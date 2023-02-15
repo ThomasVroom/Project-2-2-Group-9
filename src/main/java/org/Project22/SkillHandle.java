@@ -12,7 +12,7 @@ public class SkillHandle {
     }
     public String AskQuestion(Tuple<String,List<String>> question){
         for (Tuple<String,List<String>> answer: answers) {
-            if(answer.equals(question)){
+            if(answer.y().equals(question.y())){
                 return answer.x();
             }
         }
