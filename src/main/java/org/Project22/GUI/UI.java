@@ -9,7 +9,7 @@ public class UI extends JFrame {
     
     public UI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("| Chatbot");
+        setTitle("Chatbot");
         setResizable(false);
         setPreferredSize(new Dimension(600, 700));
 
