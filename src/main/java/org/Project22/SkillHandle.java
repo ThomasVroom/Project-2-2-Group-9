@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkillHandle {
-    List<Tuple<String, List<String>>> answers = new ArrayList<>();
+    List<Tuple<String,List<String>>> answers = new ArrayList<>();
     //Tuple<String, List<String>> question;
 
-    public SkillHandle(){
+    public SkillHandle(String filename){
         //TODO read file for answers
     }
     public String AskQuestion(Tuple<String,List<String>> question){
