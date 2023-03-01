@@ -19,16 +19,26 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 public class ChatWindow extends JTextPane {
+
+    /**
+     * Name shown above the prompts typed by the human.
+     */
+    public static final String HUMAN_NAME = " " + new String(Character.toChars(0x1F4AC)) + " HUMAN";
+
+    /**
+     * Name shown above the prompt given by the bot.
+     */
+    public static final String BOT_NAME = " " + new String(Character.toChars(0x1F916)) + " BOT";
     
     /**
      * Prefix used for when the user is typing.
      */
-    public static final String HUMAN_PREFIX = "  " + new String(Character.toChars(0x1F4AC)) + "  ";
+    public static final String HUMAN_PREFIX = " ";
 
     /**
      * Prefix used for when the bot is talking.
      */
-    public static final String BOT_PREFIX = "  " + new String(Character.toChars(0x1F916)) + "  ";
+    public static final String BOT_PREFIX = " ";
 
     /**
      * Attribute for left text alignment.
@@ -39,6 +49,11 @@ public class ChatWindow extends JTextPane {
      * Attribute for right test alignment.
      */
     public static final SimpleAttributeSet RIGHT = new SimpleAttributeSet();
+
+    /**
+     * Attribute for left text alignment.
+     */
+    public static final SimpleAttributeSet NAME_HEADER = new SimpleAttributeSet();
 
     /**
      * Color used to fill the background with once the scrollpane activates.
@@ -71,6 +86,10 @@ public class ChatWindow extends JTextPane {
         // set alignments
         StyleConstants.setAlignment(LEFT, StyleConstants.ALIGN_LEFT);
         StyleConstants.setAlignment(RIGHT, StyleConstants.ALIGN_RIGHT);
+
+        // set name header
+        StyleConstants.setFontSize(NAME_HEADER, 12);
+        StyleConstants.setForeground(NAME_HEADER, Color.DARK_GRAY);
         
         // initialize component
         this.setOpaque(false);
@@ -80,7 +99,8 @@ public class ChatWindow extends JTextPane {
         // initialize document
         this.doc = (StyledDocument)this.getDocument();
         ((DefaultStyledDocument)this.doc).setDocumentFilter(new ChatDocument(this));
-        this.addText(HUMAN_PREFIX);
+        this.addText(HUMAN_NAME, NAME_HEADER);
+        this.addText("\n" + HUMAN_PREFIX, null);
 
         // update chat
         this.resetCursor();
@@ -100,9 +120,9 @@ public class ChatWindow extends JTextPane {
      * Add text to the text pane.
      * @param s the text to add
      */
-    public void addText(String s) {
+    public void addText(String s, AttributeSet attr) {
         try {
-            this.doc.insertString(this.doc.getLength(), s, null);
+            this.doc.insertString(this.doc.getLength(), s, attr);
         } catch (BadLocationException e) {e.printStackTrace();}
     }
 
@@ -167,11 +187,13 @@ public class ChatWindow extends JTextPane {
                     String input = this.comp.doc.getText(allowed_offset, offset - allowed_offset);
 
                     // process input
-                    this.comp.addText("\n\n" + BOT_PREFIX);
-                    this.comp.addText(InputProcessor.process(input));
+                    this.comp.addText("\n\n" + BOT_NAME, NAME_HEADER);
                     this.comp.changeAlignment(false);
-                    this.comp.addText("\n\n" + HUMAN_PREFIX);
+                    this.comp.addText("\n" + BOT_PREFIX, null);
+                    this.comp.addText(InputProcessor.process(input), null);
+                    this.comp.addText("\n\n" + HUMAN_NAME, NAME_HEADER);
                     this.comp.changeAlignment(true);
+                    this.comp.addText("\n" + HUMAN_PREFIX, null);
 
                     // update document
                     this.comp.resetCursor();
