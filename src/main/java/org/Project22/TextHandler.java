@@ -42,16 +42,6 @@ public class TextHandler {
         return stringBuilder.toString();
     }
 
-    public static void main(String[] args) throws IOException {
-        String fileContent = "Hello, world!";
-        writeStringToFile("C:/Users/Casper/Desktop/Project-2-2-Group-9/src/main/java/org/Project22/SkillFiles/Basic", fileContent);
-        
-        String fileContent1 = readFileToString("C:/Users/Casper/Desktop/Project-2-2-Group-9/src/main/java/org/Project22/SkillFiles/Basic");
-        System.out.println(fileContent1);
-
-        
-    }
-
     public static String removeSubstring(String originalString, String substringToRemove) {
         // Replacing all occurrences of the substring with an empty string 
         String resultString = originalString.replaceAll(substringToRemove, "");

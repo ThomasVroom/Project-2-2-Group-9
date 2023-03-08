@@ -1,0 +1,13 @@
+Question What services are available at <PLACE>?
+
+Slot <PLACE> Library
+Slot <PLACE> Hospital
+Slot <PLACE> Gym
+Slot <PLACE> Post Office
+Slot <PLACE> Bank
+
+Answer <PLACE> Library: Book lending, Study rooms, Computer lab, Printing
+Answer <PLACE> Hospital: Emergency care, Diagnostic services, Inpatient care, Outpatient care
+Answer <PLACE> Gym: Cardio equipment, Weightlifting equipment, Group fitness classes, Personal training
+Answer <PLACE> Post Office: Mail and package delivery, PO boxes, Stamps and shipping supplies, Money orders
+Answer <PLACE> Bank: Checking and savings accounts, Loans, Credit cards, Investment services
