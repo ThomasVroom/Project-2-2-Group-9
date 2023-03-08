@@ -8,9 +8,9 @@ Slot <DRINK> Manhattan
 Slot <TIME> 6
 Slot <TIME> 9
 
-Answer <DRINK> Margarita at <TIME> 6 Tequila, Lime Juice, Triple Sec, Salt, Ice
-Answer <DRINK> Margarita at <TIME> 9 Mango Juice, Tequila, Orange Liqueur, Lime Juice, Ice
-Answer <DRINK> Martini at <TIME> 6 Gin, Vermouth, Olive, Ice
-Answer <DRINK> Martini at <TIME> 9 Vodka, Lemon Twist, Olive Juice, Ice
-Answer <DRINK> Old Fashioned at <TIME> 6 Bourbon, Sugar Cube, Angostura Bitters, Orange Slice, Ice
-Answer <DRINK> Old Fashioned at <TIME> 9 Rye Whiskey, Simple Syrup, Orange Bitters, Cherry, Ice
+Action <DRINK> Margarita <TIME> 6 Tequila, Lime Juice, Triple Sec, Salt, Ice
+Action <DRINK> Margarita <TIME> 9 Mango Juice, Tequila, Orange Liqueur, Lime Juice, Ice
+Action <DRINK> Martini <TIME> 6 Gin, Vermouth, Olive, Ice
+Action <DRINK> Martini <TIME> 9 Vodka, Lemon Twist, Olive Juice, Ice
+Action <DRINK> Old Fashioned <TIME> 6 Bourbon, Sugar Cube, Angostura Bitters, Orange Slice, Ice
+Action <DRINK> Old Fashioned <TIME> 9 Rye Whiskey, Simple Syrup, Orange Bitters, Cherry, Ice

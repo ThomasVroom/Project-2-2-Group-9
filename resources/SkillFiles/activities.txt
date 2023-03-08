@@ -1,4 +1,4 @@
-Question What activities are available at <LOCATION> during <DAY>?
+Question What activities are available at <LOCATION> <DAY>?
 
 Slot <LOCATION> Park
 Slot <LOCATION> Beach
@@ -12,15 +12,15 @@ Slot <DAY> Friday
 Slot <DAY> Saturday
 Slot <DAY> Sunday
 
-Answer At <LOCATION> Park during <DAY> Monday: Yoga class, Frisbee game, Picnic area
-Answer At <LOCATION> Park during <DAY> Wednesday: Bootcamp class, Volleyball game, Dog park
-Answer At <LOCATION> Park during <DAY> Friday: Tai Chi class, Basketball game, Hiking trail
-Answer At <LOCATION> Beach during <DAY> Tuesday: Surfing lesson, Beach volleyball, Sunbathing area
-Answer At <LOCATION> Beach during <DAY> Thursday: Yoga class, Kayaking, Beach soccer
-Answer At <LOCATION> Beach during <DAY> Saturday: Paddleboarding, Beach cleanup, Bonfire pit
-Answer At <LOCATION> Museum during <DAY> Monday: Art exhibit, Guided tour, Gift shop
-Answer At <LOCATION> Museum during <DAY> Wednesday: Science exhibit, Lecture series, Interactive workshop
-Answer At <LOCATION> Museum during <DAY> Friday: History exhibit, Film screening, Museum cafe
-Answer At <LOCATION> Mall during <DAY> Tuesday: Shopping discounts, Food court, Arcade
-Answer At <LOCATION> Mall during <DAY> Thursday: Live music performance, Virtual reality games, Bookstore
-Answer At <LOCATION> Mall during <DAY> Sunday: Farmers market, Children's play area, Nail salon
+Action <LOCATION> Park <DAY> Monday Yoga class, Frisbee game, Picnic area
+Action <LOCATION> Park <DAY> Wednesday Bootcamp class, Volleyball game, Dog park
+Action <LOCATION> Park <DAY> Friday Tai Chi class, Basketball game, Hiking trail
+Action <LOCATION> Beach <DAY> Tuesday Surfing lesson, Beach volleyball, Sunbathing area
+Action <LOCATION> Beach <DAY> Thursday Yoga class, Kayaking, Beach soccer
+Action <LOCATION> Beach <DAY> Saturday Paddleboarding, Beach cleanup, Bonfire pit
+Action <LOCATION> Museum <DAY> Monday Art exhibit, Guided tour, Gift shop
+Action <LOCATION> Museum <DAY> Wednesday Science exhibit, Lecture series, Interactive workshop
+Action <LOCATION> Museum <DAY> Friday History exhibit, Film screening, Museum cafe
+Action <LOCATION> Mall <DAY> Tuesday Shopping discounts, Food court, Arcade
+Action <LOCATION> Mall <DAY> Thursday Live music performance, Virtual reality games, Bookstore
+Action <LOCATION> Mall <DAY> Sunday Farmers market, Children's play area, Nail salon

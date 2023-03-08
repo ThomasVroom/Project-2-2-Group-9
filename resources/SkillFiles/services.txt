@@ -6,8 +6,8 @@ Slot <PLACE> Gym
 Slot <PLACE> Post Office
 Slot <PLACE> Bank
 
-Answer <PLACE> Library: Book lending, Study rooms, Computer lab, Printing
-Answer <PLACE> Hospital: Emergency care, Diagnostic services, Inpatient care, Outpatient care
-Answer <PLACE> Gym: Cardio equipment, Weightlifting equipment, Group fitness classes, Personal training
-Answer <PLACE> Post Office: Mail and package delivery, PO boxes, Stamps and shipping supplies, Money orders
-Answer <PLACE> Bank: Checking and savings accounts, Loans, Credit cards, Investment services
+Action <PLACE> Library Book lending, Study rooms, Computer lab, Printing
+Action <PLACE> Hospital Emergency care, Diagnostic services, Inpatient care, Outpatient care
+Action <PLACE> Gym Cardio equipment, Weightlifting equipment, Group fitness classes, Personal training
+Action <PLACE> Post Office Mail and package delivery, PO boxes, Stamps and shipping supplies, Money orders
+Action <PLACE> Bank Checking and savings accounts, Loans, Credit cards, Investment services

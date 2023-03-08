@@ -11,7 +11,7 @@ Slot <TIME> 11
 Slot <TIME> 13
 Slot <TIME> 15
 
-Answer <DAY> Saturday There are no lectures on Saturday
-Answer <DAY> Monday <TIME> 9 We start the week with math
-Answer <DAY> Monday <TIME> 11 On Monday noon we have Theoratical Computer Science
-Answer I have no idea
+Action <DAY> Saturday There are no lectures on Saturday
+Action <DAY> Monday <TIME> 9 We start the week with math
+Action <DAY> Monday <TIME> 11 On Monday noon we have Theoratical Computer Science
+Action I have no idea
