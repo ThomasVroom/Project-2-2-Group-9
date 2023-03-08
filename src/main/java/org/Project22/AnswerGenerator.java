@@ -12,9 +12,13 @@ public class AnswerGenerator {
     }
     public String getAnswer(String userString){
         Triple<Integer, String, Float> question = matchQuestion(userString,questions).get(0);
+        Question question2 = questions.get(question.x());
+        List<Tuple<String, String>> variables = question2.getVariable2(userString);
+        
         Main.ui.setConfidence(question.z());
+        Main.ui.setDebugText(question2.cleanQuestion, variables);
 
-        return questions.get(question.x()).getAnswer(questions.get(question.x()).getVariable2(userString));
+        return question2.getAnswer(variables);
     }
     /**
      * @param userString question of the user

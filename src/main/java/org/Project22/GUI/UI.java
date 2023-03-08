@@ -2,8 +2,11 @@ package org.Project22.GUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.*;
+
+import org.Project22.Tuple;
 
 public class UI extends JFrame {
 
@@ -135,6 +138,16 @@ public class UI extends JFrame {
     public void setConfidence(float percentage) {
         this.confidenceLabel.setText("Confidence: "+((int)(percentage * 100))/100f);
         this.confidenceBar.setValue((int)(percentage * 100));
+    }
+
+    public void setDebugText(String question, List<Tuple<String, String>> variables) {
+        String s = question + "\n\n";
+
+        for (Tuple<String, String> variable : variables) {
+            s += variable.x() + " " + variable.y() + "\n";
+        }
+
+        this.debugPane.setText(s);
     }
 
     private void skilleditorButtonActionPerformed(ActionEvent evt) {                                                  
