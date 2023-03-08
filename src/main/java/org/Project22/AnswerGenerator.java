@@ -1,5 +1,10 @@
 package org.Project22;
 
+import org.Project22.Matching.Match1;
+import org.Project22.Matching.Match2;
+import org.Project22.Matching.Match3;
+import org.Project22.Matching.MatchingInterface;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,21 +31,13 @@ public class AnswerGenerator {
      * @return an ordered list with (index of question,algorithm used + name of question, matches percentage)
      */
     public static List<Triple<Integer,String,Float>> matchQuestion(String userString, List<Question> Questions, int... algorithm){
+        MatchingInterface matchingAlgorithms[] = {new Match1(),new Match2(),new Match3()};
         List<Triple<Integer,String,Float>> result = new ArrayList<>();
         int choice = 2;
-        if (algorithm.length >= 1){
+        if (algorithm.length >= 1)
             choice = algorithm[0];
-        }
-
         for (Question question : Questions) {
-            if (choice == 0)
-                result.add(new Triple<>(Questions.indexOf(question),"matches1.0 ,"+question.name,question.Matches(userString)));
-            else if (choice == 1)
-                result.add(new Triple<>(Questions.indexOf(question),"matches2.0 ,"+question.name,question.Matches2(userString)));
-            else if (choice == 2)
-                result.add(new Triple<>(Questions.indexOf(question),"matches3.0 ,"+question.name,question.Matches3(userString)));
-            else
-                throw new IllegalArgumentException("choose a valid algorithm choice");
+            result.add(new Triple<>(Questions.indexOf(question),matchingAlgorithms[choice].getClass().getName()+" ,"+question.name,matchingAlgorithms[choice].Matching(userString,question)));
         }
         Comparator<Triple<Integer, String, Float>> comparator = new Comparator<Triple<Integer, String, Float>>() {
             @Override

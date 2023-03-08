@@ -1,6 +1,9 @@
 package org.Project22;
 
 import org.Project22.GUI.UI;
+import org.Project22.Matching.Match2;
+import org.Project22.Matching.Match1;
+import org.Project22.Matching.MatchingInterface;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +35,7 @@ public class Main {
         if (algorithm.length >= 1){
              choice = algorithm[0];
         }
-
+        MatchingInterface k[] = {new Match1(), new Match2()};
         for (Question question : Questions) {
             if (choice == 0)
                 result.add(new Triple<>(Questions.indexOf(question),"matches1.0 ,"+question.name,question.Matches(userString)));

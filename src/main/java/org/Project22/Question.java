@@ -8,10 +8,10 @@ public class Question {
     //used for identifying the skill (Debug/convenience) purposes only
     String name;
     //patternQuestion is the string of the skill with .* at the places of the variable
-    String patternQuestion;
+    public String patternQuestion;
     //cleanQuestion is string of the skill with nothing at the places of the variable
-    String cleanQuestion;
-    List<Tuple<Integer,String>> variablesWithAddedLocation;
+    public String cleanQuestion;
+    public List<Tuple<Integer,String>> variablesWithAddedLocation;
     List<String> variables;
     //these are thing like (<DAY>, monday) or (<TIME>, 8:00)
     List<Tuple<String,String>> placeholders;
