@@ -130,7 +130,7 @@ public class UI extends JFrame {
     }
 
     private void skilleditorButtonActionPerformed(ActionEvent evt) {                                                  
-        // TODO add your handling code here:
+        new SkillEditor().setVisible(true);
     }                                                 
 
     private void webcamButtonActionPerformed(ActionEvent evt) {                                             
