@@ -60,7 +60,7 @@ public class SkillEditor extends javax.swing.JFrame {
                 String text=textArea1.getText();
                 String file=textField1.getText();
                 try {
-                    TextHandler.writeStringToFile(file, text);
+                    TextHandler.writeStringToFile("resources/SkillFiles/"+file, text);
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

@@ -54,6 +54,17 @@ public class SkillHandle {
                     categories.add(slot.x());
                     break;
                 }
+                else if (slot.y().contains(word) && !categories.contains(slot.x())){
+                    String addedwords = "";
+                    for (int i = userWords.indexOf(word)+1; i < userWords.size(); i++) {
+                        addedwords += " "+userWords.get(i);
+                        if (slot.y().equals(word+addedwords)){
+                            result.add(slot);
+                            categories.add(slot.x());
+                            break;
+                        }
+                    }
+                }
             }
         }
         return result;

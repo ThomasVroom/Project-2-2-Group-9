@@ -83,7 +83,7 @@ public class Question {
 
     // return all the variables in a string as list of tuples like : {(DAY,monday), (TIME,8:00)}
     public List<Tuple<String,String>> getVariable2(String userQuestion){
-        List<String> userWords = Arrays.asList(userQuestion.toLowerCase().split(" "));
+        List<String> userWords = Arrays.asList(userQuestion.split(" "));
         List<Tuple<String,String>> result = new ArrayList<>();
         List<String> categories = new ArrayList<>();
         for (String word: userWords) {
@@ -92,6 +92,17 @@ public class Question {
                     result.add(placeholder);
                     categories.add(placeholder.x());
                     break;
+                }
+                else if (placeholder.y().contains(word) && !categories.contains(placeholder.x()) && !word.equals("")){
+                    String addedwords = "";
+                    for (int i = userWords.indexOf(word)+1; i < userWords.size(); i++) {
+                        addedwords += " "+userWords.get(i);
+                        if (placeholder.y().equals(word+addedwords)){
+                            result.add(placeholder);
+                            categories.add(placeholder.x());
+                            break;
+                        }
+                    }
                 }
             }
         }

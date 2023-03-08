@@ -24,3 +24,4 @@ Action <LOCATION> Museum <DAY> Friday History exhibit, Film screening, Museum ca
 Action <LOCATION> Mall <DAY> Tuesday Shopping discounts, Food court, Arcade
 Action <LOCATION> Mall <DAY> Thursday Live music performance, Virtual reality games, Bookstore
 Action <LOCATION> Mall <DAY> Sunday Farmers market, Children's play area, Nail salon
+Action I have no idea
