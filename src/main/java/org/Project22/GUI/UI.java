@@ -8,10 +8,9 @@ import javax.swing.*;
 public class UI extends JFrame {
 
     private JScrollPane chatScrollPane;
-    private ChatWindow chatwindow;
     private JProgressBar confidenceBar;
     private JLabel confidenceLabel;
-    private JCheckBox darkModeBox;
+    private JButton clearButton;
     private JLabel debugLabel;
     private JTextPane debugPane;
     private JScrollPane debugScrollPane;
@@ -37,12 +36,11 @@ public class UI extends JFrame {
         webcamButton = new JButton();
         languageBox = new JComboBox<>();
         languageLabel = new JLabel();
-        darkModeBox = new JCheckBox();
+        clearButton = new JButton();
         confidenceLabel = new JLabel();
         confidenceBar = new JProgressBar();
         debugLabel = new JLabel();
         chatScrollPane = new JScrollPane();
-        chatwindow = new ChatWindow();
         debugScrollPane = new JScrollPane();
         debugPane = new JTextPane();
 
@@ -64,10 +62,10 @@ public class UI extends JFrame {
 
         languageLabel.setText("Language Model");
 
-        darkModeBox.setText("Dark Mode");
-        darkModeBox.addActionListener(new ActionListener() {
+        clearButton.setText("Clear Chat");
+        clearButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                darkModeBoxActionPerformed(evt);
+                clearButtonActionPerformed(evt);
             }
         });
 
@@ -78,7 +76,7 @@ public class UI extends JFrame {
 
         debugLabel.setText("Debug:");
 
-        chatScrollPane.setViewportView(chatwindow);
+        chatScrollPane.setViewportView(new ChatWindow());
 
         debugScrollPane.setViewportView(debugPane);
 
@@ -100,7 +98,7 @@ public class UI extends JFrame {
                     .addComponent(debugLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(skilleditorButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(webcamButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(darkModeBox, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                    .addComponent(clearButton, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
                     .addComponent(languageBox, GroupLayout.Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -114,7 +112,7 @@ public class UI extends JFrame {
                         .addGap(4, 4, 4)
                         .addComponent(skilleditorButton)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(darkModeBox)
+                        .addComponent(clearButton)
                         .addGap(18, 18, 18)
                         .addComponent(languageLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -147,7 +145,7 @@ public class UI extends JFrame {
         // TODO add your handling code here:
     }                                            
 
-    private void darkModeBoxActionPerformed(ActionEvent evt) {                                            
-        // TODO add your handling code here:
+    private void clearButtonActionPerformed(ActionEvent evt) {                                            
+        this.chatScrollPane.setViewportView(new ChatWindow());
     }
 }

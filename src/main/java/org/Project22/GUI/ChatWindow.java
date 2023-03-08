@@ -100,7 +100,7 @@ public class ChatWindow extends JTextPane {
         this.doc = (StyledDocument)this.getDocument();
         ((DefaultStyledDocument)this.doc).setDocumentFilter(new ChatDocument(this));
         this.addText(HUMAN_NAME, NAME_HEADER);
-        this.addText("\n" + HUMAN_PREFIX, null);
+        this.addText("\n" + HUMAN_PREFIX, LEFT);
 
         // update chat
         this.resetCursor();
@@ -193,13 +193,14 @@ public class ChatWindow extends JTextPane {
                     this.comp.addText(InputProcessor.process(input), null);
                     this.comp.addText("\n\n" + HUMAN_NAME, NAME_HEADER);
                     this.comp.changeAlignment(true);
-                    this.comp.addText("\n" + HUMAN_PREFIX, null);
+                    this.comp.addText("\n" + HUMAN_PREFIX, LEFT);
 
                     // update document
                     this.comp.resetCursor();
                     this.comp.updateOffset();
                 } catch (BadLocationException e) {
                     e.printStackTrace();
+                    System.out.println("(ignore)");
                 }
                 return;
             }
