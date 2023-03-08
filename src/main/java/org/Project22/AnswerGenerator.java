@@ -11,8 +11,10 @@ public class AnswerGenerator {
         this.questions = questions;
     }
     public String getAnswer(String userString){
-        int indexQuestion = matchQuestion(userString,questions).get(0).x();
-        return questions.get(indexQuestion).getAnswer(questions.get(indexQuestion).getVariable2(userString));
+        Triple<Integer, String, Float> question = matchQuestion(userString,questions).get(0);
+        Main.ui.setConfidence(question.z());
+
+        return questions.get(question.x()).getAnswer(questions.get(question.x()).getVariable2(userString));
     }
     /**
      * @param userString question of the user

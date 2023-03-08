@@ -73,11 +73,16 @@ public class UI extends JFrame {
 
         confidenceLabel.setText("Confidence: XX");
 
+        confidenceBar.setMinimum(0);
+        confidenceBar.setMaximum(100);
+
         debugLabel.setText("Debug:");
 
         chatScrollPane.setViewportView(chatwindow);
 
         debugScrollPane.setViewportView(debugPane);
+
+        debugPane.setEditable(false);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,6 +132,11 @@ public class UI extends JFrame {
         );
 
         pack();
+    }
+
+    public void setConfidence(float percentage) {
+        this.confidenceLabel.setText("Confidence: "+((int)(percentage * 100))/100f);
+        this.confidenceBar.setValue((int)(percentage * 100));
     }
 
     private void skilleditorButtonActionPerformed(ActionEvent evt) {                                                  
