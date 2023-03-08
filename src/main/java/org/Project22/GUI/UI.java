@@ -2,16 +2,18 @@ package org.Project22.GUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.*;
+
+import org.Project22.Tuple;
 
 public class UI extends JFrame {
 
     private JScrollPane chatScrollPane;
-    private ChatWindow chatwindow;
     private JProgressBar confidenceBar;
     private JLabel confidenceLabel;
-    private JCheckBox darkModeBox;
+    private JButton clearButton;
     private JLabel debugLabel;
     private JTextPane debugPane;
     private JScrollPane debugScrollPane;
@@ -37,12 +39,11 @@ public class UI extends JFrame {
         webcamButton = new JButton();
         languageBox = new JComboBox<>();
         languageLabel = new JLabel();
-        darkModeBox = new JCheckBox();
+        clearButton = new JButton();
         confidenceLabel = new JLabel();
         confidenceBar = new JProgressBar();
         debugLabel = new JLabel();
         chatScrollPane = new JScrollPane();
-        chatwindow = new ChatWindow();
         debugScrollPane = new JScrollPane();
         debugPane = new JTextPane();
 
@@ -64,20 +65,25 @@ public class UI extends JFrame {
 
         languageLabel.setText("Language Model");
 
-        darkModeBox.setText("Dark Mode");
-        darkModeBox.addActionListener(new ActionListener() {
+        clearButton.setText("Clear Chat");
+        clearButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                darkModeBoxActionPerformed(evt);
+                clearButtonActionPerformed(evt);
             }
         });
 
         confidenceLabel.setText("Confidence: XX");
 
+        confidenceBar.setMinimum(0);
+        confidenceBar.setMaximum(100);
+
         debugLabel.setText("Debug:");
 
-        chatScrollPane.setViewportView(chatwindow);
+        chatScrollPane.setViewportView(new ChatWindow());
 
         debugScrollPane.setViewportView(debugPane);
+
+        debugPane.setEditable(false);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -95,7 +101,7 @@ public class UI extends JFrame {
                     .addComponent(debugLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(skilleditorButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(webcamButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(darkModeBox, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                    .addComponent(clearButton, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
                     .addComponent(languageBox, GroupLayout.Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -109,7 +115,7 @@ public class UI extends JFrame {
                         .addGap(4, 4, 4)
                         .addComponent(skilleditorButton)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(darkModeBox)
+                        .addComponent(clearButton)
                         .addGap(18, 18, 18)
                         .addComponent(languageLabel)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -129,15 +135,30 @@ public class UI extends JFrame {
         pack();
     }
 
+    public void setConfidence(float percentage) {
+        this.confidenceLabel.setText("Confidence: "+((int)(percentage * 100))/100f);
+        this.confidenceBar.setValue((int)(percentage * 100));
+    }
+
+    public void setDebugText(String question, List<Tuple<String, String>> variables) {
+        String s = question + "\n\n";
+
+        for (Tuple<String, String> variable : variables) {
+            s += variable.x() + " " + variable.y() + "\n";
+        }
+
+        this.debugPane.setText(s);
+    }
+
     private void skilleditorButtonActionPerformed(ActionEvent evt) {                                                  
-        // TODO add your handling code here:
+        new SkillEditor().setVisible(true);
     }                                                 
 
     private void webcamButtonActionPerformed(ActionEvent evt) {                                             
         // TODO add your handling code here:
     }                                            
 
-    private void darkModeBoxActionPerformed(ActionEvent evt) {                                            
-        // TODO add your handling code here:
+    private void clearButtonActionPerformed(ActionEvent evt) {                                            
+        this.chatScrollPane.setViewportView(new ChatWindow());
     }
 }

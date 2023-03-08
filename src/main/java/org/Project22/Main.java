@@ -8,6 +8,8 @@ import java.util.*;
 
 public class Main {
    public static AnswerGenerator answerGenerator;
+
+   public static UI ui;
     public static void main(String[] args) throws IOException {
         File masterFile = new File("resources/SkillFiles");
         List<Question> questions = new ArrayList<>();
@@ -16,7 +18,7 @@ public class Main {
             questions.add(new SkillHandle(filename).returnQuestion());
         }
         answerGenerator = new AnswerGenerator(questions);
-        new UI();
+        ui = new UI();
     }
 
     /**
