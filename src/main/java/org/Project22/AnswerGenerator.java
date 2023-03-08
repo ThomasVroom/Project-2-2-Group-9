@@ -1,24 +1,19 @@
 package org.Project22;
 
-import org.Project22.GUI.UI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-
-public class Main {
-   public static AnswerGenerator answerGenerator;
-    public static void main(String[] args) throws IOException {
-        File masterFile = new File("resources/SkillFiles");
-        List<Question> questions = new ArrayList<>();
-        String[] fileNames = masterFile.list();
-        for (String filename: fileNames) {
-            questions.add(new SkillHandle(filename).returnQuestion());
-        }
-        answerGenerator = new AnswerGenerator(questions);
-        new UI();
+public class AnswerGenerator {
+    List<Question> questions;
+    public AnswerGenerator(List<Question> questions, int... algorithmChoice){
+        this.questions = questions;
     }
-
+    public String getAnswer(String userString){
+        int indexQuestion = matchQuestion(userString,questions).get(0).x();
+        return questions.get(indexQuestion).getAnswer(questions.get(indexQuestion).getVariable2(userString));
+    }
     /**
      * @param userString question of the user
      * @param Questions list of question aka skills of the chatbot
@@ -28,7 +23,7 @@ public class Main {
         List<Triple<Integer,String,Float>> result = new ArrayList<>();
         int choice = 2;
         if (algorithm.length >= 1){
-             choice = algorithm[0];
+            choice = algorithm[0];
         }
 
         for (Question question : Questions) {
@@ -50,5 +45,4 @@ public class Main {
         Collections.sort(result, comparator);
         return result;
     }
-
 }

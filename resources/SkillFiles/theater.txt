@@ -5,7 +5,7 @@ Slot <THEATER> AMC Theatres
 Slot <THEATER> Cinemark
 Slot <THEATER> Cineplex
 
-Answer <THEATER> Regal Cinemas Spider-Man: No Way Home, Sing 2, The Matrix Resurrections
-Answer <THEATER> AMC Theatres The King's Man, Ghostbusters: Afterlife, West Side Story
-Answer <THEATER> Cinemark Encanto, The French Dispatch, House of Gucci
-Answer <THEATER> Cineplex The Power of the Dog, The Lost Daughter, Nightmare Alley
+Action <THEATER> Regal Cinemas Spider-Man No Way Home, Sing 2, The Matrix Resurrections
+Action <THEATER> AMC Theatres The King's Man, Ghostbusters Afterlife, West Side Story
+Action <THEATER> Cinemark Encanto, The French Dispatch, House of Gucci
+Action <THEATER> Cineplex The Power of the Dog, The Lost Daughter, Nightmare Alley

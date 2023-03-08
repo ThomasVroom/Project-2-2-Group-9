@@ -7,10 +7,10 @@ Slot <FOOD> Salad
 Slot <TIME> 12
 Slot <TIME> 18
 
-Answer <FOOD> Pizza at <TIME> 12 Pepperoni, Mushrooms, Onions, Olives, Sausage
-Answer <FOOD> Pizza at <TIME> 18 Pineapple, Ham, Bacon, Chicken, Green Peppers
-Answer <FOOD> Burgers at <TIME> 12 Cheese, Lettuce, Tomato, Pickles, Onions
-Answer <FOOD> Burgers at <TIME> 18 Bacon, Avocado, Jalapenos, Fried Egg, BBQ Sauce
-Answer <FOOD> Tacos at <TIME> 12 Ground Beef, Shredded Chicken, Beans, Rice, Guacamole
-Answer <FOOD> Tacos at <TIME> 18 Grilled Fish, Steak, Roasted Vegetables, Pico de Gallo, Queso Fresco
-answer <FOOD> Salad Some leaves with olives and feta.
+Action <FOOD> Pizza <TIME> 12 Pepperoni, Mushrooms, Onions, Olives, Sausage
+Action <FOOD> Pizza <TIME> 18 Pineapple, Ham, Bacon, Chicken, Green Peppers
+Action <FOOD> Burgers <TIME> 12 Cheese, Lettuce, Tomato, Pickles, Onions
+Action <FOOD> Burgers <TIME> 18 Bacon, Avocado, Jalapenos, Fried Egg, BBQ Sauce
+Action <FOOD> Tacos <TIME> 12 Ground Beef, Shredded Chicken, Beans, Rice, Guacamole
+Action <FOOD> Tacos <TIME> 18 Grilled Fish, Steak, Roasted Vegetables, Pico de Gallo, Queso Fresco
+Action <FOOD> Salad Some leaves with olives and feta.

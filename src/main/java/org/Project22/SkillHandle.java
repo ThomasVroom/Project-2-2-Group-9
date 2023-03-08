@@ -24,7 +24,7 @@ public class SkillHandle {
                 question = line.substring(9);
             else if (line.startsWith("slot")||line.startsWith("Slot"))
                 slots.add(line.substring(4));
-            else if (line.startsWith("answer")||line.startsWith("Answer"))
+            else if (line.startsWith("action")||line.startsWith("Action"))
                 answers.add(line.substring(7));
             else if (line.trim().length()>0)
                 System.out.println("Unrecognised String:" + line);
@@ -41,7 +41,7 @@ public class SkillHandle {
             }
             answersFinal.add(new Tuple<>(answer,placeholders));
         }
-        return new Question(question,slotsExtracted,answersFinal,filename);
+        return new Question(question,slotsExtracted,answersFinal,filename.substring(0, filename.lastIndexOf('.')));
     }
     public List<Tuple<String,String>> getVariable(String answer,List<Tuple<String,String>> slotsExtracted){
         List<String> userWords = Arrays.asList(answer.split(" "));
