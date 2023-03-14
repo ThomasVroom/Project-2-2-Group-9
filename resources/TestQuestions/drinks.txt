@@ -1,3 +1,4 @@
+<Basic>
 What ingredients are needed for a margarita at 9?
 Can you tell me the ingredients for a mojito at 6?
 What goes into an old fashioned at 9?
@@ -8,3 +9,25 @@ What's in a mojito cocktail at 6?
 What do I need to make an old fashioned at 6?
 What are the ingredients for a Manhattan at 9?
 Can you tell me what's in a margarita at 6?
+<Errors>
+What ingredients are needed for a margarit at 9?
+Can you tell me the ingredients for a mojto at 6?
+What goes into an old fashined at 9?
+What do I need to make a Manhtan cocktail at 6?
+What are the ingredients for a magarita at 6?
+Can you list the ingredients for a martni at 9?
+What's in a mojo coktail at 6?
+What do I need to make an ol fashoned at 6?
+What are the ingredients for a Maattan at 9?
+Can you tell me what's in a magrita at 6?
+<Twists>
+What ingredients are needed for a margarita at 9 pm?
+Can you tell me the ingredients for a mojito at 6 am?
+What goes into an old fashioned at 21h?
+What do I need to make a Manhattan cocktail at 18h?
+What are the ingredients for a margarita at 6 am?
+Can you list the ingredients for a martini at 9 pm?
+What's in a mojito cocktail at 18h?
+What do I need to make an old fashioned at 18h?
+What are the ingredients for a Manhattan at 21h?
+Can you tell me what's in a margarita at 6 pm?

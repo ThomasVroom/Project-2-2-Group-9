@@ -1,3 +1,4 @@
+<Basic>
 What lectures are available on Monday morning?
 Is there a lecture on Wednesday at 13?
 What classes are offered on Friday?
@@ -8,3 +9,25 @@ Is there a class on Thursday afternoon?
 What's the lecture schedule for Wednesday?
 What course is offered on Monday at 12?
 Which lecture is on Monday at 9?
+<Errors>
+What lectures are available on Mondy moning?
+Is there a lecture on Wedneday at 13?
+What classes are offered on Fiday?
+Which lecture is on Monay at 11?
+Are there any lectures on Satrday?
+What course starts the week on Mondy at 9?
+Is there a class on Thursay afternoon?
+What's the lecture schedule for Wedneday?
+What course is offered on Moday at 12?
+Which lecture is on Monay at 9?
+<Twists>
+What lectures are available on Monday morning?
+Is there a lecture on Wednesday at 13h?
+What classes are offered on Friday?
+Which lecture is on Monday at 11 am?
+Are there any lectures on Saturday?
+What course starts the week on Monday at 9 pm?
+Is there a class on Thursday afternoon?
+What's the lecture schedule for Wednesday?
+What course is offered on Monday at 12h?
+Which lecture is on Monday at 21h?

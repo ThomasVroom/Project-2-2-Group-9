@@ -1,3 +1,4 @@
+<Basic>
 What movies are currently showing at the Cinemark
 What are the top movies playing at the AMC theaters today?
 Can I find any family-friendly movies playing at the AMC theaters?
@@ -8,3 +9,14 @@ Are there any new movies playing at the AMC theaters?
 What are the current movie options available to watch at the regal cinemas?
 What are the trending movies playing at the AMC theaters?
 Can I find any action movies playing at the Cinemark today?
+<Errors>
+What movies are currently showing at the Ciemark
+What are the top movies playing at the AC theaers today?
+Can I find any family-friendly movies playing at the AM theters?
+What are the latest releases playing at the Cinplex?
+What theaters are currently showing Spider-Man: No Way Home?
+What are the popular movie choices at the regl cinema right now?
+Are there any new movies playing at the AM theaers?
+What are the current movie options available to watch at the real cinems?
+What are the trending movies playing at the AM theters?
+Can I find any action movies playing at the Cineark today?

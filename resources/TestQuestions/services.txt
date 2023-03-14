@@ -1,3 +1,4 @@
+<Basic>
 What kinds of technology are available at the library?
 What types of care are available at the emergency room of the hospital?
 What fitness classes are available at the gym?
@@ -8,3 +9,14 @@ What outpatient services does the hospital offer?
 What weightlifting equipment is available at the gym?
 What postal services are available at the post office?
 What type of loans are available at the bank?
+<Errors>
+What kinds of technology are available at the libary?
+What types of care are available at the emergency room of the hopital?
+What fitness classes are available at the gm?
+What shipping supplies can I buy at the pot ofice?
+What investment services are available at the bak?
+What kind of study materials can I find at the librry?
+What outpatient services does the hosital offer?
+What weightlifting equipment is available at the ym?
+What postal services are available at the ost ofice?
+What type of loans are available at the bnk?

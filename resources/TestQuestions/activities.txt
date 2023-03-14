@@ -1,3 +1,4 @@
+<Basic>
 What activities are available at the beach on Wednesday?
 What can you do at the park on Friday?
 What is there to do at the museum on Monday?
@@ -8,3 +9,14 @@ What activities are available at the museum on Friday?
 What can you do at the mall on Thursday?
 What is there to do at the park on Wednesday?
 What activities are available at the beach on Tuesday?
+<Errors>
+What activities are available at the beah on Wedneday?
+What can you do at the prk on Frday?
+What is there to do at the musum on Moday?
+What activities are available at the mal on Suday?
+What can you do at the bea on Saturay?
+What is there to do at the prk on Tuesay?
+What activities are available at the muse on Frida?
+What can you do at the mal on Thusday?
+What is there to do at the ark on Wedesday?
+What activities are available at the each on Tueday?
