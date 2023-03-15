@@ -55,7 +55,7 @@ public class UI extends JFrame {
             }
         });
 
-        webcamButton.setText("Webcam");
+        webcamButton.setText("Webcam "+new String(Character.toChars(0x1F4F8)));
         webcamButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 webcamButtonActionPerformed(evt);
@@ -156,7 +156,6 @@ public class UI extends JFrame {
     }                                                 
 
     private void webcamButtonActionPerformed(ActionEvent evt) {  
-        System.out.println("pressed button");                                           
         new WebCamThread().start();
     }                                            
 
@@ -171,14 +170,12 @@ public class UI extends JFrame {
             try {
                 String[] source = {"python3", "src/main/java/org/Project22/WebCamRecognition/WebCamRec.py"};
                 Process process = Runtime.getRuntime().exec(source);
-                System.out.println("executed file");
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String output;
                 while ((output = reader.readLine()) != null) {
                     System.out.println(output);
                 }
-                System.out.println("finished thread");
             } catch (IOException e) {e.printStackTrace();}
         }
     }
