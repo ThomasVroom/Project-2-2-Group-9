@@ -3,9 +3,7 @@ package org.Project22.GUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
 import javax.swing.*;
-
 import org.Project22.Tuple;
 
 public class UI extends JFrame {
