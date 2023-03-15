@@ -7,11 +7,15 @@ import java.util.List;
 
 public class TestMatchingAlgorithms {
     public static String testname = "match1-3";
+
+    // Plotting the mathcing algorithms against each other, and see which one performs the best.
     public static void main(String[] args) throws IOException {
+
         File masterFile = new File("resources/SkillFiles");
         File masterTestFile = new File("resources/TestQuestions");
         if (masterFile.list().length != masterTestFile.listFiles().length)
             throw new RuntimeException("difference in file structure please recode or fix file structure");
+
         //question initialisation
         List<Question> questions = new ArrayList<>();
         String[] filenames = masterFile.list();
@@ -22,7 +26,9 @@ public class TestMatchingAlgorithms {
                 throw new RuntimeException(e);
             }
         }
-        //end of initialisation start of testing init
+        //end of initialisation 
+
+        //start of testing init
         List<String[]> tests = new ArrayList<>();
         for (String filename:masterTestFile.list()) {
             String bigString = TextHandler.readFileToString(masterTestFile.getPath()+"/"+filename);
@@ -38,7 +44,7 @@ public class TestMatchingAlgorithms {
                 float difCorrect = 0;
                 for(String test : tests.get(j)) {
                     if (test.startsWith("<")){
-
+                    // nothing
                     }
                     Tuple<Question,Float> skillChosen = answerGenerator.getQuestion(test,i);
                     if (skillChosen == null) {}
@@ -57,6 +63,4 @@ public class TestMatchingAlgorithms {
         }
         TextHandler.writeStringToFile("resources/TestOutput/"+testname,BigString);
     }
-
-
 }

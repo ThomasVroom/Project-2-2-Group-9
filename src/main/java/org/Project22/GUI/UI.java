@@ -6,9 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-
 import javax.swing.*;
-
 import org.Project22.Tuple;
 
 public class UI extends JFrame {

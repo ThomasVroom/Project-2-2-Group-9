@@ -3,20 +3,36 @@ package org.Project22;
 import org.Project22.Matching.Match1;
 import org.Project22.Matching.Match2;
 import org.Project22.Matching.Match3;
+import org.Project22.Matching.Match4;
 import org.Project22.Matching.MatchingInterface;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class AnswerGenerator {
-    public static MatchingInterface matchingAlgorithms[] = {new Match1(),new Match2(),new Match3()};
+public class AnswerGenerator{
+
+    // possible matching algorithms
+    public static MatchingInterface matchingAlgorithms[] = {new Match1(),new Match2(),new Match3(),new Match4()};
+
+    //threshold
     public float ConfidenceCutoff = 0.3f;
+
+    //list of questions
     List<Question> questions;
+
+    /**
+     * @param questions list of question objects
+     * @param algorithmChoice optional parameter, specify the matching algorithm type if needed
+     */
     public AnswerGenerator(List<Question> questions, int... algorithmChoice){
         this.questions = questions;
     }
+
+    /**
+     * @param userString question of the user
+     * @return the appropriate answer for the user question
+     */
     public String getAnswer(String userString){
         Triple<Integer, String, Float> question = matchQuestion(userString,questions).get(0);
 
@@ -46,6 +62,7 @@ public class AnswerGenerator {
         Question question2 = questions.get(question.x());
         return new Tuple<Question,Float>(question2,question.z()-matchQuestion(userString,questions, algorithm).get(1).z());
     }
+
     /**
      * @param userString question of the user
      * @param Questions list of question aka skills of the chatbot

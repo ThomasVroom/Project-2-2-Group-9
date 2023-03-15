@@ -6,14 +6,19 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SkillHandle {
+
     public String BigString;
     public String filename;
+
     public SkillHandle(String filename) throws IOException {
         this.filename = filename;
         BigString = TextHandler.readFileToString("resources/SkillFiles/"+filename);
-        //System.out.println(BigString);
+        //System.out.println(BigString); uncomment to test
     }
 
+    /**
+     * @return a question object (userquestion, placeholders, all possible answers for each placeholder, the whole file as a string)
+     */
     public Question returnQuestion(){
         List<String> slots = new ArrayList<>();
         List<String> answers = new ArrayList<>();
@@ -43,6 +48,13 @@ public class SkillHandle {
         }
         return new Question(question,slotsExtracted,answersFinal,filename.substring(0, filename.lastIndexOf('.')));
     }
+
+
+    /**
+     * @param answer a possible answer for the question from the List<String> answers
+     * @param slotsExtracted tuple of <placeholder, placeholder variable extracted from question>
+     * @return list <Tuple<Placeholder>,<appropriate variable for placeholder>
+     */
     public List<Tuple<String,String>> getVariable(String answer,List<Tuple<String,String>> slotsExtracted){
         List<String> userWords = Arrays.asList(answer.split(" "));
         List<Tuple<String,String>> result = new ArrayList<>();
