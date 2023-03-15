@@ -1,5 +1,5 @@
 <Basic>
-What lectures are available on Monday morning?
+What lectures are available on Monday at 9
 Is there a lecture on Wednesday at 13?
 What classes are offered on Friday?
 Which lecture is on Monday at 11?

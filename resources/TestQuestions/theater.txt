@@ -1,4 +1,5 @@
 <Basic>
+What movies are playing at Cinemark today?
 What movies are currently showing at the Cinemark
 What are the top movies playing at the AMC theaters today?
 Can I find any family-friendly movies playing at the AMC theaters?

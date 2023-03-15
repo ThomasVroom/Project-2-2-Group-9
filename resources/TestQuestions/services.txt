@@ -9,6 +9,7 @@ What outpatient services does the hospital offer?
 What weightlifting equipment is available at the gym?
 What postal services are available at the post office?
 What type of loans are available at the bank?
+What services are available at the library?
 <Errors>
 What kinds of technology are available at the libary?
 What types of care are available at the emergency room of the hopital?

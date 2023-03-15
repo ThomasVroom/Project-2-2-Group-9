@@ -2,13 +2,10 @@
 What activities are available at the beach on Wednesday?
 What can you do at the park on Friday?
 What is there to do at the museum on Monday?
-What activities are available at the mall on Sunday?
 What can you do at the beach on Saturday?
 What is there to do at the park on Tuesday?
-What activities are available at the museum on Friday?
 What can you do at the mall on Thursday?
 What is there to do at the park on Wednesday?
-What activities are available at the beach on Tuesday?
 <Errors>
 What activities are available at the beah on Wedneday?
 What can you do at the prk on Frday?

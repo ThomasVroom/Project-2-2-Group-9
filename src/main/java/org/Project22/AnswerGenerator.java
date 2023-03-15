@@ -11,19 +11,40 @@ import java.util.Comparator;
 import java.util.List;
 
 public class AnswerGenerator {
+    public static MatchingInterface matchingAlgorithms[] = {new Match1(),new Match2(),new Match3()};
+    public float ConfidenceCutoff = 0.3f;
     List<Question> questions;
     public AnswerGenerator(List<Question> questions, int... algorithmChoice){
         this.questions = questions;
     }
     public String getAnswer(String userString){
         Triple<Integer, String, Float> question = matchQuestion(userString,questions).get(0);
+
         Question question2 = questions.get(question.x());
         List<Tuple<String, String>> variables = question2.getVariable2(userString);
         
         Main.ui.setConfidence(question.z());
         Main.ui.setDebugText(question2.cleanQuestion, variables);
 
+        if (question.z()<ConfidenceCutoff)
+            return "too low confidence to make a decision";
         return question2.getAnswer(variables);
+    }
+
+    /**
+     * Method used for debugging and testing returns the corresponding skill for a certain user question
+     * @param userString
+     * @param algorithm algorithm choice
+     * @return null for invalid algorithm choice and for a valid one the question
+     */
+    public Tuple<Question,Float> getQuestion(String userString, int algorithm) {
+        Triple<Integer, String, Float> question = matchQuestion(userString,questions, algorithm).get(0);
+        if (question.equals(null))
+            return null;
+        if (question.z()<ConfidenceCutoff)
+            return null;
+        Question question2 = questions.get(question.x());
+        return new Tuple<Question,Float>(question2,question.z()-matchQuestion(userString,questions, algorithm).get(1).z());
     }
     /**
      * @param userString question of the user
@@ -31,11 +52,14 @@ public class AnswerGenerator {
      * @return an ordered list with (index of question,algorithm used + name of question, matches percentage)
      */
     public static List<Triple<Integer,String,Float>> matchQuestion(String userString, List<Question> Questions, int... algorithm){
-        MatchingInterface matchingAlgorithms[] = {new Match1(),new Match2(),new Match3()};
         List<Triple<Integer,String,Float>> result = new ArrayList<>();
         int choice = 2;
         if (algorithm.length >= 1)
             choice = algorithm[0];
+        if (choice >= matchingAlgorithms.length) {
+            System.out.println("Invalid algorithm choice");
+            return null;
+        }
         for (Question question : Questions) {
             result.add(new Triple<>(Questions.indexOf(question),matchingAlgorithms[choice].getClass().getName()+" ,"+question.name,matchingAlgorithms[choice].Matching(userString,question)));
         }

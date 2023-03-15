@@ -1,4 +1,4 @@
-Question What services are available at <PLACE>?
+Question What services are available at the <PLACE>?
 
 Slot <PLACE> Library
 Slot <PLACE> Hospital
