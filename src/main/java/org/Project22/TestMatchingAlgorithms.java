@@ -36,19 +36,27 @@ public class TestMatchingAlgorithms {
             for (int j = 0; j < questions.size(); j++) {
                 float perCorrect = 0;
                 float difCorrect = 0;
+                String addedCategorie = "";
+                boolean checkForAddingInBetween = false;
                 for(String test : tests.get(j)) {
                     if (test.startsWith("<")){
-
+                        if (checkForAddingInBetween){
+                            resultString.add(perCorrect/tests.get(j).length+","+difCorrect/tests.get(j).length+","+answerGenerator.matchingAlgorithms[i].getClass().getName().substring(answerGenerator.matchingAlgorithms[i].getClass().getName().lastIndexOf(".")+1)+","+questions.get(j).name + ", "+addedCategorie);
+                        }
+                        addedCategorie = test.substring(1,test.length()-1);
                     }
-                    Tuple<Question,Float> skillChosen = answerGenerator.getQuestion(test,i);
-                    if (skillChosen == null) {}
-                    else if (skillChosen.x().name.equals(questions.get(j).name)){
-                        perCorrect+=1.0;
-                        difCorrect+=skillChosen.y();
+                    else {
+                        checkForAddingInBetween = true;
+                        Tuple<Question, Float> skillChosen = answerGenerator.getQuestion(test, i);
+                        if (skillChosen == null) {
+                        } else if (skillChosen.x().name.equals(questions.get(j).name)) {
+                            perCorrect += 1.0;
+                            difCorrect += skillChosen.y();
+                        } else {
+                        }
                     }
-                    else {}
                 }
-                resultString.add(perCorrect/tests.get(j).length+","+difCorrect/tests.get(j).length+","+answerGenerator.matchingAlgorithms[i].getClass().getName().substring(answerGenerator.matchingAlgorithms[i].getClass().getName().lastIndexOf(".")+1)+","+questions.get(j).name);
+                resultString.add(perCorrect/tests.get(j).length+","+difCorrect/tests.get(j).length+","+answerGenerator.matchingAlgorithms[i].getClass().getName().substring(answerGenerator.matchingAlgorithms[i].getClass().getName().lastIndexOf(".")+1)+","+questions.get(j).name + ", "+addedCategorie);
             }
         }
         String BigString = "Percentage correct,Difference Correctly identified,algorithm used,Categories";
