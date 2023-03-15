@@ -3,6 +3,7 @@ package org.Project22;
 import org.Project22.Matching.Match1;
 import org.Project22.Matching.Match2;
 import org.Project22.Matching.Match3;
+import org.Project22.Matching.Match4;
 import org.Project22.Matching.MatchingInterface;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +13,7 @@ import java.util.List;
 public class AnswerGenerator{
 
     // possible matching algorithms
-    public static MatchingInterface matchingAlgorithms[] = {new Match1(),new Match2(),new Match3()};
+    public static MatchingInterface matchingAlgorithms[] = {new Match1(),new Match2(),new Match3(),new Match4()};
 
     //threshold
     public float ConfidenceCutoff = 0.3f;
