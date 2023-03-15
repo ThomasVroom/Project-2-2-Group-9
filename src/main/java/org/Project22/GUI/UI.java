@@ -22,6 +22,8 @@ public class UI extends JFrame {
     private JLabel languageLabel;
     private JButton skilleditorButton;
     private JButton webcamButton;
+
+    private static final String[] matching_algorithms = new String[] { "Matcher 1", "Matcher 2", "Matcher 3", "Matcher 4" };
     
     public UI() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -62,7 +64,7 @@ public class UI extends JFrame {
             }
         });
 
-        languageBox.setModel(new DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        languageBox.setModel(new DefaultComboBoxModel<>(matching_algorithms));
 
         languageLabel.setText("Language Model");
 
@@ -151,6 +153,10 @@ public class UI extends JFrame {
         this.debugPane.setText(s);
     }
 
+    public int getMatchingAlgorithm() {
+        return languageBox.getSelectedIndex();
+    }
+
     private void skilleditorButtonActionPerformed(ActionEvent evt) {                                                  
         new SkillEditor().setVisible(true);
     }                                                 
@@ -165,10 +171,11 @@ public class UI extends JFrame {
 
     private class WebCamThread extends Thread {
 
+        private static final String[] source = {"python3", "src/main/java/org/Project22/WebCamRecognition/WebCamRec.py"};
+
         @Override
         public void run() {
             try {
-                String[] source = {"python3", "src/main/java/org/Project22/WebCamRecognition/WebCamRec.py"};
                 Process process = Runtime.getRuntime().exec(source);
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
