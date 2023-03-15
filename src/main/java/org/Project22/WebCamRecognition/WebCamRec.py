@@ -54,8 +54,9 @@ def recognizeFaceAndEyes():
 
 def isDetected():
     if recognizeFaceAndEyes():
-        print("A little human was detected")
+        print("A human was detected")
     else:
         print("No human was detected around.")
+
 
 isDetected()

@@ -9,17 +9,19 @@ import java.io.IOException;
 
 public class SkillHandle2 {
 
-    //***** don't know what to do with this
     List<Tuple<String,List<String>>> answers = new ArrayList<>();
-    //*****
-
+    
     private Question question = null;
+
     String skillID = "";
+
     private String skillQuestion = new String();
     private List<Tuple<String,String>> slots = new ArrayList<>();
     private List<Tuple<String,List<Tuple<String,String>>>> skillAnswers = new ArrayList<>();
 
-
+    /**
+     * @param filename string name of the skill file to read
+     */
     public SkillHandle2(String filename){
         this.skillID = filename.substring(0, filename.lastIndexOf('.'));
 
@@ -32,11 +34,19 @@ public class SkillHandle2 {
         this.question = new Question(skillQuestion, slots, skillAnswers,filename);
     }
 
+    /**
+     * @return getter function to return question object
+     */
     public Question getQuestion(){
         return this.question;
     }
 
-
+    /**
+     * @param filename string name of the skill file to read
+     * @throws FileNotFoundException
+     * @throws IOException
+     * parses every line in the skill file according to the ParseLine method
+     */
     private void ReadLines(String filename) throws FileNotFoundException, IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -47,6 +57,9 @@ public class SkillHandle2 {
         }
     }
 
+    /**
+     * @param line string representing the current line of the file
+     */
     private void ParseLine(String line){
 
         if (line.length() < 6) {
@@ -71,11 +84,19 @@ public class SkillHandle2 {
 
     }
 
+    /**
+     * @param line string representing the current line of the file
+     * @return returns the typical question from the file
+     */
     private String ParseQuestion(String line){
         String question = line.substring(9);
         return question;
     }
 
+    /**
+     * @param line string representing the current line of the file
+     * @return the placeholder slot parsed with <Placeholder name, Placeholder value>
+     */
     private Tuple<String,String> ParseSlot(String line){
 
         line = line.substring(5);
@@ -87,6 +108,10 @@ public class SkillHandle2 {
         return result;
     }
 
+    /**
+     * @param line string representing the current line of the file
+     * @return a tuple with <answer1, list(tuple<placeholder name, placeholder value>) : for each answer, the placeholders and the value that goes with them extracted from the file.
+     */
     private Tuple<String,List<Tuple<String,String>>> ParseAnswer(String line){
         line = line.substring(7);
 

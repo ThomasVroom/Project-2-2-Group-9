@@ -4,20 +4,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+
 public class Question {
+
     //used for identifying the skill (Debug/convenience) purposes only
     String name;
+
     //patternQuestion is the string of the skill with .* at the places of the variable
     public String patternQuestion;
+
     //cleanQuestion is string of the skill with nothing at the places of the variable
     public String cleanQuestion;
     public List<Tuple<Integer,String>> variablesWithAddedLocation;
     List<String> variables;
+
     //these are thing like (<DAY>, monday) or (<TIME>, 8:00)
     List<Tuple<String,String>> placeholders;
+
     // this looks like {(answer1,{(<DAY>, monday),(<TIME>, 9:00)}),(answer2,{(<DAY>, friday),(<TIME>, 11:00)})}
     List<Tuple<String,List<Tuple<String,String>>>> answers;
+
     //example input: what weather is it on <Name1> at <Name2> thanks
+
+    /**
+     * @param rquestion string representing the user question
+     * @param placeholders list of tuples <PLACEHOLDER>,<Placeholder variable>
+     * @param answers list of tuple < possible answer>,<list of tuple <PLACEHOLDER><Placeholder variable>>
+     * @param name string for placeholder name
+     */
     public Question(String rquestion,List<Tuple<String,String>> placeholders, List<Tuple<String,List<Tuple<String,String>>>> answers,String name){
         variablesWithAddedLocation = new ArrayList<>();
         String fquestion = rquestion;
@@ -36,52 +50,12 @@ public class Question {
         this.placeholders = placeholders;
         this.answers = answers;
         this.name = name;
-    }
+    }  
 
-    public float Matches(String userQuestion) {
-        if (Pattern.matches(patternQuestion,userQuestion))
-            return 1.0f;
-        return 0.0f;
-    }
-    public float Matches2(String userQuestion) {
-        float result = 0;
-        String[] userWords = userQuestion.toLowerCase().split(" ");
-        ArrayList<String> skillWords = new ArrayList<>(Arrays.asList(cleanQuestion.toLowerCase().split(" ")));
-        int lengthOfSkillWords = skillWords.size();
-        for (String word : userWords) {
-             if (skillWords.contains(word)) {
-                 skillWords.remove(skillWords.indexOf(word));
-                 result += 1f/lengthOfSkillWords;
-             }
-        }
-        return result;
-    }
-    public float Matches3(String userQuestion){
-        float result = 0;
-        String[] userWords = userQuestion.toLowerCase().split(" ");
-        ArrayList<String> skillWords = new ArrayList<>(Arrays.asList(cleanQuestion.toLowerCase().split(" ")));
-        int lengthOfSkillWords = skillWords.size();
-        for (String word : userWords) {
-            if (skillWords.contains(word)) {
-                skillWords.remove(skillWords.indexOf(word));
-                result += 1f/lengthOfSkillWords;
-            }
-        }
-        result += (float) getVariable2(userQuestion).size()/variablesWithAddedLocation.size();
-        return result/2;
-    }
-    public List <Tuple<Integer,String>> getVariable(String userQuestion) {
-        if (Matches(userQuestion) < 0.5) //float stuff don't worry about it
-            throw new RuntimeException();
-        List <Tuple<Integer,String>> returnList = new ArrayList<>();
-        for (int i = 0; i < variablesWithAddedLocation.size(); i++) {
-            returnList.add(new Tuple<>(i,userQuestion.substring(variablesWithAddedLocation.get(i).x(),userQuestion.indexOf(" " , variablesWithAddedLocation.get(i).x()))));
-            userQuestion = userQuestion.replaceAll(userQuestion.substring(variablesWithAddedLocation.get(i).x(),userQuestion.indexOf(" " , variablesWithAddedLocation.get(i).x())),"");
-        }
-        return returnList;
-    }
-
-    // return all the variables in a string as list of tuples like : {(DAY,monday), (TIME,8:00)}
+    /**
+     * @param userQuestion string representing the user question with variables instead of placeholders
+     * @return all the variables in a string as list of tuples like : {(DAY,monday), (TIME,8:00)}
+     */
     public List<Tuple<String,String>> getVariable2(String userQuestion){
         List<String> userWords = Arrays.asList(userQuestion.split(" "));
         List<Tuple<String,String>> result = new ArrayList<>();
@@ -108,6 +82,11 @@ public class Question {
         }
         return result;
     }
+
+    /**
+     * @param variables tuple representing <PLACEHOLDER>,<Placeholder variable>
+     * @return correct answer for question, no answer found if not successful
+     */
     public String getAnswer(List<Tuple<String,String>> variables){
         boolean breaked = false;
         for (Tuple<String,List<Tuple<String,String>>> answer : answers) {
