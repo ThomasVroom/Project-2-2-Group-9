@@ -2,6 +2,9 @@ package org.Project22.GUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import javax.swing.*;
 import org.Project22.Tuple;
@@ -52,7 +55,7 @@ public class UI extends JFrame {
             }
         });
 
-        webcamButton.setText("Webcam");
+        webcamButton.setText("Webcam "+new String(Character.toChars(0x1F4F8)));
         webcamButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 webcamButtonActionPerformed(evt);
@@ -152,11 +155,28 @@ public class UI extends JFrame {
         new SkillEditor().setVisible(true);
     }                                                 
 
-    private void webcamButtonActionPerformed(ActionEvent evt) {                                             
-        // TODO add your handling code here:
+    private void webcamButtonActionPerformed(ActionEvent evt) {  
+        new WebCamThread().start();
     }                                            
 
     private void clearButtonActionPerformed(ActionEvent evt) {                                            
         this.chatScrollPane.setViewportView(new ChatWindow());
+    }
+
+    private class WebCamThread extends Thread {
+
+        @Override
+        public void run() {
+            try {
+                String[] source = {"python3", "src/main/java/org/Project22/WebCamRecognition/WebCamRec.py"};
+                Process process = Runtime.getRuntime().exec(source);
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String output;
+                while ((output = reader.readLine()) != null) {
+                    System.out.println(output);
+                }
+            } catch (IOException e) {e.printStackTrace();}
+        }
     }
 }

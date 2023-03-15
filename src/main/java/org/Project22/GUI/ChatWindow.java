@@ -3,11 +3,18 @@ package org.Project22.GUI;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.imageio.ImageIO;
+import javax.swing.Action;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
@@ -69,9 +76,29 @@ public class ChatWindow extends JTextPane {
     private StyledDocument doc;
 
     /**
+     * Action called when the up-key is pressed.
+     */
+    private UpDownAction upAction;
+
+    /**
+     * Action called when the down-key is pressed.
+     */
+    private UpDownAction downAction;
+
+    /**
      * Keeps track of where the user is allowed to type.
      */
     private int allowed_offset;
+
+    /**
+     * List that keeps track of the prompts the user has typed.
+     */
+    private List<String> promptHistory;
+
+    /**
+     * Keeps track of how many times the user has pressed up.
+     */
+    private int upCount;
 
     public ChatWindow() {
         // load background
@@ -93,6 +120,15 @@ public class ChatWindow extends JTextPane {
         this.setOpaque(false);
         this.setBackground(new Color(0,0,0,0));
         this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+        this.promptHistory = new ArrayList<String>();
+
+        // change keybindings
+        this.upAction = new UpDownAction(this, true);
+        this.downAction = new UpDownAction(this, false);
+        this.getInputMap().put(KeyStroke.getKeyStroke("UP"), "up_key_press");
+        this.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "down_key_press");
+        this.getActionMap().put("up_key_press", this.upAction);
+        this.getActionMap().put("down_key_press", this.downAction);
 
         // initialize document
         this.doc = (StyledDocument)this.getDocument();
@@ -121,6 +157,18 @@ public class ChatWindow extends JTextPane {
     public void addText(String s, AttributeSet attr) {
         try {
             this.doc.insertString(this.doc.getLength(), s, attr);
+        } catch (BadLocationException e) {e.printStackTrace();}
+    }
+
+    /**
+     * Delete the prompt the user is currently typing.
+     */
+    public void deletePrompt() {
+        int promptSize = this.doc.getLength() - this.allowed_offset;
+        try {
+            for (int i = 0; i < promptSize; i++) {
+                this.doc.remove(this.doc.getLength() - 1, 1);
+            }
         } catch (BadLocationException e) {e.printStackTrace();}
     }
 
@@ -184,6 +232,9 @@ public class ChatWindow extends JTextPane {
                     // get input string
                     String input = this.comp.doc.getText(allowed_offset, offset - allowed_offset);
 
+                    // add prompt to history
+                    this.comp.promptHistory.add(input);
+
                     // process input
                     this.comp.addText("\n\n" + BOT_NAME, NAME_HEADER);
                     this.comp.changeAlignment(false);
@@ -210,5 +261,88 @@ public class ChatWindow extends JTextPane {
 
             super.replace(fb, offset, length, text, attrs);
         }
+    }
+
+    /**
+     * Action that allows the user to view their prompt history by pressing up or down.
+     */
+    private class UpDownAction implements Action {
+
+        /**
+         * Reference to the chat component.
+         */
+        private ChatWindow comp;
+
+        /**
+         * true if this action should be used for the up key, false if down.
+         */
+        private final boolean up;
+
+        public UpDownAction(ChatWindow comp, boolean up) {
+            // set components
+            this.comp = comp;
+            this.up = up;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            // hardcoded patch
+            if (this.comp.promptHistory.size() == 0) return;
+
+            // only activate if mouse position is not before prompt
+            if (this.comp.getCaretPosition() >= this.comp.allowed_offset) {
+                // delete current prompt
+                this.comp.deletePrompt();
+
+                String prompt;
+
+                // up
+                if (up) {
+                    if (this.comp.upCount < this.comp.promptHistory.size()) {
+                        prompt = this.comp.promptHistory.get(this.comp.promptHistory.size() - 1 - this.comp.upCount);
+                        this.comp.upCount++;
+                    }
+                    else {
+                        prompt = this.comp.promptHistory.get(0);
+                    }
+                }
+
+                //down
+                else {
+                    if (this.comp.upCount > 0) {
+                        this.comp.upCount--;
+                    }
+                    
+                    if (this.comp.upCount == 0) {
+                        prompt = "";
+                    }
+                    else {
+                        prompt = this.comp.promptHistory.get(this.comp.promptHistory.size() - this.comp.upCount);
+                    }
+                }
+
+                // add prompt
+                this.comp.addText(prompt, LEFT);
+            }
+        }
+
+        @Override
+        public Object getValue(String key) {return null;}
+
+        @Override
+        public void putValue(String key, Object value) {}
+
+        @Override
+        public void setEnabled(boolean b) {}
+
+        @Override
+        public boolean isEnabled() {return true;}
+
+        @Override
+        public void addPropertyChangeListener(PropertyChangeListener listener) {}
+
+        @Override
+        public void removePropertyChangeListener(PropertyChangeListener listener) {}
+        
     }
 }
