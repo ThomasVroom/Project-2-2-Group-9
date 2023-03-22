@@ -1,10 +1,6 @@
 package org.Project22.GUI;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.Project22.Main;
-import org.Project22.Question;
-import org.Project22.Tuple;
 
 public class InputProcessor {
     
@@ -13,6 +9,6 @@ public class InputProcessor {
      * @return the correct answer to display based on the input
      */
     public static String process(String input) {
-        return Main.answerGenerator.getAnswer(input.toLowerCase());
+        return Main.answerGenerator.getAnswer(input.replaceAll("[^a-zA-Z0-9 ]", "").toLowerCase());
     }
 }

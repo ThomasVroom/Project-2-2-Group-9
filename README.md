@@ -39,7 +39,8 @@ Action <Place> Maastricht <Place> Heerlen <Time> 11am By car.
 Action <Place> Sittard <Place> Maastricht <Time> 11am By bike.
 ```
 
-5. After defining a new skill, press the 'Clear Chat' button to reload all existing skills.
+- Key-words in the skill template cannot have any special characters, and is not case sensitive.
+- After defining a new skill, press the 'Clear Chat' button to reload all existing skills.
 
 ### Notes
 
