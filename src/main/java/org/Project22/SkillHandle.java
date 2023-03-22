@@ -40,7 +40,7 @@ public class SkillHandle {
         }
         List<Tuple<String,List<Tuple<String,String>>>> answersFinal = new ArrayList<>();
         for (String answer: answers){
-            List<Tuple<String,String>> placeholders = getVariable(answer,slotsExtracted);
+            List<Tuple<String,String>> placeholders = getVariable(answer.toLowerCase(),slotsExtracted);
             while (answer.contains("<")){
                 answer = answer.replaceAll(answer.substring(answer.indexOf("<"),answer.indexOf(">")+1), "");
             }
@@ -49,7 +49,7 @@ public class SkillHandle {
         for (Tuple<String, List<Tuple<String, String>>> answer : answersFinal) {
             for (Tuple<String,String>an:answer.y()) {
                 if (!slotsExtracted.contains(an))
-                    slotsExtracted.add(an);
+                    slotsExtracted.add(new Tuple<>(an.x(),an.y().toLowerCase()));
             }
         }
         return new Question(question,slotsExtracted,answersFinal,filename.substring(0, filename.lastIndexOf('.')));
@@ -69,8 +69,8 @@ public class SkillHandle {
             for (Tuple<String,String> slot: slotsExtracted) {
                 if(word.equals(slot.y())){
                     if (categories.contains(slot.x())){
-                        categories.add(slot.x()+"-"+categories.size());
-                        result.add(new Tuple<>(slot.x()+"-"+categories.size(),slot.y()));
+                        categories.add(slot.x()+"#"+categories.size());
+                        result.add(new Tuple<>(slot.x()+"#"+categories.size(),slot.y().toLowerCase()));
                     }
                     else{
                         categories.add(slot.x());
@@ -84,8 +84,8 @@ public class SkillHandle {
                         addedwords += " "+userWords.get(i);
                         if (slot.y().equals(word+addedwords)){
                             if (categories.contains(slot.x())){
-                                categories.add(slot.x()+"-"+categories.size());
-                                result.add(new Tuple<>(slot.x()+"-"+categories.size(),slot.y()));
+                                categories.add(slot.x()+"#"+categories.size());
+                                result.add(new Tuple<>(slot.x()+"#"+categories.size(),slot.y().toLowerCase()));
                             }
                             else{
                                 categories.add(slot.x());
