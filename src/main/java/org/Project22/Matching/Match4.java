@@ -1,27 +1,36 @@
 package org.Project22.Matching;
 
 import org.Project22.Question;
+import org.Project22.Tuple;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Match4 implements MatchingInterface{
 
-    private Map<String, Boolean> stopWordsTable;
+    // ----- Weights -----
+    private double LevenshteinDistance = 0.8; // minimum similarity between words
+    private double relevantWordsWeight = 0.3; // weight of the number of relevant words
+    private double consistentParametersWeight = 0.7; // weight of the number of consistent parameters
+    // ----- Weights -----
 
+    private Map<String, Boolean> stopWordsTable; // Hash table of stop words
+    
     @Override
     public float Matching(String userQuestion, Question question) {
         StopWordsHashTable();
-        float result;
+        double result;
         int matchingWords = 0;
         int totalWords = 0;
-        float consistentParametersRate = (float) question.getVariable2(userQuestion).size()/question.variablesWithAddedLocation.size();
+        userQuestion = removePunctuation(userQuestion);
+        double consistentParametersRate = (double) getVariable(userQuestion, question).size()/question.variablesWithAddedLocation.size();
 
-        userQuestion = removePunctuation(userQuestion.toLowerCase()); 
+        userQuestion = userQuestion.toLowerCase();
         ArrayList<String> userWords = new ArrayList<>(Arrays.asList(userQuestion.toLowerCase().split(" ")));
         ArrayList<String> skillWords = new ArrayList<>(Arrays.asList(question.cleanQuestion.toLowerCase().split(" ")));
 
@@ -29,16 +38,17 @@ public class Match4 implements MatchingInterface{
             if (isStopWord(word) == false && !word.equals(" ") && !word.equals("")) {
                 totalWords += 1;
                 for (String userWord : userWords) {
-                    if (StringSimilarity(word, userWord) > 0.8) {
+                    if (StringSimilarity(word, userWord) >= LevenshteinDistance) {
                         matchingWords += 1;
                     }
                 }
             }
         }
-        result = (float) (matchingWords/totalWords) * 0.5f;
-        result += (float)(0.5f * consistentParametersRate);
-        return result;
+        result = ((double) matchingWords / totalWords) * relevantWordsWeight;
+        result += (consistentParametersRate * consistentParametersWeight);
+        return (float) result;
     }
+
     // Read stop words from the file and store them in a hash table
     private void StopWordsHashTable() {
         stopWordsTable = new HashMap<>();
@@ -84,9 +94,9 @@ public class Match4 implements MatchingInterface{
         }
      
         int maxLen = Math.max(len1, len2);
-        double similarityRate = (double) (maxLen - distance[len1][len2]) / maxLen;
+        float similarityRate = (float) (maxLen - distance[len1][len2]) / maxLen;
 
-        return (float) similarityRate;
+        return similarityRate;
         
     }
 
@@ -97,6 +107,33 @@ public class Match4 implements MatchingInterface{
             char c = text.charAt(i);
             if (Character.isLetterOrDigit(c) || Character.isWhitespace(c)) {
                 result += c;
+            }
+        }
+        return result;
+    }
+
+    private List<Tuple<String,String>> getVariable(String userQuestion, Question question){
+        List<String> userWords = Arrays.asList(userQuestion.split(" "));
+        List<Tuple<String,String>> result = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
+        for (String word: userWords) {
+            for (Tuple<String,String> placeholder: question.placeholders) {
+                if(StringSimilarity(word, placeholder.y().toLowerCase()) >= LevenshteinDistance && !categories.contains(placeholder.x())){
+                    result.add(placeholder);
+                    categories.add(placeholder.x());
+                    break;
+                }
+                else if (placeholder.y().contains(word) && !categories.contains(placeholder.x()) && !word.equals("")){
+                    String addedwords = "";
+                    for (int i = userWords.indexOf(word)+1; i < userWords.size(); i++) {
+                        addedwords += " "+userWords.get(i);
+                        if (placeholder.y().equals(word+addedwords)){
+                            result.add(placeholder);
+                            categories.add(placeholder.x());
+                            break;
+                        }
+                    }
+                }
             }
         }
         return result;
