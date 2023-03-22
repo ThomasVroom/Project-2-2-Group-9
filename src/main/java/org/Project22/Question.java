@@ -19,7 +19,7 @@ public class Question {
     List<String> variables;
 
     //these are thing like (<DAY>, monday) or (<TIME>, 8:00)
-    List<Tuple<String,String>> placeholders;
+    public List<Tuple<String,String>> placeholders;
 
     // this looks like {(answer1,{(<DAY>, monday),(<TIME>, 9:00)}),(answer2,{(<DAY>, friday),(<TIME>, 11:00)})}
     List<Tuple<String,List<Tuple<String,String>>>> answers;
