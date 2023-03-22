@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 import javax.swing.*;
+
+import org.Project22.Main;
 import org.Project22.Tuple;
 
 public class UI extends JFrame {
@@ -165,7 +167,8 @@ public class UI extends JFrame {
         new WebCamThread().start();
     }                                            
 
-    private void clearButtonActionPerformed(ActionEvent evt) {                                            
+    private void clearButtonActionPerformed(ActionEvent evt) {   
+        Main.loadSkills();                                         
         this.chatScrollPane.setViewportView(new ChatWindow());
     }
 

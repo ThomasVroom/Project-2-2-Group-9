@@ -20,7 +20,26 @@ This application uses [Java Swing](https://en.wikipedia.org/wiki/Swing_(Java)) a
 
 1. Open this repository. Make sure you have gradle installed.
 2. Launch the application by running the main class located in Main.java.
-3. ...
+
+3. Talk to our digital assistant by typing in the chat box, then press the Enter key to send your message.
+4. To define a new skill, open the skill editor and specify a skill based on the template-based format, for example:
+
+```
+Question How do I get from <Place> to <Place> at <Time>?
+
+Slot <Place> Maastricht
+Slot <Place> Heerlen
+Slot <Place> Sittard
+
+Slot <Time> 9am
+Slot <Time> 11am
+
+Action <Place> Maastricht <Place> Heerlen <Time> 9am By train.
+Action <Place> Maastricht <Place> Heerlen <Time> 11am By car.
+Action <Place> Sittard <Place> Maastricht <Time> 11am By bike.
+```
+
+5. After defining a new skill, press the 'Clear Chat' button to reload all existing skills.
 
 ### Notes
 
