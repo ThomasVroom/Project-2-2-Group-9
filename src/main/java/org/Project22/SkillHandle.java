@@ -36,7 +36,7 @@ public class SkillHandle {
         }
         List<Tuple<String,String>> slotsExtracted = new ArrayList<>();
         for (String slot:slots) {
-            slotsExtracted.add(new Tuple<>(slot.substring(slot.indexOf("<")+1,slot.indexOf(">")).trim().toUpperCase(),slot.substring(slot.indexOf(">")+1).trim()));
+            slotsExtracted.add(new Tuple<>(slot.substring(slot.indexOf("<")+1,slot.indexOf(">")).trim().toUpperCase(),slot.substring(slot.indexOf(">")+1).trim().toLowerCase()));
         }
         List<Tuple<String,List<Tuple<String,String>>>> answersFinal = new ArrayList<>();
         for (String answer: answers){
