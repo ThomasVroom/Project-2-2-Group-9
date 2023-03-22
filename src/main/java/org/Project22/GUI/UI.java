@@ -23,7 +23,7 @@ public class UI extends JFrame {
     private JButton skilleditorButton;
     private JButton webcamButton;
 
-    private static final String[] matching_algorithms = new String[] { "Matcher 1", "Matcher 2", "Matcher 3", "Matcher 4" };
+    private static final String[] matching_algorithms = new String[] { "Exact Match", "Split Variables", "Split Variables+", "Filter Match" };
     
     public UI() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
