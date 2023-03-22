@@ -15,11 +15,12 @@ public class Question {
 
     //cleanQuestion is string of the skill with nothing at the places of the variable
     public String cleanQuestion;
+    //dirtyQuestion is string of the skill with everything as it started
+    public String dirtyQuestion;
     public List<Tuple<Integer,String>> variablesWithAddedLocation;
-    List<String> variables;
 
     //these are thing like (<DAY>, monday) or (<TIME>, 8:00)
-    List<Tuple<String,String>> placeholders;
+    public List<Tuple<String,String>> placeholders;
 
     // this looks like {(answer1,{(<DAY>, monday),(<TIME>, 9:00)}),(answer2,{(<DAY>, friday),(<TIME>, 11:00)})}
     List<Tuple<String,List<Tuple<String,String>>>> answers;
@@ -46,6 +47,7 @@ public class Question {
         while (cleanQuestion.contains("<")){
             cleanQuestion = cleanQuestion.replaceAll(cleanQuestion.substring(cleanQuestion.indexOf("<"),cleanQuestion.indexOf(">")+1), "");
         }
+        dirtyQuestion = rquestion;
         patternQuestion = fquestion;
         this.placeholders = placeholders;
         this.answers = answers;
