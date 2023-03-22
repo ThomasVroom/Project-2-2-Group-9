@@ -34,7 +34,7 @@ public class AnswerGenerator{
      * @return the appropriate answer for the user question
      */
     public String getAnswer(String userString){
-        Triple<Integer, String, Float> question = matchQuestion(userString,questions).get(0);
+        Triple<Integer, String, Float> question = matchQuestion(userString,questions, Main.ui.getMatchingAlgorithm()).get(0);
 
         Question question2 = questions.get(question.x());
         List<Tuple<String, String>> variables = question2.getVariable2(userString);
