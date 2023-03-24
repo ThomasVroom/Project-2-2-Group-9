@@ -41,7 +41,7 @@ def detectFaceAndEyes():
 
             # the copy of the frame to draw rectangles to cover the eyes however there is a difference between frame and
             # rectangleOfImage_in_frame: rectangleOfImage_in_frame is the little part of the frame that has the sizes of
-            # rectangles that covers the faces.
+            # rectangles that covers the faces
             rectangleOfImage_in_frame = frame[y:y + h, x:x + w]
 
             # the eyes in the rectangle which covers the detected face, will be detected and the rectangles will be
