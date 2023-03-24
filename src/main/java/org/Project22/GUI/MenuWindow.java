@@ -9,20 +9,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MenuWindow {
-    public JFrame frame = new JFrame();
+    public JFrame frame;
     public JPanel menuPanel;
     private JButton authenticationButton;
     private JButton welcomeButton;
     private JButton detectedButton;
     private JButton welcomeLabel;
     private JButton noAccessButton;
+    private JButton noWebCamButton;
+    private JButton continueButton;
     private BufferedImage background, resized_b;
     private JLabel background_label;
+    private JPasswordField passwordField;
     private ImageIcon icon;
     public ArrayList<String> outputList;
 
@@ -35,18 +42,14 @@ public class MenuWindow {
         int w = (int) (screenSize.getWidth());
         int h = (int) (screenSize.getHeight());
 
-        frame.setVisible(true);
-        frame.setBounds((w -768)/2,(h -767)/2,768,740);
-        frame.setResizable(false);
         menuPanel = new JPanel();
         menuPanel.setLayout(new BorderLayout());
         Color lightBlue = new Color(173, 216, 230); // RGB values for light blue
-        menuPanel.setBackground(lightBlue);
-        frame.add(menuPanel);
+        //menuPanel.setBackground(lightBlue);
 
         welcomeButton = new JButton("Digital Assistant");
         menuPanel.add(welcomeButton);
-        welcomeButton.setBounds(15,200,768,80);
+        welcomeButton.setBounds(15,60,768,80);
         welcomeButton.setForeground(Color.red.darker());
         welcomeButton.setFont(new Font("Sans-serif",Font.BOLD,60));
         welcomeButton.setOpaque(false);
@@ -56,8 +59,8 @@ public class MenuWindow {
 
         welcomeLabel = new JButton("Hello DACS Student!");
         menuPanel.add(welcomeLabel);
-        welcomeLabel.setFont(new Font("Sans-serif",Font.BOLD,20));
-        welcomeLabel.setBounds(15,320,768,100);
+        welcomeLabel.setFont(new Font("Sans-serif",Font.BOLD,30));
+        welcomeLabel.setBounds(15,150,768,100);
         welcomeLabel.setForeground(Color.black.darker());
         welcomeLabel.setOpaque(false);
         welcomeLabel.setContentAreaFilled(false);
@@ -66,14 +69,42 @@ public class MenuWindow {
 
         //MENU LABEL
         authenticationButton = new JButton("Authentication");
-        menuPanel.add(authenticationButton);
         authenticationButton.setBounds(200,500,368,50);
         authenticationButton.setForeground(Color.black.brighter());
         authenticationButton.setFont(new Font("Sans-serif",Font.BOLD,30));
-        authenticationButton.setOpaque(false);
-        authenticationButton.setContentAreaFilled(false);
+        authenticationButton.setOpaque(true);
+        authenticationButton.setContentAreaFilled(true);
+        authenticationButton.setBackground(lightBlue);
         authenticationButton.setBorderPainted(true);
         authenticationButton.setFocusPainted(false);
+        menuPanel.add(authenticationButton);
+
+        noWebCamButton = new JButton("No access to webcam");
+        noWebCamButton.setBounds(200,585,368,50);
+        noWebCamButton.setFont(new Font("Sans-serif",Font.BOLD,20));
+        Color darkBlue = new Color(53, 98, 189); // RGB values for light blue
+        noWebCamButton.setForeground(darkBlue);
+        Font font = noWebCamButton.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        noWebCamButton.setFont(font.deriveFont(attributes));
+        noWebCamButton.setOpaque(false);
+        noWebCamButton.setContentAreaFilled(false);
+        noWebCamButton.setBorderPainted(false);
+        noWebCamButton.setFocusPainted(false);
+        menuPanel.add(noWebCamButton);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(284,629,200,30);
+        passwordField.setVisible(false);
+        menuPanel.add(passwordField);
+
+        continueButton = new JButton("Continue");
+        continueButton.setBounds(330,665,100,30);
+        continueButton.setFont(new Font("Sans-serif",Font.BOLD,10));
+        continueButton.setVisible(false);
+        menuPanel.add(continueButton);
+
 
         detectedButton = new JButton("Hello human! I'd love to help you.");
         menuPanel.add(detectedButton);
@@ -86,15 +117,15 @@ public class MenuWindow {
         detectedButton.setBorderPainted(true);
         detectedButton.setFocusPainted(false);
 
-        noAccessButton = new JButton("Try again.");
+        noAccessButton = new JButton("Try again");
         noAccessButton.setVisible(false);
         menuPanel.add(noAccessButton);
         noAccessButton.setForeground(Color.black.brighter());
-        noAccessButton.setBounds(15,500,400,50);
+        noAccessButton.setBounds(200,550,368,50);
         noAccessButton.setFont(new Font("Sans-serif",Font.BOLD,20));
-        noAccessButton.setOpaque(false);
-        noAccessButton.setContentAreaFilled(false);
-        noAccessButton.setBorderPainted(true);
+        noAccessButton.setOpaque(true);
+        noAccessButton.setContentAreaFilled(true);
+        noAccessButton.setBorderPainted(false);
         noAccessButton.setFocusPainted(false);
 
         authenticationButton.addMouseListener(new MouseListener() {
@@ -103,8 +134,10 @@ public class MenuWindow {
 
                 webcamButtonActionPerformed(event);
 
+                noAccessButton.setVisible(false);
+
                 try {
-                    Thread.sleep(7000); // delay for 1000 milliseconds (1 second)
+                    Thread.sleep(10000); // delay for 1000 milliseconds (1 second)
                 } catch (InterruptedException et) {
                     // handle the exception
                 }
@@ -117,7 +150,7 @@ public class MenuWindow {
                     menuPanel.add(detectedButton);
 
                     try {
-                        Thread.sleep(2000); // delay for 1000 milliseconds (1 second)
+                        Thread.sleep(1000); // delay for 1000 milliseconds (1 second)
                     } catch (InterruptedException et) {
                         // handle the exception
                     }
@@ -148,20 +181,53 @@ public class MenuWindow {
 
             }
         });
-//
-//
-//        try {
-//            File imageFile = new File("image.png");
-//            background = ImageIO.read(imageFile);
-//        } catch (IOException ex) {
-//            System.err.println("Error reading image file: " + ex.getMessage());
-//            ex.printStackTrace();
-//        }
-//
-//        background_label = new JLabel();
-//        icon = new ImageIcon(background);
-//        background_label.setIcon(icon);
-//        menuPanel.add(background_label,BorderLayout.CENTER);
+
+        noWebCamButton.addActionListener(e -> {
+            noAccessButton.setVisible(false);
+            noWebCamButton.setText("Enter your password:");
+            noWebCamButton.setForeground(Color.BLACK);
+            passwordField.setVisible(true);
+            continueButton.setVisible(true);
+
+        });
+        continueButton.addActionListener(e -> {
+            try {
+                Thread.sleep(1000); // delay for 1000 milliseconds (1 second)
+            } catch (InterruptedException et) {
+                // handle the exception
+            }
+            frame.setVisible(false);
+            Main.ui = new UI();
+        });
+
+
+        try {
+            File imageFile = new File("src/main/java/org/Project22/GUI/image.png");
+            BufferedImage originalImage = ImageIO.read(imageFile);
+
+            int scaledWidth = 200; // set the width to which you want to resize the image
+            int scaledHeight = 200; // set the height to which you want to resize the image
+            Image scaledImage = originalImage.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+            BufferedImage resizedImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
+
+            Graphics2D graphics2D = resizedImage.createGraphics();
+            graphics2D.drawImage(scaledImage, 0, 0, null);
+            graphics2D.dispose();
+
+            background_label = new JLabel(new ImageIcon(resizedImage));
+            menuPanel.add(background_label, BorderLayout.CENTER);
+
+            // use the resized image as needed
+        } catch (IOException ex) {
+            System.err.println("Error reading image file: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        frame = new JFrame();
+        frame.setVisible(true);
+        frame.setBounds((w -768)/2,(h -767)/2,768,740);
+        frame.setResizable(false);
+        frame.add(menuPanel);
 
     }
     private void webcamButtonActionPerformed(MouseEvent evt) {
