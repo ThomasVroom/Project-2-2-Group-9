@@ -1,5 +1,6 @@
 package org.Project22.GUI;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -11,7 +12,9 @@ import javax.swing.*;
 import org.Project22.Main;
 import org.Project22.Tuple;
 
-public class UI extends JFrame {
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
+public class UI{
 
     private JScrollPane chatScrollPane;
     private JProgressBar confidenceBar;
@@ -23,25 +26,27 @@ public class UI extends JFrame {
     private JComboBox<String> languageBox;
     private JLabel languageLabel;
     private JButton skilleditorButton;
-    private JButton webcamButton;
+    //private JButton webcamButton;
+    private MenuWindow menuWindow= new MenuWindow();
 
-    private static final String[] matching_algorithms = new String[] { "Exact Match", "Split Variables", "Split Variables+", "Filter Match" };
-    
+
+    private static final String[] matching_algorithms = new String[]{"Exact Match", "Split Variables", "Split Variables+", "Filter Match"};
+
     public UI() {
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setTitle("Chatbot");
-        setResizable(false);
+
+        menuWindow.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        menuWindow.frame.setTitle("Chatbot");
+        menuWindow.frame.setResizable(true);
 
         initComponents();
 
-        setLocationRelativeTo(null);
-        setVisible(true);
+        menuWindow.frame.setLocationRelativeTo(null);
     }
 
     private void initComponents() {
 
         skilleditorButton = new JButton();
-        webcamButton = new JButton();
+//        webcamButton = new JButton();
         languageBox = new JComboBox<>();
         languageLabel = new JLabel();
         clearButton = new JButton();
@@ -59,12 +64,12 @@ public class UI extends JFrame {
             }
         });
 
-        webcamButton.setText("Webcam "+new String(Character.toChars(0x1F4F8)));
-        webcamButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                webcamButtonActionPerformed(evt);
-            }
-        });
+//        webcamButton.setText("Webcam "+new String(Character.toChars(0x1F4F8)));
+//        webcamButton.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent evt) {
+//                webcamButtonActionPerformed(evt);
+//            }
+//        });
 
         languageBox.setModel(new DefaultComboBoxModel<>(matching_algorithms));
 
@@ -90,59 +95,59 @@ public class UI extends JFrame {
 
         debugPane.setEditable(false);
 
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        GroupLayout layout = new GroupLayout(menuWindow.frame.getContentPane());
+        menuWindow.frame.getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(chatScrollPane, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(confidenceBar, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(languageLabel, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                    .addComponent(debugScrollPane, GroupLayout.Alignment.TRAILING)
-                    .addComponent(confidenceLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(debugLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(skilleditorButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(webcamButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(clearButton, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                    .addComponent(languageBox, GroupLayout.Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(chatScrollPane, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(confidenceBar, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(languageLabel, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                                        .addComponent(debugScrollPane, GroupLayout.Alignment.TRAILING)
+                                        .addComponent(confidenceLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(debugLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(skilleditorButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//                                        .addComponent(webcamButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(clearButton, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                                        .addComponent(languageBox, GroupLayout.Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(webcamButton)
-                        .addGap(4, 4, 4)
-                        .addComponent(skilleditorButton)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clearButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(languageLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(languageBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(debugLabel)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(debugScrollPane, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(confidenceLabel)
-                        .addGap(4, 4, 4)
-                        .addComponent(confidenceBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addComponent(chatScrollPane, GroupLayout.PREFERRED_SIZE, 700, GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(layout.createSequentialGroup()
+//                                                .addComponent(webcamButton)
+                                                .addGap(4, 4, 4)
+                                                .addComponent(skilleditorButton)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(clearButton)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(languageLabel)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(languageBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(debugLabel)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(debugScrollPane, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(confidenceLabel)
+                                                .addGap(4, 4, 4)
+                                                .addComponent(confidenceBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(chatScrollPane, GroupLayout.PREFERRED_SIZE, 700, GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pack();
+        menuWindow.frame.pack();
     }
 
     public void setConfidence(float percentage) {
-        this.confidenceLabel.setText("Confidence: "+((int)(percentage * 100))/100f);
-        this.confidenceBar.setValue((int)(percentage * 100));
+        this.confidenceLabel.setText("Confidence: " + ((int) (percentage * 100)) / 100f);
+        this.confidenceBar.setValue((int) (percentage * 100));
     }
 
     public void setDebugText(String question, List<Tuple<String, String>> variables) {
@@ -159,34 +164,16 @@ public class UI extends JFrame {
         return languageBox.getSelectedIndex();
     }
 
-    private void skilleditorButtonActionPerformed(ActionEvent evt) {                                                  
+    private void skilleditorButtonActionPerformed(ActionEvent evt) {
         new SkillEditor().setVisible(true);
-    }                                                 
-
-    private void webcamButtonActionPerformed(ActionEvent evt) {  
-        new WebCamThread().start();
-    }                                            
-
-    private void clearButtonActionPerformed(ActionEvent evt) {   
-        Main.loadSkills();                                         
-        this.chatScrollPane.setViewportView(new ChatWindow());
     }
 
-    private class WebCamThread extends Thread {
+//    private void webcamButtonActionPerformed(ActionEvent evt) {
+//        new WebCamThread().start();
+//    }
 
-        private static final String[] source = {"python3", "src/main/java/org/Project22/WebCamRecognition/WebCamRec.py"};
-
-        @Override
-        public void run() {
-            try {
-                Process process = Runtime.getRuntime().exec(source);
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String output;
-                while ((output = reader.readLine()) != null) {
-                    System.out.println(output);
-                }
-            } catch (IOException e) {e.printStackTrace();}
-        }
+    private void clearButtonActionPerformed(ActionEvent evt) {
+        Main.loadSkills();
+        this.chatScrollPane.setViewportView(new ChatWindow());
     }
 }
