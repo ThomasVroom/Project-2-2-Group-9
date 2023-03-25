@@ -176,7 +176,7 @@ public class MenuWindow {
 
 
         try {
-            File imageFile = new File("src/main/java/org/Project22/GUI/image.png");
+            File imageFile = new File("resources/image.png");
             BufferedImage originalImage = ImageIO.read(imageFile);
 
             int scaledWidth = 200; // set the width to which you want to resize the image
