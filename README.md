@@ -21,8 +21,13 @@ This application uses [Java Swing](https://en.wikipedia.org/wiki/Swing_(Java)) a
 1. Open this repository. Make sure you have gradle installed.
 2. Launch the application by running the main class located in Main.java.
 
-3. Talk to our digital assistant by typing in the chat box, then press the Enter key to send your message.
-4. To define a new skill, open the skill editor and specify a skill based on the template-based format, for example:
+3. Press the `authentication` button to start the authentication process:
+  - The assistant will access your webcam to see if there is a human in front of it,
+  - If the assistant finds a human you will be granted access to the chat.
+  - If you don't have a webcam press the `No access to webcam` button and enter the password `XXXXX`.
+
+4. Talk to our digital assistant by typing in the chat box, then press the Enter key to send your message.
+5. To define a new skill, open the skill editor and specify a skill based on the template-based format, for example:
 
 ```
 Question How do I get from <Place> to <Place> at <Time>?
