@@ -31,7 +31,6 @@ public class MenuWindow {
     private JLabel background_label;
     private JPasswordField passwordField;
     private ImageIcon icon;
-    public ArrayList<String> outputList;
 
     public MenuWindow() {initializeMenu();}
 
@@ -135,31 +134,6 @@ public class MenuWindow {
                 webcamButtonActionPerformed(event);
 
                 noAccessButton.setVisible(false);
-
-                try {
-                    Thread.sleep(10000); // delay for 1000 milliseconds (1 second)
-                } catch (InterruptedException et) {
-                    // handle the exception
-                }
-
-                if(!outputList.isEmpty() & outputList.contains("A human was detected")){
-
-                    noAccessButton.setVisible(false);
-
-                    menuPanel.remove(authenticationButton);
-                    menuPanel.add(detectedButton);
-
-                    try {
-                        Thread.sleep(1000); // delay for 1000 milliseconds (1 second)
-                    } catch (InterruptedException et) {
-                        // handle the exception
-                    }
-                    frame.setVisible(false);
-                    Main.ui = new UI();
-
-                }else{
-                    noAccessButton.setVisible(true);
-                }
             }
             @Override
             public void mousePressed(MouseEvent e) {
@@ -227,6 +201,7 @@ public class MenuWindow {
         frame.setVisible(true);
         frame.setBounds((w -768)/2,(h -767)/2,768,740);
         frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(menuPanel);
 
     }
@@ -246,11 +221,27 @@ public class MenuWindow {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String output;
 
-                outputList = new ArrayList<>();
-
                 while ((output = reader.readLine()) != null) {
-                    outputList.add(output);
                     System.out.println(output);
+                    if(output.equals("A human was detected")){
+
+                        noAccessButton.setVisible(false);
+    
+                        menuPanel.remove(authenticationButton);
+                        menuPanel.add(detectedButton);
+    
+                        try {
+                            Thread.sleep(1000); // delay for 1000 milliseconds (1 second)
+                        } catch (InterruptedException et) {
+                            // handle the exception
+                        }
+                        
+                        frame.setVisible(false);
+                        Main.ui = new UI();
+    
+                    }else{
+                        noAccessButton.setVisible(true);
+                    }
                 }
             } catch (IOException e) {e.printStackTrace();}
         }

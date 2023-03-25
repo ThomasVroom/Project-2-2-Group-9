@@ -1,20 +1,14 @@
 package org.Project22.GUI;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 import javax.swing.*;
 
 import org.Project22.Main;
 import org.Project22.Tuple;
 
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-
-public class UI{
+public class UI extends JFrame{
 
     private JScrollPane chatScrollPane;
     private JProgressBar confidenceBar;
@@ -26,27 +20,24 @@ public class UI{
     private JComboBox<String> languageBox;
     private JLabel languageLabel;
     private JButton skilleditorButton;
-    //private JButton webcamButton;
-    private MenuWindow menuWindow= new MenuWindow();
 
-
-    private static final String[] matching_algorithms = new String[]{"Exact Match", "Split Variables", "Split Variables+", "Filter Match"};
+    private static final String[] matching_algorithms = new String[] {"Exact Match", "Split Variables", "Split Variables+", "Filter Match"};
 
     public UI() {
 
-        menuWindow.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        menuWindow.frame.setTitle("Chatbot");
-        menuWindow.frame.setResizable(true);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setTitle("Chatbot");
+        this.setResizable(true);
 
         initComponents();
 
-        menuWindow.frame.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
     }
 
     private void initComponents() {
 
         skilleditorButton = new JButton();
-//        webcamButton = new JButton();
         languageBox = new JComboBox<>();
         languageLabel = new JLabel();
         clearButton = new JButton();
@@ -63,13 +54,6 @@ public class UI{
                 skilleditorButtonActionPerformed(evt);
             }
         });
-
-//        webcamButton.setText("Webcam "+new String(Character.toChars(0x1F4F8)));
-//        webcamButton.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent evt) {
-//                webcamButtonActionPerformed(evt);
-//            }
-//        });
 
         languageBox.setModel(new DefaultComboBoxModel<>(matching_algorithms));
 
@@ -95,8 +79,8 @@ public class UI{
 
         debugPane.setEditable(false);
 
-        GroupLayout layout = new GroupLayout(menuWindow.frame.getContentPane());
-        menuWindow.frame.getContentPane().setLayout(layout);
+        GroupLayout layout = new GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -110,7 +94,6 @@ public class UI{
                                         .addComponent(confidenceLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(debugLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(skilleditorButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//                                        .addComponent(webcamButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(clearButton, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
                                         .addComponent(languageBox, GroupLayout.Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addContainerGap())
@@ -121,7 +104,6 @@ public class UI{
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                         .addGroup(layout.createSequentialGroup()
-//                                                .addComponent(webcamButton)
                                                 .addGap(4, 4, 4)
                                                 .addComponent(skilleditorButton)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -142,7 +124,7 @@ public class UI{
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        menuWindow.frame.pack();
+        this.pack();
     }
 
     public void setConfidence(float percentage) {
@@ -167,10 +149,6 @@ public class UI{
     private void skilleditorButtonActionPerformed(ActionEvent evt) {
         new SkillEditor().setVisible(true);
     }
-
-//    private void webcamButtonActionPerformed(ActionEvent evt) {
-//        new WebCamThread().start();
-//    }
 
     private void clearButtonActionPerformed(ActionEvent evt) {
         Main.loadSkills();

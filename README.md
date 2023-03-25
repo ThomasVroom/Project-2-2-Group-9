@@ -49,7 +49,7 @@ Action <Place> Sittard <Place> Maastricht <Time> 11am By bike.
   - open a terminal and navigate to this repository
   - to run the application, type `gradle run` in the terminal (starting up might take a while)
 
-- Java Runtime Environment must be needed to run the game (minimum 17).
+- Java Runtime Environment must be needed to launch the application.
   - https://www.java.com/nl/
 
 - Citation of code is mentioned in comments throughout the source code.

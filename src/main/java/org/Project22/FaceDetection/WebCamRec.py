@@ -1,6 +1,6 @@
 import cv2
 import time
-import face_recognition
+#import face_recognition
 
 start_time = time.time()
 
