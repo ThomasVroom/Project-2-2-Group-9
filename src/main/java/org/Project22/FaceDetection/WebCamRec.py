@@ -29,7 +29,7 @@ def detectFaceAndEyes():
         # Minimum Neighbors: This parameter specifies how many neighbors each potential detection rectangle must have
         #   in order to be considered a valid detection. Increasing the number of neighbors can reduce false positives
         #   but can also decrease the sensitivity of the detector and increase the likelihood of false negatives.
-        #   Higher value = fewer detections but higher quality. Value between 3-6 is good.
+        #   Higher value = fewer detections but higher quality. Value between 3-6 is good
         faces = face_detection.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
 
         for (x, y, w, h) in faces:
