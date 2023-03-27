@@ -4,14 +4,8 @@
  */
 package org.Project22.GUI;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 import org.Project22.TextHandler;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 /**

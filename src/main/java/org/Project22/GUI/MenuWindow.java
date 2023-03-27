@@ -5,17 +5,12 @@ import org.Project22.Main;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class MenuWindow {
     public JFrame frame;

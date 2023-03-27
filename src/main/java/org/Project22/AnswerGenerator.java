@@ -16,7 +16,7 @@ public class AnswerGenerator{
     public static MatchingInterface matchingAlgorithms[] = {new Match1(),new Match2(),new Match3(),new Match4()};
 
     //threshold
-    public float ConfidenceCutoff = 0.9f;
+    public float ConfidenceCutoff = 0.3f;
 
     //list of questions
     List<Question> questions;

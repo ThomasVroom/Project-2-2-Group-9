@@ -233,7 +233,7 @@ public class ChatWindow extends JTextPane {
                     String input = this.comp.doc.getText(allowed_offset, offset - allowed_offset);
 
                     // add prompt to history
-                    this.comp.promptHistory.add(input);
+                    if (!input.isBlank()) this.comp.promptHistory.add(input);
 
                     // process input
                     this.comp.addText("\n\n" + BOT_NAME, NAME_HEADER);
@@ -247,6 +247,7 @@ public class ChatWindow extends JTextPane {
                     // update document
                     this.comp.resetCursor();
                     this.comp.updateOffset();
+                    this.comp.upCount = 0;
                 } catch (BadLocationException e) {
                     e.printStackTrace();
                     System.out.println("(ignore)");
