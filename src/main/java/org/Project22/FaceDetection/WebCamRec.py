@@ -13,7 +13,7 @@ eye_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.x
 def detectFaceAndEyes():
     detected = False
 
-    while time.time() - start_time <= 5:
+    while time.time() - start_time <= 10:
 
         # ret indicates whether the capture is done successfully.
         # frame is the numpy array that represents the image.
@@ -23,12 +23,13 @@ def detectFaceAndEyes():
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # detects all the faces in the frame.
-        # the second input (1.3) is the scale factor for the case of the pixels of the image are high then the size of
-        #   the pixels are reduced by the scale factor -30% in this case-. Using small reduce size decreases the risk of
-        #   missing the detection of faces however it makes the algorithm slower.
-        #   Using bigger scale factor has the reverse effect.
-        # the third input - minNeighbors - (5) is the parameter specifying how many neighbors each candidate rectangle
-        #   should have to retain it. Higher value = fewer detections but higher quality. Value between 3-6 is good.
+        # Scale Factor: This parameter controls how much the image size is reduced at each image scale.
+        #   Increasing the scale factor can result in better detection of smaller faces, but it can also increase the
+        #   chances of false positives.
+        # Minimum Neighbors: This parameter specifies how many neighbors each potential detection rectangle must have
+        #   in order to be considered a valid detection. Increasing the number of neighbors can reduce false positives
+        #   but can also decrease the sensitivity of the detector and increase the likelihood of false negatives.
+        #   Higher value = fewer detections but higher quality. Value between 3-6 is good.
         faces = face_detection.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
 
         for (x, y, w, h) in faces:
