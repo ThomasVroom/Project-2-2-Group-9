@@ -18,7 +18,7 @@ This application uses [Java Swing](https://en.wikipedia.org/wiki/Swing_(Java)) a
 
 ### Instructions
 
-1. Open this repository. Make sure you have gradle installed.
+1. Open this repository. Make sure you have java, python, opencv and gradle installed.
 2. Launch the application by running the main class located in Main.java.
 
 3. Press the `authentication` button to start the authentication process:
@@ -44,6 +44,7 @@ Action <Place> Maastricht <Place> Heerlen <Time> 11am By car.
 Action <Place> Sittard <Place> Maastricht <Time> 11am By bike.
 ```
 
+Note that:
 - Key-words in the skill template cannot have any special characters, and is not case sensitive.
 - After defining a new skill, press the 'Clear Chat' button to reload all existing skills.
 
@@ -56,5 +57,9 @@ Action <Place> Sittard <Place> Maastricht <Time> 11am By bike.
 
 - Java Runtime Environment must be needed to launch the application.
   - https://www.java.com/nl/
+
+- Python and the OpenCV library must be needed to use the webcam functionality:
+  - https://www.python.org/
+  - https://pypi.org/project/opencv-python/
 
 - Citation of code is mentioned in comments throughout the source code.
