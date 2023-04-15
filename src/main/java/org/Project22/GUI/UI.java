@@ -2,6 +2,7 @@ package org.Project22.GUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 
@@ -23,8 +24,9 @@ public class UI extends JFrame{
 
     private static final String[] matching_algorithms = new String[] {"Exact Match", "Split Variables", "Split Variables+", "Filter Match"};
 
-    public UI() {
+    private List<String> variables;
 
+    public UI() {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Chatbot");
         this.setResizable(true);
@@ -36,7 +38,6 @@ public class UI extends JFrame{
     }
 
     private void initComponents() {
-
         skilleditorButton = new JButton();
         languageBox = new JComboBox<>();
         languageLabel = new JLabel();
@@ -47,6 +48,7 @@ public class UI extends JFrame{
         chatScrollPane = new JScrollPane();
         debugScrollPane = new JScrollPane();
         debugPane = new JTextPane();
+        variables = new ArrayList<String>();
 
         skilleditorButton.setText("Skill Editor");
         skilleditorButton.addActionListener(new ActionListener() {
@@ -135,11 +137,17 @@ public class UI extends JFrame{
     public void setDebugText(String question, List<Tuple<String, String>> variables) {
         String s = question + "\n\n";
 
+        this.variables.clear();
         for (Tuple<String, String> variable : variables) {
             s += variable.x() + " " + variable.y() + "\n";
+            this.variables.add(variable.y());
         }
 
         this.debugPane.setText(s);
+    }
+
+    public List<String> getVariables() {
+        return this.variables;
     }
 
     public int getMatchingAlgorithm() {

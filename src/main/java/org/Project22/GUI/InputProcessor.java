@@ -9,6 +9,6 @@ public class InputProcessor {
      * @return the correct answer to display based on the input
      */
     public static String process(String input) {
-        return Main.answerGenerator.getAnswer(input.replaceAll("[^a-zA-Z0-9 ]", "").toLowerCase());
+        return Main.answerGenerator.getAnswer(input);
     }
 }
