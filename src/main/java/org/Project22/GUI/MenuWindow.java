@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class MenuWindow {
@@ -19,9 +20,13 @@ public class MenuWindow {
     private JButton welcomeButton;
     private JButton detectedButton;
     private JButton welcomeLabel;
+    private JButton nameLabel;
+    private JTextField text_name;
+    private ArrayList<String> name_lists = new ArrayList<>();
+    private String userInput;
     private JButton noAccessButton;
     private JButton noWebCamButton;
-    private JButton continueButton;
+    private JButton continueButton1,continueButton2;
     private BufferedImage background, resized_b;
     private JLabel background_label;
     private JPasswordField passwordField;
@@ -61,11 +66,39 @@ public class MenuWindow {
         welcomeLabel.setBorderPainted(false);
         welcomeLabel.setFocusPainted(false);
 
+        nameLabel = new JButton("What is your name?");
+        nameLabel.setBounds(240,485,300,21);
+        nameLabel.setFont(new Font("Sans-serif",Font.BOLD,20));
+        nameLabel.setForeground(Color.black.darker());
+        nameLabel.setOpaque(false);
+        nameLabel.setContentAreaFilled(false);
+        nameLabel.setBorderPainted(false);
+        nameLabel.setFocusPainted(false);
+        menuPanel.add(nameLabel);
+
+        text_name = new JTextField();
+        text_name.setBounds(280,520,150,30);
+        text_name.setEnabled(true);
+        menuPanel.add(text_name);
+
+        continueButton2 = new JButton("Continue");
+        continueButton2.setBounds(435,520,100,30);
+        continueButton2.setFont(new Font("Sans-serif",Font.BOLD,10));
+        menuPanel.add(continueButton2);
+
+        continueButton2.addActionListener(e -> {
+            userInput = text_name.getText().toLowerCase();
+            System.out.println(userInput);
+            if(!name_lists.contains(userInput)){
+                name_lists.add(userInput);
+            }
+        });
+
         //MENU LABEL
         authenticationButton = new JButton("Authentication");
-        authenticationButton.setBounds(200,500,368,50);
+        authenticationButton.setBounds(240,570,300,45);
         authenticationButton.setForeground(Color.black.brighter());
-        authenticationButton.setFont(new Font("Sans-serif",Font.BOLD,30));
+        authenticationButton.setFont(new Font("Sans-serif",Font.BOLD,26));
         authenticationButton.setOpaque(true);
         authenticationButton.setContentAreaFilled(true);
         authenticationButton.setBackground(lightBlue);
@@ -74,8 +107,8 @@ public class MenuWindow {
         menuPanel.add(authenticationButton);
 
         noWebCamButton = new JButton("No access to webcam");
-        noWebCamButton.setBounds(200,585,368,50);
-        noWebCamButton.setFont(new Font("Sans-serif",Font.BOLD,20));
+        noWebCamButton.setBounds(200,620,368,50);
+        noWebCamButton.setFont(new Font("Sans-serif",Font.BOLD,15));
         Color darkBlue = new Color(53, 98, 189); // RGB values for light blue
         noWebCamButton.setForeground(darkBlue);
         Font font = noWebCamButton.getFont();
@@ -89,21 +122,20 @@ public class MenuWindow {
         menuPanel.add(noWebCamButton);
 
         passwordField = new JPasswordField();
-        passwordField.setBounds(284,629,200,30);
+        passwordField.setBounds(284,662,200,30);
         passwordField.setVisible(false);
         menuPanel.add(passwordField);
 
-        continueButton = new JButton("Continue");
-        continueButton.setBounds(330,665,100,30);
-        continueButton.setFont(new Font("Sans-serif",Font.BOLD,10));
-        continueButton.setVisible(false);
-        menuPanel.add(continueButton);
-
+        continueButton1 = new JButton("Continue");
+        continueButton1.setBounds(330,695,100,30);
+        continueButton1.setFont(new Font("Sans-serif",Font.BOLD,10));
+        continueButton1.setVisible(false);
+        menuPanel.add(continueButton1);
 
         detectedButton = new JButton("Hello human! I'd love to help you.");
         menuPanel.add(detectedButton);
         detectedButton.setVisible(false);
-        detectedButton.setBounds(15,450,500,100);
+        detectedButton.setBounds(15,430,500,100);
         detectedButton.setForeground(Color.black.brighter());
         detectedButton.setFont(new Font("Sans-serif",Font.BOLD,20));
         detectedButton.setOpaque(false);
@@ -115,7 +147,7 @@ public class MenuWindow {
         noAccessButton.setVisible(false);
         menuPanel.add(noAccessButton);
         noAccessButton.setForeground(Color.black.brighter());
-        noAccessButton.setBounds(200,550,368,50);
+        noAccessButton.setBounds(200,530,368,50);
         noAccessButton.setFont(new Font("Sans-serif",Font.BOLD,20));
         noAccessButton.setOpaque(true);
         noAccessButton.setContentAreaFilled(true);
@@ -156,10 +188,10 @@ public class MenuWindow {
             noWebCamButton.setText("Enter your password:");
             noWebCamButton.setForeground(Color.BLACK);
             passwordField.setVisible(true);
-            continueButton.setVisible(true);
+            continueButton1.setVisible(true);
 
         });
-        continueButton.addActionListener(e -> {
+        continueButton1.addActionListener(e -> {
             try {
                 Thread.sleep(1000); // delay for 1000 milliseconds (1 second)
             } catch (InterruptedException et) {
@@ -174,8 +206,8 @@ public class MenuWindow {
             File imageFile = new File("resources/image.png");
             BufferedImage originalImage = ImageIO.read(imageFile);
 
-            int scaledWidth = 200; // set the width to which you want to resize the image
-            int scaledHeight = 200; // set the height to which you want to resize the image
+            int scaledWidth = 180; // set the width to which you want to resize the image
+            int scaledHeight = 180; // set the height to which you want to resize the image
             Image scaledImage = originalImage.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
             BufferedImage resizedImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
 
@@ -194,7 +226,7 @@ public class MenuWindow {
 
         frame = new JFrame();
         frame.setVisible(true);
-        frame.setBounds((w -768)/2,(h -767)/2,768,740);
+        frame.setBounds((w -768)/2,(h -767)/2,768,765);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(menuPanel);
