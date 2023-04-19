@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 public class WebcamRecognition {
 
     public static void main(String[] args) throws IOException {
-        String[] source = {"python3", "src/main/java/org/Project22/WebCamRecognition/WebCamRec.py"};
+        String[] source = {"python3", "src/main/java/org/Project22/FaceDetection/WebCamRec.py"};
         Process process = Runtime.getRuntime().exec(source);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));

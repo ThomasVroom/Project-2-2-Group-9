@@ -1,0 +1,12 @@
+Question How do I get from <Place> to <Place> at <Time>?
+
+Slot <Place> Maastricht
+Slot <Place> Heerlen
+Slot <Place> Sittard
+
+Slot <Time> 9am
+Slot <Time> 11am
+
+Action <Place> Maastricht <Place> Heerlen <Time> 9am By train.
+Action <Place> Maastricht <Place> Heerlen <Time> 11am By car.
+Action <Place> Maastricht <Place> Sittard <Time> 11am By bike.
