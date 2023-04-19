@@ -77,7 +77,7 @@ public class MenuWindow {
         menuPanel.add(nameLabel);
 
         text_name = new JTextField();
-        text_name.setBounds(280,520,150,30);
+        text_name.setBounds(279,520,150,30);
         text_name.setEnabled(true);
         menuPanel.add(text_name);
 
