@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestMatchingAlgorithms {
-    public static String testname = "match1-3";
+    public static String testname = "match1-4new";
     public static void main(String[] args) throws IOException {
         File masterFile = new File("resources/SkillFiles");
         File masterTestFile = new File("resources/TestQuestions");
