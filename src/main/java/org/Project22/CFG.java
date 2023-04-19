@@ -9,7 +9,7 @@ import java.util.List;
 public class CFG {
 
     // a list of: answer to question List([<DAY>,monday],[<TIME>,9])
-    public List<Tuple<String,List<Tuple<String,String>>>> Action;
+    public List<Tuple<String,List<Tuple<String,String>>>> actions;
 
     // tree that stores the entire CFG
     public Tree CFG;
@@ -22,15 +22,14 @@ public class CFG {
      * Create the tree from the CFG.txt file.
      */
     private void createTree() {
-        // create tree
         try (BufferedReader br = new BufferedReader(new FileReader("resources/CFG/CFG.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
-                // convert line
-                line = line.replaceAll("[^a-zA-Z0-9 <>\\|]", "").toLowerCase();
-
                 // read all the rules
-                if (line.startsWith("rule")) {
+                if (line.startsWith("Rule")) {
+                    // convert line
+                    line = line.replaceAll("[^a-zA-Z0-9 <>\\|]", "").toLowerCase();
+
                     // root
                     if (CFG == null) {
                         CFG = new Tree(new Tuple<String,String>(line.substring(4, line.indexOf('>') + 1).trim(), line.substring(line.indexOf('>') + 1).trim()));
@@ -51,6 +50,32 @@ public class CFG {
                         }
                     }
                 }
+
+                // load all actions
+                if (line.startsWith("Action")) {
+                    if (actions == null) {
+                        actions = new ArrayList<Tuple<String,List<Tuple<String,String>>>>();
+                    }
+
+                    // convert line
+                    line = line.substring(7);
+                    String[] splitLine = line.split("\\-");
+                    splitLine[0] = splitLine[0].replaceAll("[^a-zA-Z0-9 <>\\*\\|]", "").toLowerCase();
+
+                    // values
+                    List<Tuple<String,String>> values = new ArrayList<Tuple<String,String>>();
+                    int indexLeft = splitLine[0].lastIndexOf('<');
+                    int indexRight = splitLine[0].lastIndexOf('>');
+                    while (indexLeft != -1) {
+                        values.add(new Tuple<String,String>(splitLine[0].substring(indexLeft, indexRight + 1), splitLine[0].substring(indexRight + 1).trim()));
+                        splitLine[0] = splitLine[0].substring(0, indexLeft);
+                        indexLeft = splitLine[0].lastIndexOf('<');
+                        indexRight = splitLine[0].lastIndexOf('>');
+                    }
+
+                    // add to actions
+                    actions.add(new Tuple<String,List<Tuple<String,String>>>(splitLine[1].trim(), values));
+                }
             }
 
             // close stream
@@ -61,8 +86,6 @@ public class CFG {
 
         // delete all the nonterminal references
         deleteNonTerminalReferences(CFG.getRoot());
-
-        // TODO load actions
     }
 
     /**
@@ -103,9 +126,17 @@ public class CFG {
      * @param node the node we are currently visiting
      */
     private void deleteNonTerminalReferences(Tree.Node node) {
-        // remove all the text within arrow brackets
+        // get values
         Tuple<String,String> v = node.getValue();
-        node.setValue(new Tuple<String,String>(v.x(), v.y().replaceAll("<.*>", "").trim()));
+
+        // check for arrow brackets
+        if (v.y().contains("<")) {
+            // check for oddities
+            if (node.getChildren().isEmpty()) throw new RuntimeException("Incorrect CFG format. (check row order)");
+
+            // delete values
+            node.setValue(new Tuple<String,String>(v.x(), v.y().replaceAll("<.*>", "").trim()));
+        }
 
         // dfs iteration over children
         for (Tree.Node child : node.getChildren()) {
@@ -123,8 +154,36 @@ public class CFG {
     public List<Tuple<String,String>> matchString(final String input) {
         Tuple<Boolean,List<Tuple<String,String>>> output = dfs(CFG.getRoot(), input, new ArrayList<Tuple<String,String>>());
         return output.x().booleanValue() ? output.y() : null;
+    }
 
-        // TODO get answer from actions
+    /**
+     * Get the string output corresponding to the values of the input sentence.
+     * @param values a list of all variables and their values
+     * @return the corresponding string
+     */
+    public String getAnswer(List<Tuple<String,String>> values) {
+        for (Tuple<String,List<Tuple<String,String>>> answer : actions) { // loop over all actions
+            boolean answerFound = true;
+            for (Tuple<String, String> answerValue : answer.y()) { // for every value in the action
+                boolean found = false;
+                for (Tuple<String, String> value : values) { // for every value in the parameter
+                    if (answerValue.x().equals(value.x())) {
+                        if (answerValue.y().equals(value.y()) || answerValue.y().equals("*")) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    answerFound = false;
+                    break;
+                }
+            }
+            if (answerFound) {
+                return answer.x();
+            }
+        }
+        return "error: no answer found, something went wrong.";
     }
 
     /**
@@ -186,7 +245,7 @@ public class CFG {
         // TESTING:
         CFG cfg = new CFG();
 
-        String input = "which lectures are there on monday at 9";
-        System.out.println(input + " : " + cfg.matchString(input));
+        String input = "which lectures are there on monday at 12";
+        System.out.println(input + " : " + cfg.getAnswer(cfg.matchString(input)));
     }
 }
