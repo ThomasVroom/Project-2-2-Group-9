@@ -8,6 +8,8 @@ public class Tree {
         private Tuple<String,String> value;
         private List<Node> children;
         private Node suffix;
+        private Node parent;
+
         public Node(Tuple<String,String> value) {
             this.value = value;
             this.children = new ArrayList<>();
@@ -28,7 +30,12 @@ public class Tree {
             return suffix;
         }
 
+        public Node getParent() {
+            return parent;
+        }
+
         public void addChild(Node child) {
+            child.parent = this;
             children.add(child);
         }
         public void addSuffix(Node child){
@@ -39,7 +46,7 @@ public class Tree {
 
         @Override
         public String toString() {
-            return "Node{" +
+            return "\n{" +
                     "value=" + value +
                     ", children=" + children +
                     ", suffix=" + suffix +
@@ -59,12 +66,8 @@ public class Tree {
 
     @Override
     public String toString() {
-        return "Tree{" +
+        return "{" +
                 "root=" + root +
                 '}';
-    }
-
-    public static void main(String[] args) {
-
     }
 }
