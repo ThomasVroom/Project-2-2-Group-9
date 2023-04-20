@@ -153,7 +153,7 @@ public class CFG {
      */
     public List<Tuple<String,String>> matchString(final String input) {
         Tuple<Boolean,List<Tuple<String,String>>> output = dfs(CFG.getRoot(), input, new ArrayList<Tuple<String,String>>());
-        return output.x().booleanValue() ? output.y() : null;
+        return output.x().booleanValue() ? output.y() : new ArrayList<Tuple<String,String>>();
     }
 
     /**
@@ -183,7 +183,7 @@ public class CFG {
                 return answer.x();
             }
         }
-        return "error: no answer found, something went wrong.";
+        throw new RuntimeException("error selecting answer. (you probably called this method in the wrong way)");
     }
 
     /**

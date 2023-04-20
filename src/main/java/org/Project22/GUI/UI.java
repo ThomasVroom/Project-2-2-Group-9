@@ -19,10 +19,14 @@ public class UI extends JFrame{
     private JTextPane debugPane;
     private JScrollPane debugScrollPane;
     private JComboBox<String> languageBox;
+    private JComboBox<String> skillBox;
     private JLabel languageLabel;
+    private JLabel skillLabel;
     private JButton skilleditorButton;
 
-    private static final String[] matching_algorithms = new String[] {"Exact Match", "Split Variables", "Split Variables+", "Filter Match"};
+    private static final String[] skill_types = new String[] {"Template", "CFG"};
+    private static final String[] cfg_matching_algorithms = new String[] {"Tree Traversal"};
+    private static final String[] template_matching_algorithms = new String[] {"Exact Match", "Split Variables", "Split Variables+", "Filter Match"};
 
     private List<String> variables;
 
@@ -40,7 +44,9 @@ public class UI extends JFrame{
     private void initComponents() {
         skilleditorButton = new JButton();
         languageBox = new JComboBox<>();
+        skillBox = new JComboBox<>();
         languageLabel = new JLabel();
+        skillLabel = new JLabel();
         clearButton = new JButton();
         confidenceLabel = new JLabel();
         confidenceBar = new JProgressBar();
@@ -57,9 +63,22 @@ public class UI extends JFrame{
             }
         });
 
-        languageBox.setModel(new DefaultComboBoxModel<>(matching_algorithms));
+        skillBox.setModel(new DefaultComboBoxModel<>(skill_types));
+        skillBox.addActionListener (new ActionListener () {
+            public void actionPerformed(ActionEvent e) {
+                if (skillBox.getSelectedIndex() == 0) { // template
+                    languageBox.setModel(new DefaultComboBoxModel<>(template_matching_algorithms));
+                }
+                else if (skillBox.getSelectedIndex() == 1) { // cfg
+                    languageBox.setModel(new DefaultComboBoxModel<>(cfg_matching_algorithms));
+                }
+            }
+        });
+
+        languageBox.setModel(new DefaultComboBoxModel<>(template_matching_algorithms));
 
         languageLabel.setText("Language Model");
+        skillLabel.setText("Skill Type");
 
         clearButton.setText("Clear Chat");
         clearButton.addActionListener(new ActionListener() {
@@ -91,12 +110,14 @@ public class UI extends JFrame{
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(confidenceBar, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(skillLabel, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
                                         .addComponent(languageLabel, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
                                         .addComponent(debugScrollPane, GroupLayout.Alignment.TRAILING)
                                         .addComponent(confidenceLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(debugLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(skilleditorButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(clearButton, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                                        .addComponent(skillBox, GroupLayout.Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(languageBox, GroupLayout.Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addContainerGap())
         );
@@ -111,6 +132,8 @@ public class UI extends JFrame{
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(clearButton)
                                                 .addGap(18, 18, 18)
+                                                .addComponent(skillLabel)
+                                                .addComponent(skillBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                 .addComponent(languageLabel)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(languageBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -150,8 +173,8 @@ public class UI extends JFrame{
         return this.variables;
     }
 
-    public int getMatchingAlgorithm() {
-        return languageBox.getSelectedIndex();
+    public Tuple<Integer, Integer> getMatchingAlgorithm() {
+        return new Tuple<Integer,Integer>(skillBox.getSelectedIndex(), languageBox.getSelectedIndex());
     }
 
     private void skilleditorButtonActionPerformed(ActionEvent evt) {

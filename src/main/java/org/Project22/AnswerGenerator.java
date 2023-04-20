@@ -15,6 +15,9 @@ public class AnswerGenerator{
     // possible matching algorithms
     public static MatchingInterface matchingAlgorithms[] = {new Match1(),new Match2(),new Match3(),new Match4()};
 
+    // cfg
+    public CFG cfg;
+
     //threshold
     public float ConfidenceCutoff = 0.3f;
 
@@ -27,6 +30,7 @@ public class AnswerGenerator{
      */
     public AnswerGenerator(List<Question> questions, int... algorithmChoice){
         this.questions = questions;
+        this.cfg = new CFG();
     }
 
     /**
@@ -34,17 +38,27 @@ public class AnswerGenerator{
      * @return the appropriate answer for the user question
      */
     public String getAnswer(String userString){
-        Triple<Integer, String, Float> question = matchQuestion(userString,questions, Main.ui.getMatchingAlgorithm()).get(0);
+        Tuple<Integer, Integer> algorithm = Main.ui.getMatchingAlgorithm();
 
-        Question question2 = questions.get(question.x());
-        List<Tuple<String, String>> variables = question2.getVariable2(userString);
+        if (algorithm.x().intValue() == 0) { // template
+            Triple<Integer, String, Float> question = matchQuestion(userString,questions, algorithm.y().intValue()).get(0);
+
+            Question question2 = questions.get(question.x());
+            List<Tuple<String, String>> variables = question2.getVariable2(userString);
         
-        Main.ui.setConfidence(question.z());
-        Main.ui.setDebugText(question2.cleanQuestion, variables);
+            Main.ui.setConfidence(question.z());
+            Main.ui.setDebugText(question2.cleanQuestion, variables);
 
-        if (question.z()<ConfidenceCutoff)
-            return "too low confidence to make a decision";
-        return question2.getAnswer(variables);
+            if (question.z()<ConfidenceCutoff)
+                return "too low confidence to make a decision";
+            return question2.getAnswer(variables);
+        }
+        else if (algorithm.x().intValue() == 1) { // cfg
+            List<Tuple<String,String>> variables = cfg.matchString(userString);
+            Main.ui.setDebugText("CFG Path:", variables);
+            return cfg.getAnswer(variables);
+        }
+        throw new RuntimeException("error selecting matching algorithm.");
     }
 
     /**
