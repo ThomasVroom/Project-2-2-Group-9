@@ -32,7 +32,12 @@ public class MenuWindow {
     private JPasswordField passwordField;
     private ImageIcon icon;
 
-    public MenuWindow() {initializeMenu();}
+    public MenuWindow() {
+        initializeMenu();
+    }
+    public ArrayList<String> getName_lists() {
+        return name_lists;
+    }
 
     public void initializeMenu(){
 
