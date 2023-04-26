@@ -8,6 +8,7 @@ Rule <PRO> I | you | he | she
 Rule <ROOM> DeepSpace | SpaceBox
 Rule <DAY> Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
 Action <SCHEDULE> * <DAY> Saturday - There are no lectures on Saturday.
+Action <SCHEDULE> * <DAY> Sunday - /py test_answer.py <TIME>
 Action <SCHEDULE> * <DAY> Monday <TIME> 9 - We start the week with math.
 Action <SCHEDULE> * <DAY> Monday <TIME> 12 - On Monday noon we have Theoratical Computer Science.
 Action <LOCATION> * <ROOM> DeepSpace - DeepSpace is the first room after the entrance.

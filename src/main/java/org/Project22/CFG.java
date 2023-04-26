@@ -3,6 +3,7 @@ package org.Project22;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,7 +133,7 @@ public class CFG {
         // check for arrow brackets
         if (v.y().contains("<")) {
             // check for oddities
-            if (node.getChildren().isEmpty()) throw new RuntimeException("Incorrect CFG format. (check row order)");
+            if (node.getChildren().isEmpty()) throw new RuntimeException("Incorrect CFG format (check row order).");
 
             // delete values
             node.setValue(new Tuple<String,String>(v.x(), v.y().replaceAll("<.*>", "").trim()));
@@ -180,10 +181,29 @@ public class CFG {
                 }
             }
             if (answerFound) {
-                return answer.x();
+                String output = answer.x();
+                if (output.startsWith("/py")) {
+                    // replace placeholders
+                    output = output.replace("/py", "python");
+                    for (Tuple<String,String> value : values) {
+                        output = output.replace(value.x().toUpperCase(), value.y());
+                    }
+
+                    // split string
+                    String[] code = output.split(" ");
+                    code[1] = "resources/CFG/" + code[1];
+                    
+                    // execute python code
+                    try {
+                        Process process = Runtime.getRuntime().exec(code);
+                        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                        return br.readLine();
+                    } catch (IOException e) {e.printStackTrace();}
+                }
+                else return output;
             }
         }
-        throw new RuntimeException("error selecting answer. (you probably called this method in the wrong way)");
+        throw new RuntimeException("error selecting answer (probably python).");
     }
 
     /**
@@ -239,13 +259,5 @@ public class CFG {
 
         // else check the parent
         return suffixSearch(node.getParent(), remainder, values);
-    }
-
-    public static void main(String[] args) {
-        // TESTING:
-        CFG cfg = new CFG();
-
-        String input = "which lectures are there on monday at 12";
-        System.out.println(input + " : " + cfg.getAnswer(cfg.matchString(input)));
     }
 }
