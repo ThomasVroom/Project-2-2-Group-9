@@ -247,7 +247,7 @@ public class ChatWindow extends JTextPane {
                 try {
                     // get input string
                     String input = this.comp.doc.getText(allowed_offset, offset - allowed_offset);
-                    input = input.replaceAll("[^a-zA-Z0-9 ]", "").toLowerCase();
+                    input = input.replaceAll("[^a-zA-Z0-9 :+-]", "").toLowerCase();
 
                     // add prompt to history
                     if (!input.isBlank()) this.comp.promptHistory.add(input);

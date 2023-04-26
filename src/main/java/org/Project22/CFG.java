@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CFG {
 
@@ -23,13 +25,13 @@ public class CFG {
      * Create the tree from the CFG.txt file.
      */
     private void createTree() {
-        try (BufferedReader br = new BufferedReader(new FileReader("resources/CFG/CFG.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("resources/CFG/NEW_CFG.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 // read all the rules
                 if (line.startsWith("Rule")) {
                     // convert line
-                    line = line.replaceAll("[^a-zA-Z0-9 <>\\|]", "").toLowerCase();
+                    line = line.toLowerCase();
 
                     // root
                     if (CFG == null) {
@@ -61,7 +63,7 @@ public class CFG {
                     // convert line
                     line = line.substring(7);
                     String[] splitLine = line.split("\\-");
-                    splitLine[0] = splitLine[0].replaceAll("[^a-zA-Z0-9 <>\\*\\|]", "").toLowerCase();
+                    splitLine[0] = splitLine[0].toLowerCase();
 
                     // values
                     List<Tuple<String,String>> values = new ArrayList<Tuple<String,String>>();
@@ -165,11 +167,14 @@ public class CFG {
     public String getAnswer(List<Tuple<String,String>> values) {
         for (Tuple<String,List<Tuple<String,String>>> answer : actions) { // loop over all actions
             boolean answerFound = true;
+            boolean[] usedValues = new boolean[values.size()];
             for (Tuple<String, String> answerValue : answer.y()) { // for every value in the action
                 boolean found = false;
-                for (Tuple<String, String> value : values) { // for every value in the parameter
-                    if (answerValue.x().equals(value.x())) {
-                        if (answerValue.y().equals(value.y()) || answerValue.y().equals("*")) {
+                for (int i = 0; i < values.size(); i++) { // for every value in the parameter
+                    if (usedValues[i]) continue;
+                    if (answerValue.x().equals(values.get(i).x())) {
+                        if (answerValue.y().equals(values.get(i).y()) || answerValue.y().equals("*")) {
+                            usedValues[i] = true;
                             found = true;
                             break;
                         }
@@ -182,16 +187,16 @@ public class CFG {
             }
             if (answerFound) {
                 String output = answer.x();
-                if (output.startsWith("/py")) {
+                if (output.startsWith("\\py")) {
                     // replace placeholders
-                    output = output.replace("/py", "python");
+                    output = output.replace("\\py", "python");
                     for (Tuple<String,String> value : values) {
-                        output = output.replace(value.x().toUpperCase(), value.y());
+                        output = output.replaceFirst(value.x().toUpperCase(), value.y());
                     }
 
                     // split string
                     String[] code = output.split(" ");
-                    code[1] = "resources/CFG/" + code[1];
+                    code[1] = "resources/CFG/python_answers/" + code[1];
                     
                     // execute python code
                     try {
@@ -215,10 +220,13 @@ public class CFG {
      */
     private Tuple<Boolean,List<Tuple<String,String>>> dfs(Tree.Node node, String remainder, List<Tuple<String,String>> values) {
         // if the remainder contains the value of the node
-        if (remainder.contains(node.getValue().y())) {
+        String value = node.getValue().y();
+        Pattern pattern = value.startsWith("regex") ? Pattern.compile(value.substring(6)) : Pattern.compile(value, Pattern.LITERAL);
+        Matcher matcher = pattern.matcher(remainder);
+        if (matcher.find()) {
             // remove the value from the remainder
-            remainder = remainder.replaceFirst(node.getValue().y(), "");
-            values.add(node.getValue());
+            values.add(new Tuple<String,String> (node.getValue().x(), matcher.group()));
+            remainder = remainder.replaceFirst(matcher.group(), "").trim();
 
             // if node is a leaf
             if (node.getChildren().isEmpty()) {
