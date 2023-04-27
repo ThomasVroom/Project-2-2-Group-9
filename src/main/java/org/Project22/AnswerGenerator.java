@@ -15,8 +15,8 @@ public class AnswerGenerator{
     // possible matching algorithms
     public static MatchingInterface matchingAlgorithms[] = {new Match1(),new Match2(),new Match3(),new Match4()};
 
-    // cfg
-    public CFG cfg;
+    // cfg-tree used by the tree traversal algorithm
+    public CFGTree cfg;
 
     //threshold
     public float ConfidenceCutoff = 0.3f;
@@ -30,7 +30,7 @@ public class AnswerGenerator{
      */
     public AnswerGenerator(List<Question> questions, int... algorithmChoice){
         this.questions = questions;
-        this.cfg = new CFG();
+        this.cfg = new CFGTree();
     }
 
     /**

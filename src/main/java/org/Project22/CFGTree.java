@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CFG {
+public class CFGTree {
 
     // a list of: answer to question List([<DAY>,monday],[<TIME>,9])
     public List<Tuple<String,List<Tuple<String,String>>>> actions;
@@ -17,7 +17,7 @@ public class CFG {
     // tree that stores the entire CFG
     public Tree CFG;
 
-    public CFG() {
+    public CFGTree() {
         createTree();
     }
 
@@ -267,5 +267,121 @@ public class CFG {
 
         // else check the parent
         return suffixSearch(node.getParent(), remainder, values);
+    }
+
+    /**
+     * Tree data structure used for storing the CFG.
+     */
+    private class Tree {
+
+        /**
+         * Root of the tree
+         */
+        private Node root;
+
+        public Tree(Tuple<String,String> rootValue) {
+            root = new Node(rootValue);
+        }
+
+        /**
+         * Get the root of the tree.
+         */
+        public Node getRoot() {
+            return root;
+        }
+
+        /**
+         * Node data structure used in the tree data structure.
+         */
+        private static class Node {
+
+            /**
+             * The value of this node.
+             * (Name of the rule, Definition of the rule)
+             */
+            private Tuple<String,String> value;
+
+            /**
+             * All of the children of this node.
+             */
+            private List<Node> children;
+
+            /**
+             * The 'suffix child' of this node.
+             * Equal to null if this node doesn't have a suffix.
+             */
+            private Node suffix;
+
+            /**
+             * The parent of this node.
+             * Equal to null if this node is the root.
+             */
+            private Node parent;
+
+            public Node(Tuple<String,String> value) {
+                this.value = value;
+                this.children = new ArrayList<>();
+            }
+
+            /**
+             * Get the value of this node.
+             * @return a tuple (Name of the rule, Definition of the rule)
+             */
+            public Tuple<String,String> getValue() {
+                return value;
+            }
+
+            /**
+             * Set the value of this node.
+             * @param value the new value of this node
+             */
+            public void setValue(Tuple<String,String> value) {
+                this.value = value;
+            }
+
+            /**
+             * Get the children of this node.
+             * @return a list of all the children
+             */
+            public List<Node> getChildren() {
+                return children;
+            }
+
+            /**
+             * Get the 'suffix child' of this node.
+             * @return the suffix node if this node has one, otherwise null
+             */
+            public Node getSuffix() {
+                return suffix;
+            }
+
+            /**
+             * Get the parent of this node.
+             * @return the parent if this node has one, otherwise null
+             */
+            public Node getParent() {
+                return parent;
+            }
+
+            /**
+             * Add a new child to this node.
+             * @param child the node to add
+             */
+            public void addChild(Node child) {
+                child.parent = this;
+                children.add(child);
+            }
+
+            /**
+             * Add a suffix node to this node.
+             * @param suffix the node to add
+             * @throws RuntimeException if this node already has a suffix
+             */
+            public void addSuffix(Node suffix) {
+                if (this.suffix != null)
+                    throw new RuntimeException("node already has suffix");
+                this.suffix = suffix;
+            }
+        }
     }
 }
