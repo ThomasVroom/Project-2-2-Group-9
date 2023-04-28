@@ -240,7 +240,7 @@ public class MenuWindow {
 
     class WebCamThread extends Thread {
 
-        private static final String[] source = {"python3", "src/main/java/org/Project22/FaceDetection/FaceRec.py", userInput};
+        private static final String[] source = {"python3", "src/main/java/org/Project22/FaceDetection/Recognition.py"};
 
         @Override
         public void run() {
