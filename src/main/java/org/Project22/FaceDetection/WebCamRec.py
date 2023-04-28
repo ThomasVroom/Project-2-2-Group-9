@@ -13,7 +13,7 @@ eye_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.x
 def detectFaceAndEyes():
     detected = False
 
-    while time.time() - start_time <= 15:
+    while time.time() - start_time <= 5:
 
         # ret indicates whether the capture is done successfully.
         # frame is the numpy array that represents the image.
