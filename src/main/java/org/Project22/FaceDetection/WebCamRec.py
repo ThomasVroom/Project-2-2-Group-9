@@ -1,6 +1,6 @@
 import cv2
 import time
-#import face_recognition
+import face_recognition
 
 start_time = time.time()
 
@@ -50,6 +50,7 @@ def detectFaceAndEyes():
             eyes = eye_detection.detectMultiScale(rectangleOfImage, scaleFactor=1.3, minNeighbors=5)
             for (ex, ey, ew, eh) in eyes:
                 cv2.rectangle(rectangleOfImage_in_frame, (ex, ey), (ex + ew, ey + eh), (100, 0, 0), 4)
+
 
         cv2.imshow('frame', frame)
 

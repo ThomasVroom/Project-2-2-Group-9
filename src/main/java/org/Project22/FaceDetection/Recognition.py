@@ -1,170 +1,134 @@
-import os
-import cv2
-import numpy as np
 import face_recognition
+import os, sys
+import cv2
+import math
+import numpy as np
+import time
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 
-cap = cv2.VideoCapture(0)
+THRESHOLD = 0.6
 
-# Create an empty dictionary to store the face encodings
-known_faces = {}
+class Recognition:
+    face_locations = []
+    face_encodings = []
+    face_names = []
+    known_face_encodings = []
+    known_face_names = []
 
-save_dir = os.path.join(os.getcwd(), "dataset_of_people", "lale")
+    process_current_frame = True
 
-if not os.path.exists(save_dir):
-    os.makedirs(save_dir)
+    def __init__(self):
+        self.encode_faces()
 
-haar_face_recognition_ds = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    def encode_faces(self):
+        """
+            This method loads images from the 'dataset_of_people' directory, detects faces in each image,
+            and encodes the faces into 128-dimensional feature vectors using the face_recognition library.
+            The method then appends each encoding to the 'known_face_encodings' list and the corresponding
+            image name to the 'known_face_names' list.
+        """
+        for image in os.listdir('dataset_of_people'):
+            name, ext = os.path.splitext(image)
+            face_image = face_recognition.load_image_file(f'dataset_of_people/{image}')
+            face_encoding = face_recognition.face_encodings(face_image)[0]
 
-count = 0
+            self.known_face_encodings.append(face_encoding)
+            self.known_face_names.append(name)
 
-while True:
-    ret, frame = cap.read()
+        print(self.known_face_names)
 
-    if ret:
-        cv2.imshow('Capture', frame)
-        save_path = os.path.join(save_dir, f"{count}.jpg")
-        cv2.imwrite(save_path, frame)
-        print(f"Image {count} saved to {save_path}")
+    def get_similarity(self, encoding1, encoding2, method):
+        """
+        This method calculates the similarity score between two 128-dimensional face encodings using the specified
+        methods.The cosine similarity measures the similarity between two vectors by taking the cosine of the
+        exact dissimilarity.
 
-        # Load the saved image and encode the face
-        image = face_recognition.load_image_file(save_path)
-        face_locations = face_recognition.face_locations(image)
+        :param encoding1: The first 128-dimensional face encoding.
+        :param encoding2: The second 128-dimensional face encoding.
 
-        if len(face_locations) > 0:
-            # Encode the face if at least one face is detected
-            encoding = face_recognition.face_encodings(image, face_locations)[0]
-            # Add the encoding to the dictionary with the person's name as the key
-            known_faces['lale'] = encoding
-            count += 1
+        :param method: The name of the method which is employed to calculate distance.
+        :return: If the method is cosine_similarity then returns cosine similarity between the two encodings as a
+        float value between -1 and 1.
+                If the method is euclidean_distance then returns euclidean distance between the two encodings.
+        """
+        if method == 'cosine_similarity':
+            return cosine_similarity([encoding1], [encoding2])[0][0]
+        if method == 'euclidean_distance':
+            return np.sqrt(np.sum(np.square(np.subtract(encoding1, encoding2))))
 
-    if count == 50:
-        break
 
-    if cv2.waitKey(1) == ord('q'):
-        break
+    def run_recognition(self):
+        capture = cv2.VideoCapture(0)
 
-cap.release()
-cv2.destroyAllWindows()
+        if not capture.isOpened():
+            sys.exit('Video source not found. Check your privacy settings.')
 
-# Save the dictionary of known faces to a numpy file
-known_faces_file = 'known_faces.npy'
-np.save(known_faces_file, known_faces)
+        start_time = time.time()
 
-# import cv2
-# import time
-# import os
-# import numpy as np
-# import sys
-# import face_recognition
-#
-# # retrieve the user's name from the command-line arguments
-# user_name = "lale"
-#
-# # sys.argv[2]
-#
-# # pre=trained data of HAAR is used:
-# face_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-# eye_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
-#
-# capture = cv2.VideoCapture(0)
-#
-# # ret indicates whether the capture is done successfully.
-# # frame is the numpy array that represents the image.
-# ret, frame = capture.read()
-#
-#
-# def detectFaceAndEyes():
-#     detected = False
-#
-#     # the algorithm requires gray scale image to perform classification.
-#     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-#
-#     # detects all the faces in the frame.
-#     # Scale Factor: This parameter controls how much the image size is reduced at each image scale.
-#     #   Increasing the scale factor can result in better detection of smaller faces, but it can also increase the
-#     #   chances of false positives.
-#     # Minimum Neighbors: This parameter specifies how many neighbors each potential detection rectangle must have
-#     #   in order to be considered a valid detection. Increasing the number of neighbors can reduce false positives
-#     #   but can also decrease the sensitivity of the detector and increase the likelihood of false negatives.
-#     #   Higher value = fewer detections but higher quality. Value between 3-6 is good
-#     faces = face_detection.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-#
-#     for (x, y, w, h) in faces:
-#         # the rectangle draws rectangles which covers the faces in the image.
-#         # the parameters are: frame which has the image, top left corner, the bottom right, color, thickness.
-#         cv2.rectangle(frame, (x, y), (x + w, y + h), (50, 200, 0), 4)
-#
-#         # rectangleOfImage will be used to focus on specifically inside this rectangle to detect the eyes.
-#         rectangleOfImage = gray[y:y + w, x:x + w]
-#
-#         # the copy of the frame to draw rectangles to cover the eyes however there is a difference between frame and
-#         # rectangleOfImage_in_frame: rectangleOfImage_in_frame is the little part of the frame that has the sizes of
-#         # rectangles that covers the faces
-#         rectangleOfImage_in_frame = frame[y:y + h, x:x + w]
-#
-#         # the eyes in the rectangle which covers the detected face, will be detected and the rectangles will be
-#         # drawn aon the rectangleOfImage_in_frame to specify eyes.
-#         eyes = eye_detection.detectMultiScale(rectangleOfImage, scaleFactor=1.3, minNeighbors=5)
-#         for (ex, ey, ew, eh) in eyes:
-#             cv2.rectangle(rectangleOfImage_in_frame, (ex, ey), (ex + ew, ey + eh), (100, 0, 0), 4)
-#
-#     if len(faces) > 0:
-#         detected = True
-#     return detected
-#
-#
-# def isDetected():
-#     if detectFaceAndEyes():
-#         print("A human was detected")
-#     else:
-#         print("No human was detected around.")
-#
-#
-# def recognition(user_name):
-#     # Encodings of the faces:
-#     known_faces = {}
-#     count = 0
-#
-#     save_dir = os.path.join(os.getcwd(), "dataset_of_people", user_name)
-#
-#     if not os.path.exists(save_dir):
-#         os.makedirs(save_dir)
-#
-#     while True:
-#         save_path = os.path.join(save_dir, f"{count}.jpg")
-#         cv2.imwrite(save_path, frame)
-#         print(f"Image {count} saved to {save_path}")
-#
-#         # Load the saved image and detect faces
-#         image = face_recognition.load_image_file(save_path)
-#         face_locations = face_recognition.face_locations(image)
-#
-#         if detectFaceAndEyes():
-#             # Encode the face if at least one face is detected
-#             encoding = face_recognition.face_encodings(image, face_locations)[0]
-#             known_faces[user_name] = encoding
-#             count += 1
-#
-#         if count == 50:
-#             break
-#
-#
-# start_time = time.time()
-#
-#
-# while time.time() - start_time <= 15:
-#     ret, frame = capture.read()  # read the next frame
-#     recognition(user_name)
-#     detectFaceAndEyes()
-#
-#     cv2.imshow('frame', frame)
-#
-#     # terminates the frame if user clicks "a"
-#     if cv2.waitKey(1) == ord('a'):
-#         break
-#
-# isDetected()
-#
-#
-# capture.release()
-# cv2.destroyAllWindows()
+        while time.time() - start_time <= 10:
+            ret, frame = capture.read()
+
+            if self.process_current_frame:
+                resized_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+                RGB_resized = resized_frame[:, :, ::-1]
+
+                self.face_locations = face_recognition.face_locations(RGB_resized, model='cnn')
+                self.face_encodings = face_recognition.face_encodings(RGB_resized, self.face_locations)
+                self.face_names = []
+
+                for face_encoding in self.face_encodings:
+                    matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
+                    name = "Unknown face"
+                    confidence_str = "Unknown"
+
+                    similarities = [self.get_similarity(face_encoding, known_encoding, 'cosine_similarity') for
+                                    known_encoding in self.known_face_encodings]
+                    best_match_index = np.argmax(similarities)
+                    best_similarity = similarities[best_match_index]
+
+                    if best_similarity > THRESHOLD:
+                        name = self.known_face_names[best_match_index]
+                        confidence_str = str(round(best_similarity * 100, 2)) + '%'
+
+                    self.face_names.append(f'{name} ({confidence_str})')
+
+            self.process_current_frame = not self.process_current_frame
+
+            # Displaying
+
+            for (top, right, bottom, left), name in zip(self.face_locations, self.face_names):
+                top *= 4
+                right *= 4
+                bottom *= 4
+                left *= 4
+
+                # Calculate the size of the face rectangle
+                width = right - left
+                height = bottom - top
+                x_padding = int(width * 0.2)
+                y_padding = int(height * 0.2)
+
+                # Calculate the new coordinates of the face rectangle
+                left -= x_padding
+                right += x_padding
+                top -= y_padding
+                bottom += y_padding
+
+                # Draw the new rectangle on the frame
+                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), -1)
+                cv2.putText(frame, name, (left + 6, bottom - 6), cv2.FONT_HERSHEY_DUPLEX, 0.8, (255, 255, 255), 1)
+
+            cv2.imshow("Face Recognition", frame)
+
+            if cv2.waitKey(1) == ord('q'):
+                break
+
+        capture.release()
+        cv2.destroyAllWindows()
+
+
+if __name__ == '__main__':
+    face_rec = Recognition()
+    face_rec.run_recognition()

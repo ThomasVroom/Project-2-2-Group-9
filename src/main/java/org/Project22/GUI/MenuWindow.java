@@ -22,8 +22,8 @@ public class MenuWindow {
     private JButton welcomeLabel;
     private JButton nameLabel;
     private JTextField text_name;
-    private ArrayList<String> name_lists = new ArrayList<>();
-    private String userInput;
+    private static ArrayList<String> name_lists = new ArrayList<>();
+    private static String userInput;
     private JButton noAccessButton;
     private JButton noWebCamButton;
     private JButton continueButton1,continueButton2;
@@ -93,10 +93,7 @@ public class MenuWindow {
 
         continueButton2.addActionListener(e -> {
             userInput = text_name.getText().toLowerCase();
-            System.out.println(userInput);
-            if(!name_lists.contains(userInput)){
-                name_lists.add(userInput);
-            }
+            System.out.println("User name: " + userInput);
         });
 
         //MENU LABEL
@@ -243,7 +240,7 @@ public class MenuWindow {
 
     class WebCamThread extends Thread {
 
-        private static final String[] source = {"python3", "src/main/java/org/Project22/FaceDetection/WebCamRec.py"};
+        private static final String[] source = {"python3", "src/main/java/org/Project22/FaceDetection/FaceRec.py", userInput};
 
         @Override
         public void run() {
