@@ -4,6 +4,7 @@ import cv2
 import math
 import time
 import numpy as np
+import imutils
 from sklearn.metrics.pairwise import cosine_similarity
 
 THRESHOLD = 0.6
