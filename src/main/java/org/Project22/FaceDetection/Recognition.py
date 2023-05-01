@@ -2,7 +2,6 @@ import face_recognition
 import os, sys
 import cv2
 import math
-import numpy as np
 import time
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -63,7 +62,7 @@ class Recognition:
 
         if not capture.isOpened():
             sys.exit('Video source not found. Check your privacy settings.')
-
+        time.sleep(0.1)
         start_time = time.time()
 
         while time.time() - start_time <= 10:
@@ -71,7 +70,7 @@ class Recognition:
 
             if self.process_current_frame:
                 resized_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-                RGB_resized = resized_frame[:, :, ::-1]
+                RGB_resized = resized_frame
 
                 self.face_locations = face_recognition.face_locations(RGB_resized, model='cnn')
                 self.face_encodings = face_recognition.face_encodings(RGB_resized, self.face_locations)
@@ -127,6 +126,8 @@ class Recognition:
 
         capture.release()
         cv2.destroyAllWindows()
+
+
 
 
 if __name__ == '__main__':
