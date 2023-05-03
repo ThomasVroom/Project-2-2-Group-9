@@ -4,10 +4,10 @@ import cv2
 import math
 import time
 import numpy as np
-import imutils
 from sklearn.metrics.pairwise import cosine_similarity
 
-THRESHOLD = 0.6
+THRESHOLD = 0.2 # 0.2 is ideal for cosine_similarity distance function.
+                # Haven't find the optimal thresholds for the other functions yet.  
 
 class Recognition:
     face_locations = []
@@ -28,9 +28,9 @@ class Recognition:
             The method then appends each encoding to the 'known_face_encodings' list and the corresponding
             image name to the 'known_face_names' list.
         """
-        for image in os.listdir('dataset_of_people'):
+        for image in os.listdir('src/main/java/org/Project22/FaceDetection/dataset_of_people'):
             name, ext = os.path.splitext(image)
-            face_image = face_recognition.load_image_file(f'dataset_of_people/{image}')
+            face_image = face_recognition.load_image_file(f'src/main/java/org/Project22/FaceDetection/dataset_of_people/{image}')
             face_encoding = face_recognition.face_encodings(face_image)[0]
 
             self.known_face_encodings.append(face_encoding)
@@ -52,12 +52,14 @@ class Recognition:
         float value between -1 and 1.
                 If the method is euclidean_distance then returns euclidean distance between the two encodings.
         """
-        if method == 'cosine_similarity':
+        if method == 'cosine_similarity': # Cosine distance measures the cosine of the angle between two vectors. Good alternative to Euclidean distance for high-dimensional data like face encodings. 
             return cosine_similarity([encoding1], [encoding2])[0][0]
         if method == 'euclidean_distance':
             return np.sqrt(np.sum(np.square(np.subtract(encoding1, encoding2))))
+        if method == 'canberra_distance':
+            return np.sum(np.abs(encoding1 - encoding2) / (np.abs(encoding1) + np.abs(encoding2)))
 
-
+        
     def run_recognition(self):
         capture = cv2.VideoCapture(0)
 
@@ -66,14 +68,23 @@ class Recognition:
         time.sleep(0.1)
         start_time = time.time()
 
-        while time.time() - start_time <= 10:
+        while time.time() - start_time <= 20:
             ret, frame = capture.read()
 
             if self.process_current_frame:
                 resized_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
                 RGB_resized = resized_frame
 
-                self.face_locations = face_recognition.face_locations(RGB_resized, model='cnn')
+                # The 'hog' model is faster but less accurate compared to the 'cnn' model. 
+                # It is based on Histogram of Oriented Gradients (HOG) features and a linear SVM classifier. 
+                # The 'hog' model can work well if the faces are well-lit and frontal, but it may fail in low-light 
+                # conditions or if the faces are in profile or at an angle.
+
+                # The 'cnn' model is a Convolutional Neural Network (CNN) that is trained to detect faces in images. 
+                # It is slower but more accurate compared to the 'hog' model. The 'cnn' model can handle faces in different 
+                # orientations and lighting conditions, and can detect faces at smaller scales compared to the 'hog' model.
+
+                self.face_locations = face_recognition.face_locations(RGB_resized,  model='hog') # to try hog model -> model='hog'
                 self.face_encodings = face_recognition.face_encodings(RGB_resized, self.face_locations)
                 self.face_names = []
 
@@ -127,8 +138,6 @@ class Recognition:
 
         capture.release()
         cv2.destroyAllWindows()
-
-
 
 
 if __name__ == '__main__':
