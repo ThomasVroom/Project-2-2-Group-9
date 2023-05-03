@@ -21,6 +21,8 @@ public class CFGtoCNFConverter {
 
     private static List<Rule> rulesList = new ArrayList<>(); // List of all rules
 
+    private static int newSymbolCounter;
+
     private final static boolean DEBUG = true; // Debug variable
     
     public static void main(String[] args) {
@@ -103,18 +105,113 @@ public class CFGtoCNFConverter {
     // Main Conversion Program //
     /////////////////////////////
 
-    private static void convertRulesToCNF() {
-        // Step 2
-        // removeEmptyStringRules(); // Rules of the form A -> ""
+    private static void convertRulesToCNF(){
 
-        // Step 3 (Can also be named : remove all unit productions rules)
-        // replaceSingleNonterminalRules(); // Rules of the form A -> B
+        // Step 1
+        removeEpsilonRules(); // Delete rules of the form A -> ""
+
+        // Step 2
+        removeUnitProductions(); // Delete rules of the form A -> B
+
+        // Step 3 
+        replaceLongProductions(); // Replace rules of the form A -> BCD into A -> BE and E -> CD
 
         //Step 4
         //convertTerminals()
     }
 
-    // Step 4
+    // Step 1
+    private static void removeEpsilonRules(){
 
+        for (Rule rule : rulesList){ 
+
+            for (List<String> element_list : rule.getRhs()) {
+
+                if (element_list.contains("ε") && rule.getRhs().size() == 1){
+                    rulesList.remove(rule);
+                    break;
+                }
+            }
+        }
+
+        /*if (DEBUG){
+            System.out.println("rulesList: " + rulesList);
+        }*/
+    }    
+
+    // Step 2
+    private static void removeUnitProductions(){
+            
+            for (Rule rule : rulesList){ 
     
+                for (List<String> element_list : rule.getRhs()) {
+    
+                    if (rule.getRhs().size() == 1 && element_list.size() == 1){
+                        rulesList.remove(rule);
+                        break;
+                    }
+                }
+            }
+    
+            /*if (DEBUG){
+                System.out.println("rulesList: " + rulesList);
+            }*/
+    }
+
+    // Step 4
+    private static void replaceLongProductions(){
+
+        // iterate over all rules 
+        for(Rule rule : rulesList){
+
+            // iterate over rule.rhs()
+            for (List<String> element_list : rule.getRhs()){
+
+                for(int element = 0; element < element_list.size(); element++){
+                        
+                    if (element_list.get(element) > 2){
+    
+                        // generate new rules
+                        generateNewRule(element_list);
+    
+                        // delete the old rule
+                        rulesList.remove(rule);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void generateNewRule(List<String> element_list){
+
+        int stop_counter = element_list.size();
+
+        while (stop_counter > 2){
+
+            // creating X ... and its value
+            String new_symbol_X = generateNewX();
+            List<List<String>> new_symbol_X_Value = new ArrayList<>();
+
+            // Adding all the other elements except the first one to the new_symbol_X_Value
+            for(int i = 1; i < element_list.size(); i++){
+                new_symbol_X_Value.add(element_list.get(i));
+            }
+
+            // Adding the new_symbol_X_Value to the rulesList
+            List<String> new_element_list = new ArrayList<>();
+
+            new_element_list.add(element_list.get(0));
+            new_element_list.add(new_symbol_X);
+
+            stop_counter--;
+
+            Rule new_rule = new Rule(new_symbol_X, new_symbol_X_Value);
+
+        }
+    }
+
+    private static String generateNewX(){
+        newSymbolCounter++;
+        return "<X" + newSymbolCounter + ">";
+    }
 }
