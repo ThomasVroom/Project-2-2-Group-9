@@ -6,6 +6,14 @@ import time
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
+# pre=trained data of HAAR is used for detection of faces:
+
+face_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+eye_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
+
+# Create an instance of the LBPHFRecognizer
+# recognizer = cv2.face.LBPHFRecognizer_create()
+
 THRESHOLD = 0.2 # 0.2 is ideal for cosine_similarity distance function.
                 # Haven't find the optimal thresholds for the other functions yet.  
 
@@ -14,19 +22,21 @@ class Recognition:
     face_encodings = []
     face_names = []
     known_face_encodings = []
-    known_face_names = []
+    known_face_names_dlib = []
+    known_face_names_openCV = []
+    known_face_recognizers = []
 
     process_current_frame = True
 
     def __init__(self):
-        self.encode_faces()
+        self.encode_faces_dlib()
 
-    def encode_faces(self):
+    def encode_faces_dlib(self):
         """
             This method loads images from the 'dataset_of_people' directory, detects faces in each image,
             and encodes the faces into 128-dimensional feature vectors using the face_recognition library.
             The method then appends each encoding to the 'known_face_encodings' list and the corresponding
-            image name to the 'known_face_names' list.
+            image name to the 'known_face_names_dlib' list.
         """
         for image in os.listdir('src/main/java/org/Project22/FaceDetection/dataset_of_people'):
             name, ext = os.path.splitext(image)
@@ -34,10 +44,10 @@ class Recognition:
             face_encoding = face_recognition.face_encodings(face_image)[0]
 
             self.known_face_encodings.append(face_encoding)
-            self.known_face_names.append(name)
+            self.known_face_names_dlib.append(name)
 
-        print(self.known_face_names)
-
+        print(self.known_face_names_dlib)
+    
     def get_similarity(self, encoding1, encoding2, method):
         """
         This method calculates the similarity score between two 128-dimensional face encodings using the specified
@@ -58,9 +68,9 @@ class Recognition:
             return np.sqrt(np.sum(np.square(np.subtract(encoding1, encoding2))))
         if method == 'canberra_distance':
             return np.sum(np.abs(encoding1 - encoding2) / (np.abs(encoding1) + np.abs(encoding2)))
-
-        
-    def run_recognition(self):
+    
+ 
+    def run_recognition_dlib(self):
         capture = cv2.VideoCapture(0)
 
         if not capture.isOpened():
@@ -84,7 +94,7 @@ class Recognition:
                 # It is slower but more accurate compared to the 'hog' model. The 'cnn' model can handle faces in different 
                 # orientations and lighting conditions, and can detect faces at smaller scales compared to the 'hog' model.
 
-                self.face_locations = face_recognition.face_locations(RGB_resized,  model='hog') # to try hog model -> model='hog'
+                self.face_locations = face_recognition.face_locations(RGB_resized, model='cnn') # to try hog model -> model='hog'
                 self.face_encodings = face_recognition.face_encodings(RGB_resized, self.face_locations)
                 self.face_names = []
 
@@ -99,7 +109,7 @@ class Recognition:
                     best_similarity = similarities[best_match_index]
 
                     if best_similarity > THRESHOLD:
-                        name = self.known_face_names[best_match_index]
+                        name = self.known_face_names_dlib[best_match_index]
                         confidence_str = str(round(best_similarity * 100, 2)) + '%'
 
                     self.face_names.append(f'{name} ({confidence_str})')
@@ -107,7 +117,6 @@ class Recognition:
             self.process_current_frame = not self.process_current_frame
 
             # Displaying
-
             for (top, right, bottom, left), name in zip(self.face_locations, self.face_names):
                 top *= 4
                 right *= 4
@@ -135,6 +144,85 @@ class Recognition:
 
             if cv2.waitKey(1) == ord('q'):
                 break
+        
+        if face_encoding is not None:
+                print("A human was detected")
+        else:
+                 print("No human was detected around.")
+
+        capture.release()
+        cv2.destroyAllWindows()
+
+    def encode_faces_openCV(self):
+        face_folder = 'src/main/java/org/Project22/FaceDetection/dataset_of_people'
+        
+        for image in os.listdir(face_folder):
+            name, ext = os.path.splitext(image)
+            face_image = cv2.imread(os.path.join(face_folder, image), cv2.IMREAD_gray_scaled_frameSCALE)
+            
+            # Train the recognizer with the face image and assign it an ID equal to the name of the file without the extension
+            recognizer.train([face_image], np.array([int(name)]))
+            
+            # Add the trained recognizer and the name to the respective lists
+            self.known_face_recognizers.append(recognizer)
+            self.known_face_names_openCV.append(name)
+
+        print(self.known_face_names_openCV)
+
+    def run_recognition_openCV(self):
+        capture = cv2.VideoCapture(0)
+
+        if not capture.isOpened():
+            sys.exit('Video source not found. Check your privacy settings.')
+        time.sleep(0.1)
+        start_time = time.time()
+
+        while time.time() - start_time <= 20:
+
+            ret, frame = capture.read()
+
+            # the algorithm requires gray_scaled_frame scale image to perform classification.
+            gray_scaled_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2gray_scaled_frame)
+
+            # detects all the faces in the frame.
+            # Scale Factor: This parameter controls how much the image size is reduced at each image scale.
+            #   Increasing the scale factor can result in better detection of smaller faces, but it can also increase the
+            #   chances of false positives.
+            # Minimum Neighbors: This parameter specifies how many neighbors each potential detection rectangle must have
+            #   in order to be considered a valid detection. Increasing the number of neighbors can reduce false positives
+            #   but can also decrease the sensitivity of the detector and increase the likelihood of false negatives.
+            #   Higher value = fewer detections but higher quality. Value between 3-6 is good
+            faces = face_detection.detectMultiScale(gray_scaled_frame, scaleFactor=1.3, minNeighbors=5)
+
+            # For each detected face, try to recognize it
+            for (x, y, w, h) in faces:
+                face_image = gray_scaled_frame[y:y+h, x:x+w]
+
+                # Train the recognizer with the face image and assign it an ID equal to the name of the file without the extension
+                recognizer.train([face_image], np.array([0]))
+
+                # Initialize the minimum distance and recognized name variables
+                min_distance = 0.5
+                recognized_name = "Unknown"
+
+                # Iterate over the known face recognizers and try to recognize the current face
+                for i, known_recognizer in enumerate(self.known_face_recognizers):
+                    label, confidence = known_recognizer.predict(face_image)
+                    distance = abs(confidence)
+
+                    # If the current recognizer has a smaller distance than the current minimum, update the minimum distance and recognized name
+                    if distance < min_distance:
+                        min_distance = distance
+                        recognized_name = self.known_face_names[i]
+
+                # Draw a rectangle around the recognized face and display the recognized name
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                cv2.putText(frame, recognized_name, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+
+            cv2.imshow("Face Recognition", frame)
+
+            if cv2.waitKey(1) == ord('q'):
+                break
 
         capture.release()
         cv2.destroyAllWindows()
@@ -142,4 +230,4 @@ class Recognition:
 
 if __name__ == '__main__':
     face_rec = Recognition()
-    face_rec.run_recognition()
+    face_rec.run_recognition_dlib()
