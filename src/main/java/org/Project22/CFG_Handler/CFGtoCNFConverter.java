@@ -22,10 +22,12 @@ public class CFGtoCNFConverter {
     private static List<Rule> rulesList = new ArrayList<>(); // List of all rules
 
     private final static boolean DEBUG = true; // Debug variable
+    private static int newSymbolCounter=0;
     
     public static void main(String[] args) {
         readRulesFromFile();
         convertRulesToCNF();
+        printRules(rulesList);
     }
 
     //////////////////////////
@@ -37,17 +39,19 @@ public class CFGtoCNFConverter {
         try (BufferedReader br = new BufferedReader(new FileReader("resources/CFG/CFG.txt"))) {
 
             String line;
-
+            List<String> lines= new ArrayList<>();
             while ((line = br.readLine()) != null) {
+                
                 if (line.contains("rule") || line.contains("Rule")) {
-
+                    lines.add(line);
                     // Parse the line to create a Rule object
-                    Rule rule = parseRule(line);
+                    
 
                     // Add the Rule object to the rulesList
-                    rulesList.add(rule);
+                    
                 }
             }
+            parseRule(lines);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -55,10 +59,15 @@ public class CFGtoCNFConverter {
     }
 
     // Parses the rule in appropriate format
-    private static Rule parseRule(String line) {
+    private static List<Rule> parseRule(List<String> lines) {
 
         // Split the line into parts separated by whitespace
-        String[] parts = line.split("\\s+"); // Split on whitespace : " "
+        String[] parts={};
+        String newSymbol="";
+        for(String line: lines){
+            parts = line.split("\\s+"); // Split on whitespace : " "
+
+        
 
         // The first part is the lhs
         String lhs = parts[1];
@@ -70,6 +79,8 @@ public class CFGtoCNFConverter {
 
         // The rest of the parts are the rhs
         List<List<String>> rhs = new ArrayList<>();
+        List<List<String>> newRHS = new ArrayList<>();
+        List<String> terminal = new ArrayList<>();
         List<String> element = new ArrayList<>();
 
         // Skip the arrow part in the string and add every element of the rhs as an element of the list
@@ -89,14 +100,62 @@ public class CFGtoCNFConverter {
                 element = new ArrayList<>();
             }
         }
+
+        for (List<String> sublist : rhs) {        
+                for (int j = 0; j < sublist.size(); j++) {
+                    String elem = sublist.get(j);
+                    if (!isNonterminalSymbol(elem)) {
+                        newSymbol = getNextNewSymbol();
+                        terminal=Arrays.asList(elem.split(" "));
+                        newRHS.add(terminal);
+                        rulesList.add(new Rule(newSymbol, newRHS));
+                        sublist.set(j,newSymbol);
+                        newRHS= new ArrayList<>();
+    
+                    } 
+
+                }
+
+            }
+
         
-        
-        if (DEBUG){
-            System.out.println("lhs: " + lhs + " rhs: " + rhs);
+
+            Rule rule= new Rule(lhs,rhs);
+            rulesList.add(rule);
         }
+
+       
         
-        return new Rule(lhs, rhs);
+        // if (DEBUG){
+        //     System.out.println("lhs: " + lhs + " rhs: " + rhs);
+        // }
+        
+        return rulesList;
+                
     }
+
+    public static void printRules(List<Rule> rules) {
+        System.out.println();
+        for (Rule rule : rules) {
+            System.out.print(rule.lhs + " -> ");
+            System.out.println((rule.rhs));
+        }
+        System.out.println();
+        System.out.println();
+
+        // for (Map.Entry<String, List<Rule>> entry : rulesMap.entrySet()) {
+        //     String key = entry.getKey();
+        //     List<Rule> ruler = entry.getValue();
+        //     System.out.println(key + ":");
+        //     for (Rule rule : ruler) {
+        //         System.out.println("    " + rule.getLhs() + " -> " + rule.getRhs());
+        //     }
+        // }
+
+    }
+            
+        
+    
 
 
     /////////////////////////////
@@ -113,6 +172,15 @@ public class CFGtoCNFConverter {
         //Step 4
         //convertTerminals()
     }
+    private static boolean isNonterminalSymbol(String symbol) {
+        return symbol.startsWith("<") && symbol.endsWith(">");
+    }
+    
+    private static String getNextNewSymbol() {
+        newSymbolCounter++;
+        return "<X" + newSymbolCounter + ">";
+    }
+    
 
     // Step 4
 
