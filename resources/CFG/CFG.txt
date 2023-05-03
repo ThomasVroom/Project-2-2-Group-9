@@ -1,12 +1,11 @@
-Rule <S> <ACTION>
-Rule <ACTION> <LOCATION> | <SCHEDULE>
-Rule <SCHEDULE> Which lectures are there <TIMEEXPRESSION>
-Rule <TIMEEXPRESSION> on <DAY> at <TIME> | at <TIME> on <DAY>
-Rule <TIME> 9 | 12
-Rule <LOCATION> Where is <ROOM> | How do <PRO> get to <ROOM> | Where is <ROOM> located
-Rule <PRO> I | you | he | she
-Rule <ROOM> DeepSpace | SpaceBox
-Rule <DAY> Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
+Rule <ACTION> --> <LOCATION> | <SCHEDULE>
+Rule <SCHEDULE> --> Which lectures are there <TIMEEXPRESSION>
+Rule <TIMEEXPRESSION> --> on <DAY> at <TIME> | at <TIME> on <DAY>
+Rule <TIME> --> 9 | 12
+Rule <LOCATION> --> Where is <ROOM> | How do <PRO> get to <ROOM> | Where is <ROOM> located
+Rule <PRO> --> I | you | he | she
+Rule <ROOM> --> DeepSpace | SpaceBox
+Rule <DAY> --> Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
 Action <SCHEDULE> * <DAY> Saturday - There are no lectures on Saturday.
 Action <SCHEDULE> * <DAY> Monday <TIME> 9 - We start the week with math.
 Action <SCHEDULE> * <DAY> Monday <TIME> 12 - On Monday noon we have Theoratical Computer Science.
