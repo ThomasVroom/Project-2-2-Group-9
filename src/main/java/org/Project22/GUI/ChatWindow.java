@@ -70,6 +70,19 @@ public class ChatWindow extends JTextPane {
     public static final SimpleAttributeSet NAME_HEADER = new SimpleAttributeSet();
 
     /**
+     * Regex that will be used to filter the input.
+     * Read it as a list of allowed characters.
+     */
+    public static final String INPUT_FILTER = "[^a-zA-Z0-9 :+-]";
+
+    /**
+     * Regex that will be used to filter the text the user is typing.
+     * Superset of INPUT_FILTER.
+     * Read it as a list of allowed characters.
+     */
+    public static final String TYPE_FILTER = "[^a-zA-Z0-9 :+-.!?,]";
+
+    /**
      * Color used to fill the background with once the scrollpane activates.
      */
     public static final Color background_color = new Color(227, 227, 227);
@@ -247,7 +260,7 @@ public class ChatWindow extends JTextPane {
                 try {
                     // get input string
                     String input = this.comp.doc.getText(allowed_offset, offset - allowed_offset);
-                    input = input.replaceAll("[^a-zA-Z0-9 :+-]", "").toLowerCase();
+                    input = input.replaceAll(INPUT_FILTER, "").toLowerCase();
 
                     // add prompt to history
                     if (!input.isBlank()) this.comp.promptHistory.add(input);
@@ -280,6 +293,12 @@ public class ChatWindow extends JTextPane {
 
             // don't allow typing before prompt
             if (offset < this.comp.allowed_offset) {
+                return;
+            }
+
+            // don't allow any invalid characters
+            String filtered = text.replaceAll(TYPE_FILTER, "");
+            if (filtered.length() != text.length()) {
                 return;
             }
 
