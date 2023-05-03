@@ -6,13 +6,16 @@ import time
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
+# if you want to try opencv's recognition function then uncomment the 18th line (recognizer = cv2.face.LBPHFaceRecognizer_create()),
+# uncomment 35th line (# self.encode_faces_openCV()) and 252nd line (face_rec.run_recognition_openCV()). 
+
 # pre=trained data of HAAR is used for detection of faces:
 
 face_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 eye_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
 
 # Create an instance of the LBPHFRecognizer
-recognizer = cv2.face.LBPHFaceRecognizer_create()
+# recognizer = cv2.face.LBPHFaceRecognizer_create()
 
 THRESHOLD = 0.2 # 0.2 is ideal for cosine_similarity distance function.
                 # Haven't find the optimal thresholds for the other functions yet.  
