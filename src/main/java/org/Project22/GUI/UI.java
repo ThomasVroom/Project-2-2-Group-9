@@ -178,7 +178,10 @@ public class UI extends JFrame{
     }
 
     private void skilleditorButtonActionPerformed(ActionEvent evt) {
-        new SkillEditor().setVisible(true);
+        if (skillBox.getSelectedIndex() == 0) 
+            new SkillEditor().setVisible(true);
+        else if (skillBox.getSelectedIndex() == 1)
+            new CFGSkillEditor().setVisible(true);
     }
 
     private void clearButtonActionPerformed(ActionEvent evt) {

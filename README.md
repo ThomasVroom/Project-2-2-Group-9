@@ -45,20 +45,8 @@ Action <Place> Sittard <Place> Maastricht <Time> 11am By bike.
 ```
 
 Note that:
-- Key-words in the skill template cannot have any special characters, and is not case sensitive.
+- Key-words in the skill template cannot have any special characters, and is not case-sensitive.
 - After defining a new skill, press the 'Clear Chat' button to reload all existing skills.
-
-For the CFG-based skills, edit the CFG file to add new rules or actions.
-Keep in mind to format it correctly:
-- Use `<>` to denote non-terminal expressions
-- Use `|` to denote an OR-statement
-- The response for an action comes after the `-` symbol
-- You can't use special characters in rules or the first part of actions (except for regex)
-- To use a regex, type `regex` as the first word of the rule followed by the regex itself
-- Matching the rules and actions is case-insensitive
-- Use `\py python_file.py <ARGUMENT_1> <ARGUMENT_2>` to denote that an action should run a python file,
-  keep in mind the `<ARGUMENT_1>` should be in uppercase
-- Keep the order in mind! (e.g. you must put all references to `<TIME>` before defining it)
 
 ### Notes
 

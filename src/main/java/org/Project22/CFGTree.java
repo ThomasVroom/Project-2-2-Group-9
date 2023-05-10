@@ -10,10 +10,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.Project22.GUI.CFGSkillEditor;
+
 public class CFGTree {
 
     // true if debug text should be printed
-    public final boolean debug = true;
+    public final boolean debug = false;
 
     // a list of: answer to question List([<DAY>,monday],[<TIME>,9])
     public List<Tuple<String,List<Tuple<String,String>>>> actions;
@@ -29,7 +31,7 @@ public class CFGTree {
      * Create the tree from the CFG.txt file.
      */
     private void createTree() {
-        try (BufferedReader br = new BufferedReader(new FileReader("resources/CFG/Example.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(CFGSkillEditor.default_cfg_file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 // read all the rules
@@ -59,7 +61,7 @@ public class CFGTree {
                 }
 
                 // load all actions
-                if (line.startsWith("Action")) {
+                else if (line.startsWith("Action")) {
                     if (actions == null) {
                         actions = new ArrayList<Tuple<String,List<Tuple<String,String>>>>();
                     }
