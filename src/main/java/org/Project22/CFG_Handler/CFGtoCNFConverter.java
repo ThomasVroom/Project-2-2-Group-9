@@ -21,15 +21,16 @@ public class CFGtoCNFConverter {
 
     private static List<Rule> rulesList = new ArrayList<>(); // List of all rules
 
-    private static int newSymbolCounter;
+    private static int newSymbolCounter = 0 ;
 
     private final static boolean DEBUG = true; // Debug variable
-    private static int newSymbolCounter=0;
     
     public static void main(String[] args) {
-        readRulesFromFile();
-        convertRulesToCNF();
-        printRules(rulesList);
+        Rule testRule = new Rule("test", Arrays.asList(Arrays.asList(new String[]{"A", "B", "C", "D"}), Arrays.asList(new String[]{"E", "F", "G", "H"})));
+        generateNewRule(testRule);
+        //readRulesFromFile();
+        //convertRulesToCNF();
+        //printRules(rulesList);
     }
 
     //////////////////////////
@@ -173,7 +174,7 @@ public class CFGtoCNFConverter {
         removeUnitProductions(); // Delete rules of the form A -> B
 
         // Step 3 
-        replaceLongProductions(); // Replace rules of the form A -> BCD into A -> BE and E -> CD
+        //replaceLongProductions(); // Replace rules of the form A -> BCD into A -> BE and E -> CD
 
         //Step 4
         //convertTerminals()
@@ -227,59 +228,54 @@ public class CFGtoCNFConverter {
     }
 
     // Step 4
-    private static void replaceLongProductions(){
 
-        // iterate over all rules 
-        for(Rule rule : rulesList){
 
-            // iterate over rule.rhs()
-            for (List<String> element_list : rule.getRhs()){
+    private static void generateNewRule(Rule rule){
+        // parameter List<String> element_list
+        List<Rule> newRules = new ArrayList();
 
-                for(int element = 0; element < element_list.size(); element++){
-                        
-                    if (element_list.get(element) > 2){
-    
-                        // generate new rules
-                        generateNewRule(element_list);
-    
-                        // delete the old rule
-                        rulesList.remove(rule);
-                    }
-                }
+        generateNewSymbol(rule, newRules);
+
+        List<List<String>> tmpLHS = new ArrayList<>();
+        for (int i = 0; i < newRules.size(); i++) {
+            if (newRules.get(i).lhs.equals(rule.lhs)){
+                tmpLHS.add(newRules.get(i).rhs.get(0));
+                newRules.remove(i);
             }
         }
+        Rule  tmpRule = new Rule (rule.lhs, tmpLHS);
+        newRules.add(0, tmpRule);
+
+        printRules(Arrays.asList(rule));
+        printRules(newRules);
     }
 
-    private static void generateNewRule(List<String> element_list){
 
-        int stop_counter = element_list.size();
+    private static void generateNewSymbol(Rule rule, List<Rule> newRules) {
+        List<List<String>> elements = rule.rhs;
 
-        while (stop_counter > 2){
+        for (int i = 0; i < elements.size(); i++) {
 
-            // creating X ... and its value
-            String new_symbol_X = generateNewX();
-            List<List<String>> new_symbol_X_Value = new ArrayList<>();
+            if (elements.get(i).size() > 2) {
+                String newRuleName = generateNewX();
 
-            // Adding all the other elements except the first one to the new_symbol_X_Value
-            for(int i = 1; i < element_list.size(); i++){
-                new_symbol_X_Value.add(element_list.get(i));
+                Rule newRule = new Rule(rule.lhs, Arrays.asList(Arrays.asList(new String[]{elements.get(i).get(0), newRuleName})));
+                newRules.add(newRule);
+
+                List<String> rhs = elements.get(i);
+                rhs = new ArrayList<>(rhs.subList(1, rhs.size()));
+
+                List<List<String>> newRuleRHS = Arrays.asList(rhs);
+
+                generateNewSymbol(new Rule(newRuleName, newRuleRHS), newRules);
+            } else {
+                newRules.add(rule);
             }
-
-            // Adding the new_symbol_X_Value to the rulesList
-            List<String> new_element_list = new ArrayList<>();
-
-            new_element_list.add(element_list.get(0));
-            new_element_list.add(new_symbol_X);
-
-            stop_counter--;
-
-            Rule new_rule = new Rule(new_symbol_X, new_symbol_X_Value);
-
         }
     }
 
     private static String generateNewX(){
-        newSymbolCounter++;
+        newSymbolCounter ++;
         return "<X" + newSymbolCounter + ">";
     }
 }
