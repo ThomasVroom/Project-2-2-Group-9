@@ -24,9 +24,11 @@ public class CFGtoCNFConverter {
     private static int newSymbolCounter = 0 ;
 
     private final static boolean DEBUG = true; // Debug variable
+
+    private static List<Rule> cnf_rules = new ArrayList<>();
     
     public static void main(String[] args) {
-        Rule testRule = new Rule("test", Arrays.asList(Arrays.asList(new String[]{"A", "B", "C", "D"}), Arrays.asList(new String[]{"E", "F", "G", "H"})));
+        Rule testRule = new Rule("test", Arrays.asList(Arrays.asList(new String[]{"A", "B", "C", "D"}), Arrays.asList(new String[]{"E", "F", "G", "H"}), Arrays.asList(new String[]{"I", "J"}),  Arrays.asList(new String[]{"O", "M"})));
         generateNewRule(testRule);
         //readRulesFromFile();
         //convertRulesToCNF();
@@ -47,11 +49,6 @@ public class CFGtoCNFConverter {
                 
                 if (line.contains("rule") || line.contains("Rule")) {
                     lines.add(line);
-                    // Parse the line to create a Rule object
-                    
-
-                    // Add the Rule object to the rulesList
-                    
                 }
             }
             parseRule(lines);
@@ -70,65 +67,59 @@ public class CFGtoCNFConverter {
         for(String line: lines){
             parts = line.split("\\s+"); // Split on whitespace : " "
 
+            // The first part is the lhs
+            String lhs = parts[1];
+
+            /*if (DEBUG){
+                System.out.println("parts: " + Arrays.toString(parts));
+                System.out.println("lhs: " + lhs);
+            }*/
+
+            // The rest of the parts are the rhs
+            List<List<String>> rhs = new ArrayList<>();
+            List<List<String>> newRHS = new ArrayList<>();
+            List<String> terminal = new ArrayList<>();
+            List<String> element = new ArrayList<>();
+
+            // Skip the arrow part in the string and add every element of the rhs as an element of the list
+            for (int i = 3; i < parts.length + 1; i++) {
+
+                if (i == parts.length){
+                    rhs.add(element);
+                    break;
+                }
+
+                if (!parts[i].equals("|")) { // Skip the "|" symbol , delete this line if you want to keep it
+                    element.add(parts[i]);
+                }
+
+                if (parts[i].equals("|")){
+                    rhs.add(element);
+                    element = new ArrayList<>();
+                }
+            }
+
+            for (List<String> sublist : rhs) {        
+                    for (int j = 0; j < sublist.size(); j++) {
+                        String elem = sublist.get(j);
+                        if (!isNonterminalSymbol(elem)) {
+                            newSymbol = getNextNewSymbol();
+                            terminal=Arrays.asList(elem.split(" "));
+                            newRHS.add(terminal);
+                            rulesList.add(new Rule(newSymbol, newRHS));
+                            sublist.set(j,newSymbol);
+                            newRHS= new ArrayList<>();
         
+                        } 
 
-        // The first part is the lhs
-        String lhs = parts[1];
-
-        /*if (DEBUG){
-            System.out.println("parts: " + Arrays.toString(parts));
-            System.out.println("lhs: " + lhs);
-        }*/
-
-        // The rest of the parts are the rhs
-        List<List<String>> rhs = new ArrayList<>();
-        List<List<String>> newRHS = new ArrayList<>();
-        List<String> terminal = new ArrayList<>();
-        List<String> element = new ArrayList<>();
-
-        // Skip the arrow part in the string and add every element of the rhs as an element of the list
-        for (int i = 3; i < parts.length + 1; i++) {
-
-            if (i == parts.length){
-                rhs.add(element);
-                break;
-            }
-
-            if (!parts[i].equals("|")) { // Skip the "|" symbol , delete this line if you want to keep it
-                element.add(parts[i]);
-            }
-
-            if (parts[i].equals("|")){
-                rhs.add(element);
-                element = new ArrayList<>();
-            }
-        }
-
-        for (List<String> sublist : rhs) {        
-                for (int j = 0; j < sublist.size(); j++) {
-                    String elem = sublist.get(j);
-                    if (!isNonterminalSymbol(elem)) {
-                        newSymbol = getNextNewSymbol();
-                        terminal=Arrays.asList(elem.split(" "));
-                        newRHS.add(terminal);
-                        rulesList.add(new Rule(newSymbol, newRHS));
-                        sublist.set(j,newSymbol);
-                        newRHS= new ArrayList<>();
-    
-                    } 
+                    }
 
                 }
 
-            }
-
-        
-
-            Rule rule= new Rule(lhs,rhs);
-            rulesList.add(rule);
+                Rule rule= new Rule(lhs,rhs);
+                rulesList.add(rule);
         }
 
-       
-        
         // if (DEBUG){
         //     System.out.println("lhs: " + lhs + " rhs: " + rhs);
         // }
@@ -146,21 +137,8 @@ public class CFGtoCNFConverter {
         System.out.println();
         System.out.println();
 
-        // for (Map.Entry<String, List<Rule>> entry : rulesMap.entrySet()) {
-        //     String key = entry.getKey();
-        //     List<Rule> ruler = entry.getValue();
-        //     System.out.println(key + ":");
-        //     for (Rule rule : ruler) {
-        //         System.out.println("    " + rule.getLhs() + " -> " + rule.getRhs());
-        //     }
-        // }
-
     }
             
-        
-    
-
-
     /////////////////////////////
     // Main Conversion Program //
     /////////////////////////////
@@ -228,26 +206,44 @@ public class CFGtoCNFConverter {
     }
 
     // Step 4
+    private static void convertTerminals(){
+        for (Rule rule : rulesList){ 
 
+            List<Rule> rule_list_tmp = generateNewRule(rule);
 
-    private static void generateNewRule(Rule rule){
+            for (Rule rule_tmp : rule_list_tmp){
+                cnf_rules.add(rule_tmp);
+            }
+        }
+        /*if (DEBUG){
+            System.out.println("rulesList: " + rulesList);
+        }*/
+    }
+
+    private static List<Rule> generateNewRule(Rule rule){
         // parameter List<String> element_list
         List<Rule> newRules = new ArrayList();
 
         generateNewSymbol(rule, newRules);
 
         List<List<String>> tmpLHS = new ArrayList<>();
-        for (int i = 0; i < newRules.size(); i++) {
+        int size = newRules.size();
+
+        List<Rule> finalRules = new ArrayList();
+
+        for (int i = 0; i < size; i++) {
             if (newRules.get(i).lhs.equals(rule.lhs)){
                 tmpLHS.add(newRules.get(i).rhs.get(0));
-                newRules.remove(i);
+            }
+            else{
+                finalRules.add(newRules.get(i));
             }
         }
         Rule  tmpRule = new Rule (rule.lhs, tmpLHS);
-        newRules.add(0, tmpRule);
+        finalRules.add(0, tmpRule);
 
-        printRules(Arrays.asList(rule));
-        printRules(newRules);
+        // printRules(Arrays.asList(rule));
+        return finalRules;
     }
 
 
@@ -269,7 +265,8 @@ public class CFGtoCNFConverter {
 
                 generateNewSymbol(new Rule(newRuleName, newRuleRHS), newRules);
             } else {
-                newRules.add(rule);
+                Rule newRule = new Rule(rule.lhs, Arrays.asList(elements.get(i)));
+                newRules.add(newRule);
             }
         }
     }
