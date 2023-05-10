@@ -24,13 +24,10 @@ public class CFGtoCNFConverter {
     private static int newSymbolCounter = 0 ;
 
     private final static boolean DEBUG = true; // Debug variable
-
-    private static List<Rule> cnf_rules = new ArrayList<>();
     
     public static void main(String[] args) {
         readRulesFromFile();
-        printRules(rulesList);
-        convertRulesToCNF();
+        rulesList = convertRulesToCNF();
         printRules(rulesList);
     }
 
@@ -98,23 +95,6 @@ public class CFGtoCNFConverter {
                 }
             }
 
-            for (List<String> sublist : rhs) {        
-                    for (int j = 0; j < sublist.size(); j++) {
-                        String elem = sublist.get(j);
-                        if (!isNonterminalSymbol(elem)) {
-                            newSymbol = getNextNewSymbol();
-                            terminal=Arrays.asList(elem.split(" "));
-                            newRHS.add(terminal);
-                            rulesList.add(new Rule(newSymbol, newRHS));
-                            sublist.set(j,newSymbol);
-                            newRHS= new ArrayList<>();
-        
-                        } 
-
-                    }
-
-                }
-
                 Rule rule= new Rule(lhs,rhs);
                 rulesList.add(rule);
         }
@@ -142,32 +122,25 @@ public class CFGtoCNFConverter {
     // Main Conversion Program //
     /////////////////////////////
 
-    private static void convertRulesToCNF(){
+    private static List<Rule> convertRulesToCNF(){
 
         // Step 1
-        removeEpsilonRules(); // Delete rules of the form A -> ""
+        rulesList = removeEpsilonRules(rulesList); // Delete rules of the form A -> ""
 
         // Step 2
-        removeUnitProductions(); // Delete rules of the form A -> B
+        rulesList = removeUnitProductions(rulesList); // Delete rules of the form A -> B
 
         // Step 3 
-        //replaceLongProductions(); // Replace rules of the form A -> BCD into A -> BE and E -> CD
+        rulesList = replaceLongProductions(rulesList); // Replace rules of the form A -> aB where a is a terminal and B is a non-terminal
 
         //Step 4
-        convertTerminals();
-    }
-    private static boolean isNonterminalSymbol(String symbol) {
-        return symbol.startsWith("<") && symbol.endsWith(">");
-    }
-    
-    private static String getNextNewSymbol() {
-        newSymbolCounter++;
-        return "<X" + newSymbolCounter + ">";
-    }
-    
+        rulesList = convertTerminals(rulesList); // Replace rules of the form A -> BCD into A -> BE and E -> CD
 
+        return rulesList;
+    }
+    
     // Step 1
-    private static void removeEpsilonRules(){
+    private static List<Rule> removeEpsilonRules(List<Rule> rulesList){
 
         for (Rule rule : rulesList){ 
 
@@ -183,10 +156,12 @@ public class CFGtoCNFConverter {
         /*if (DEBUG){
             System.out.println("rulesList: " + rulesList);
         }*/
+
+        return rulesList;
     }    
 
     // Step 2
-    private static void removeUnitProductions(){
+    private static List<Rule> removeUnitProductions(List<Rule> rulesList){
             
             for (Rule rule : rulesList){ 
     
@@ -202,21 +177,49 @@ public class CFGtoCNFConverter {
             /*if (DEBUG){
                 System.out.println("rulesList: " + rulesList);
             }*/
+
+            return rulesList;
+    }
+
+    private static List<Rule> replaceLongProductions(List<Rule> rulesList) {
+        List<Rule> newRulesToAdd = new ArrayList<>();
+    
+        for (Rule rule : rulesList) {
+            List<List<String>> rhs = rule.getRhs();
+            for (int i = 0; i < rhs.size(); i++) {
+                List<String> sublist = rhs.get(i);
+                for (int j = 0; j < sublist.size(); j++) {
+                    String elem = sublist.get(j);
+                    if (!isNonterminalSymbol(elem)) {
+                        String newSymbol = generateNewX();
+                        List<String> newRHS = Collections.singletonList(elem);
+                        newRulesToAdd.add(new Rule(newSymbol, Collections.singletonList(newRHS)));
+                        sublist.set(j, newSymbol);
+                    }
+                }
+            }
+        }
+        rulesList.addAll(newRulesToAdd);
+        return rulesList;
     }
 
     // Step 4
-    private static void convertTerminals(){
+    private static List<Rule> convertTerminals(List<Rule> rulesList){
+       
+        List<Rule> cnf_rules_tmp = new ArrayList<>();
+
         for (Rule rule : rulesList){ 
 
             List<Rule> rule_list_tmp = generateNewRule(rule);
 
             for (Rule rule_tmp : rule_list_tmp){
-                cnf_rules.add(rule_tmp);
+                cnf_rules_tmp.add(rule_tmp);
             }
         }
         /*if (DEBUG){
             System.out.println("rulesList: " + rulesList);
         }*/
+        return cnf_rules_tmp;
     }
 
     private static List<Rule> generateNewRule(Rule rule){
@@ -273,5 +276,9 @@ public class CFGtoCNFConverter {
     private static String generateNewX(){
         newSymbolCounter ++;
         return "<X" + newSymbolCounter + ">";
+    }
+
+    private static boolean isNonterminalSymbol(String symbol) {
+        return symbol.startsWith("<") && symbol.endsWith(">");
     }
 }
