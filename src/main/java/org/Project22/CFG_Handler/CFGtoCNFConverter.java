@@ -28,10 +28,8 @@ public class CFGtoCNFConverter {
     private static List<Rule> cnf_rules = new ArrayList<>();
     
     public static void main(String[] args) {
-        Rule testRule = new Rule("test", Arrays.asList(Arrays.asList(new String[]{"A", "B", "C", "D"}), Arrays.asList(new String[]{"E", "F", "G", "H"}), Arrays.asList(new String[]{"I", "J"}),  Arrays.asList(new String[]{"O", "M"})));
-        generateNewRule(testRule);
-        //readRulesFromFile();
-        //convertRulesToCNF();
+        readRulesFromFile();
+        convertRulesToCNF();
         //printRules(rulesList);
     }
 
