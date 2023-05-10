@@ -5,11 +5,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CFGTree {
+
+    // true if debug text should be printed
+    public final boolean debug = true;
 
     // a list of: answer to question List([<DAY>,monday],[<TIME>,9])
     public List<Tuple<String,List<Tuple<String,String>>>> actions;
@@ -25,7 +29,7 @@ public class CFGTree {
      * Create the tree from the CFG.txt file.
      */
     private void createTree() {
-        try (BufferedReader br = new BufferedReader(new FileReader("resources/CFG/NEW_CFG.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("resources/CFG/Example.txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 // read all the rules
@@ -89,6 +93,7 @@ public class CFGTree {
 
         // delete all the nonterminal references
         deleteNonTerminalReferences(CFG.getRoot());
+        if (debug) System.out.println(CFG);
     }
 
     /**
@@ -104,13 +109,13 @@ public class CFGTree {
             String[] splitTerminals = terminal.split("\\&");
 
             // add node to tree
-            Tree.Node newNode = new Tree.Node(new Tuple<String,String>(nonterminal, splitTerminals[0].trim()));
+            Tree.Node newNode = new Tree.Node(new Tuple<String,String>(nonterminal, splitTerminals[0].trim()), false, false);
             node.addChild(newNode);
 
             // add suffixes
             Tree.Node previous = newNode;
             for (int i = 1; i < splitTerminals.length; i++) {
-                Tree.Node suffix = new Tree.Node(new Tuple<String,String>(nonterminal, splitTerminals[i].trim()));
+                Tree.Node suffix = new Tree.Node(new Tuple<String,String>(nonterminal, splitTerminals[i].trim()), false, true);
                 previous.addSuffix(suffix);
                 previous = suffix;
             }
@@ -223,7 +228,9 @@ public class CFGTree {
         String value = node.getValue().y();
         Pattern pattern = value.startsWith("regex") ? Pattern.compile(value.substring(6)) : Pattern.compile(value, Pattern.LITERAL);
         Matcher matcher = pattern.matcher(remainder);
+        if (debug) System.out.print("rem: "+remainder+" val: "+value);
         if (matcher.find()) {
+            if (debug) System.out.println(" - found.");
             // remove the value from the remainder
             values.add(new Tuple<String,String> (node.getValue().x(), matcher.group()));
             remainder = remainder.replaceFirst(matcher.group(), "").trim();
@@ -231,7 +238,7 @@ public class CFGTree {
             // if node is a leaf
             if (node.getChildren().isEmpty()) {
                 // check for suffixes
-                return suffixSearch(node, remainder, values);
+                return suffixSearch(node, remainder, values, false);
             }
 
             // apply dfs to children
@@ -243,6 +250,7 @@ public class CFGTree {
             return new Tuple<Boolean,List<Tuple<String,String>>>(false, values);
         }
         else {
+            if (debug) System.out.println(" - not found.");
             return new Tuple<Boolean,List<Tuple<String,String>>>(false, values);
         }
     }
@@ -252,21 +260,23 @@ public class CFGTree {
      * @param node the node it is currently visiting
      * @param remainder the remainder of the input string (that hasn't been matched yet)
      * @param values the values already found
+     * @param cameFromSuffix true if this method was called from a suffix
      * @return if the string belongs to the CFG and the list of values
      */
-    private Tuple<Boolean,List<Tuple<String,String>>> suffixSearch(Tree.Node node, String remainder, List<Tuple<String,String>> values) {
+    private Tuple<Boolean,List<Tuple<String,String>>> suffixSearch(Tree.Node node, String remainder, List<Tuple<String,String>> values, boolean cameFromSuffix) {
         // if we reach the root
-        if (node.getParent() == null) {
+        if (node.isRoot) {
+            if (debug) System.out.println("suffix search root remainder: "+remainder);
             return new Tuple<Boolean,List<Tuple<String,String>>>(remainder.isBlank(), values);
         }
 
-        // if we find a suffix, explore that suffix
-        if (node.getSuffix() != null) {
+        // if we find a suffix, explore that suffix (unless we just came back from one, to prevent loop)
+        if (node.getSuffix() != null && !cameFromSuffix) {
             return dfs(node.getSuffix(), remainder, values);
         }
 
         // else check the parent
-        return suffixSearch(node.getParent(), remainder, values);
+        return suffixSearch(node.getParent(), remainder, values, node.isSuffix && node.getParent().getSuffix() != null);
     }
 
     /**
@@ -280,7 +290,7 @@ public class CFGTree {
         private Node root;
 
         public Tree(Tuple<String,String> rootValue) {
-            root = new Node(rootValue);
+            root = new Node(rootValue, true, false);
         }
 
         /**
@@ -288,6 +298,11 @@ public class CFGTree {
          */
         public Node getRoot() {
             return root;
+        }
+
+        @Override
+        public String toString() {
+            return this.getRoot().toString();
         }
 
         /**
@@ -318,8 +333,20 @@ public class CFGTree {
              */
             private Node parent;
 
-            public Node(Tuple<String,String> value) {
+            /**
+             * True if this node is the root.
+             */
+            public final boolean isRoot;
+
+            /**
+             * True if this node is a suffix
+             */
+            public final boolean isSuffix;
+
+            public Node(Tuple<String,String> value, boolean isRoot, boolean isSuffix) {
                 this.value = value;
+                this.isRoot = isRoot;
+                this.isSuffix = isSuffix;
                 this.children = new ArrayList<>();
             }
 
@@ -380,7 +407,39 @@ public class CFGTree {
             public void addSuffix(Node suffix) {
                 if (this.suffix != null)
                     throw new RuntimeException("node already has suffix");
+                suffix.parent = this;
                 this.suffix = suffix;
+            }
+
+            /**
+             * Auxilliary method for printing the tree.
+             * @param buffer
+             * @param prefix
+             * @param childrenPrefix
+             * @return
+             */
+            private void print(StringBuilder buffer, String prefix, String childrenPrefix) {
+                buffer.append(prefix);
+                buffer.append(value.x() + " " + value.y());
+                buffer.append('\n');
+                for (Iterator<Node> it = children.iterator(); it.hasNext();) {
+                    Node next = it.next();
+                    if (it.hasNext() || suffix != null) {
+                        next.print(buffer, childrenPrefix + "├── ", childrenPrefix + "│   ");
+                    } else {
+                        next.print(buffer, childrenPrefix + "└── ", childrenPrefix + "    ");
+                    }
+                }
+                if (suffix != null) {
+                    suffix.print(buffer, childrenPrefix + "└── (suffix) ", childrenPrefix + "    ");
+                }
+            }
+
+            @Override
+            public String toString() {
+                StringBuilder buffer = new StringBuilder(50);
+                print(buffer, "", "");
+                return buffer.toString();
             }
         }
     }

@@ -7,7 +7,7 @@ Rule <LOCATION> Where is <ROOM> | How do <PRO> get to <ROOM> | Where is <ROOM> l
 Rule <PRO> I | you | he | she
 Rule <ROOM> DeepSpace | SpaceBox
 Rule <DAY> Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
-Rule <ADDITION> What is <NUMBER> plus <NUMBER>
+Rule <ADDITION> What is <NUMBER> \+ <NUMBER> | What is <NUMBER> plus <NUMBER>
 Rule <NUMBER> regex -?\d+
 Action <SCHEDULE> * <DAY> Saturday - There are no lectures on Saturday.
 Action <SCHEDULE> * <DAY> Monday <TIME> 9:00 - We start the week with math.

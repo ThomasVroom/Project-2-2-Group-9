@@ -1,0 +1,12 @@
+Rule <s> <action>
+Rule <action> <weather> 
+Rule <weather> How is the weather in <location> | <pro> <verb> in <location> what is the weather
+Rule <location> <city> <time>
+Rule <city> New York | Berlin
+Rule <time> tomorrow | today
+Rule <pro> I | she | he | my mother
+Rule <verb> am | is
+Action <weather> * <city> New York <time> tomorrow - It will be sunny.
+Action <weather> * <city> Berlin - It is rainy.
+Action <weather> * <pro> my mother <verb> is <city> New York <time> today - It is stormy today. 
+Action - I have no idea.
