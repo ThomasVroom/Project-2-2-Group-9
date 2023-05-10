@@ -29,8 +29,9 @@ public class CFGtoCNFConverter {
     
     public static void main(String[] args) {
         readRulesFromFile();
+        printRules(rulesList);
         convertRulesToCNF();
-        //printRules(rulesList);
+        printRules(rulesList);
     }
 
     //////////////////////////
@@ -153,7 +154,7 @@ public class CFGtoCNFConverter {
         //replaceLongProductions(); // Replace rules of the form A -> BCD into A -> BE and E -> CD
 
         //Step 4
-        //convertTerminals()
+        convertTerminals();
     }
     private static boolean isNonterminalSymbol(String symbol) {
         return symbol.startsWith("<") && symbol.endsWith(">");
