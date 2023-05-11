@@ -23,12 +23,12 @@ public class CFGtoCNFConverter {
 
     private static int newSymbolCounter = 0 ;
 
-    private final static boolean DEBUG = true; // Debug variable
+    private final static boolean DEBUG = false; // Debug variable
     
-    public static void main(String[] args) {
+    public List<Rule> getRulesCNF() {
         readRulesFromFile();
         rulesList = convertRulesToCNF();
-        printRules(rulesList);
+        return rulesList;
     }
 
     //////////////////////////
@@ -66,10 +66,10 @@ public class CFGtoCNFConverter {
             // The first part is the lhs
             String lhs = parts[1];
 
-            /*if (DEBUG){
+            if (DEBUG){
                 System.out.println("parts: " + Arrays.toString(parts));
                 System.out.println("lhs: " + lhs);
-            }*/
+            }
 
             // The rest of the parts are the rhs
             List<List<String>> rhs = new ArrayList<>();
@@ -98,10 +98,6 @@ public class CFGtoCNFConverter {
                 Rule rule= new Rule(lhs,rhs);
                 rulesList.add(rule);
         }
-
-        // if (DEBUG){
-        //     System.out.println("lhs: " + lhs + " rhs: " + rhs);
-        // }
         
         return rulesList;
                 
@@ -153,9 +149,9 @@ public class CFGtoCNFConverter {
             }
         }
 
-        /*if (DEBUG){
+        if (DEBUG){
             System.out.println("rulesList: " + rulesList);
-        }*/
+        }
 
         return rulesList;
     }    
@@ -174,9 +170,9 @@ public class CFGtoCNFConverter {
                 }
             }
     
-            /*if (DEBUG){
+            if (DEBUG){
                 System.out.println("rulesList: " + rulesList);
-            }*/
+            }
 
             return rulesList;
     }
@@ -216,14 +212,16 @@ public class CFGtoCNFConverter {
                 cnf_rules_tmp.add(rule_tmp);
             }
         }
-        /*if (DEBUG){
+
+        if (DEBUG){
             System.out.println("rulesList: " + rulesList);
-        }*/
+        }
+
         return cnf_rules_tmp;
     }
 
     private static List<Rule> generateNewRule(Rule rule){
-        // parameter List<String> element_list
+
         List<Rule> newRules = new ArrayList();
 
         generateNewSymbol(rule, newRules);
@@ -244,10 +242,8 @@ public class CFGtoCNFConverter {
         Rule  tmpRule = new Rule (rule.lhs, tmpLHS);
         finalRules.add(0, tmpRule);
 
-        // printRules(Arrays.asList(rule));
         return finalRules;
     }
-
 
     private static void generateNewSymbol(Rule rule, List<Rule> newRules) {
         List<List<String>> elements = rule.rhs;
