@@ -1,13 +1,13 @@
 import cv2
 import time
 
-start_time = time.time()
-
-capture = cv2.VideoCapture(0)
-
 # pre=trained data of HAAR is used:
 face_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 eye_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
+
+start_time = time.time()
+
+capture = cv2.VideoCapture(0)
 
 def detectFaceAndEyes():
     detected = False
