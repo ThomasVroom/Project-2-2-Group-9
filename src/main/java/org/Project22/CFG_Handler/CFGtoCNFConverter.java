@@ -31,6 +31,12 @@ public class CFGtoCNFConverter {
         return rulesList;
     }
 
+    public static void main(String[] args) {
+        readRulesFromFile();
+        rulesList = convertRulesToCNF();
+        printRules(rulesList);
+    }
+
     //////////////////////////
     // Analyzing Skill File //
     //////////////////////////

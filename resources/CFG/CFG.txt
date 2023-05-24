@@ -1,4 +1,3 @@
-Rule <ACTION> --> <LOCATION> | <SCHEDULE>
 Rule <SCHEDULE> --> Which lectures are there <TIMEEXPRESSION>
 Rule <TIMEEXPRESSION> --> on <DAY> at <TIME> | at <TIME> on <DAY>
 Rule <TIME> --> 9 | 12
