@@ -12,7 +12,7 @@ capture = cv2.VideoCapture(0)
 def detectFaceAndEyes():
     detected = False
 
-    while time.time() - start_time <= 5:
+    while time.time() - start_time <= 10:
 
         # ret indicates whether the capture is done successfully.
         # frame is the numpy array that represents the image.
