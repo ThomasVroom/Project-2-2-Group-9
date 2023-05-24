@@ -1,0 +1,23 @@
+Rule <S> <ACTION>
+Rule <ACTION> <LOCATION> | <SCHEDULE> | <WEATHER> | <RECOMMEND>
+Rule <SCHEDULE> Which lectures are there <TIMEEXPRESSION>
+Rule <TIMEEXPRESSION> on <DAY> at <TIME> | at <TIME> on <DAY>
+Rule <TIME> 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17
+Rule <LOCATION> Where is <ROOM> | How do <PRO> get to <ROOM> | Where is <ROOM> located
+Rule <PRO> I | you | he | she | we | they
+Rule <ROOM> DeepSpace | SpaceBox | BoxSpace | SpaceDeep | SpaceSpace
+Rule <WHEATHER> How is the weather in <CITY> on <DAY> | On <DAY> what is the weather in <CITY>
+Rule <CITY> Maastricht | Berlin | Heerlen | London | Brussels | Munich | Sittard | Amsterdam
+Rule <RECOMMEND> Would you recommend <ITEM> | Would you recommend <ITEM> for <PRICE>
+Rule <ITEM> <CLOTHING> | <UTENSILS> | <FOOD>
+Rule <CLOTHING> shoes | tshirt | pants | sweater | jacket
+Rule <UTENSILS> pen | pencils | eraser
+Rule <FOOD> <SWEETS> | <VEGETABLE> | <FRUIT>
+Rule <SWEETS> chocolate | gummybears | drop | stroopwaffels
+Rule <VEGETABLE> cucumber | olives | avocado | onion | salad
+Rule <FRUIT> apple | pear | banana | strawberries | blueberries | kiwi
+Rule <PRICE> 1 euro | 3 euros | 5 euros | 10 euros | 15 euros | 20 euros | 25 euros | 50 euros
+Rule <DAY> Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
+
+Action <S> * - Sentence recognized.
+Action - Sentence not recognized.

@@ -1,0 +1,19 @@
+Rule <S> <ACTION>
+Rule <ACTION> <LOCATION> | <SCHEDULE> | <WEATHER> | <RECOMMEND>
+Rule <SCHEDULE> Which lectures are there <TIMEEXPRESSION>
+Rule <TIMEEXPRESSION> on <DAY> at <TIME> | at <TIME> on <DAY>
+Rule <TIME> 9 | 12
+Rule <LOCATION> Where is <ROOM> | How do <PRO> get to <ROOM> | Where is <ROOM> located
+Rule <PRO> I | you | he | she
+Rule <ROOM> DeepSpace | SpaceBox
+Rule <WHEATHER> How is the weather in <CITY> on <DAY> | On <DAY> what is the weather in <CITY>
+Rule <CITY> Maastricht | Berlin | Heerlen | London | Brussels
+Rule <RECOMMEND> Would you recommend <ITEM> | Would you recommend <ITEM> for <PRICE>
+Rule <ITEM> <CLOTHING> | <UTENSILS>
+Rule <CLOTHING> shoes | tshirt | pants | sweater
+Rule <UTENSILS> pen | pencils | eraser
+Rule <PRICE> 3 euros | 5 euros | 10 euros | 20 euros | 50 euros
+Rule <DAY> Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
+
+Action <S> * - Sentence recognized.
+Action - Sentence not recognized.

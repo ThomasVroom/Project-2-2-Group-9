@@ -11,7 +11,7 @@ import javax.swing.*;
 
 public class CFGSkillEditor extends JFrame {
 
-    public static final String default_cfg_file = "resources/CFG/NEW_CFG.txt";
+    public static String default_cfg_file = "resources/CFG/NEW_CFG.txt";
 
     private String currentFile;
     
@@ -89,7 +89,8 @@ public class CFGSkillEditor extends JFrame {
                 JFileChooser fileChooser = new JFileChooser(default_cfg_file);
                 int result = fileChooser.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
-                    loadFile(fileChooser.getSelectedFile().getAbsolutePath());
+                    default_cfg_file = fileChooser.getSelectedFile().getAbsolutePath();
+                    loadFile(default_cfg_file);
                 }
             }
         });
