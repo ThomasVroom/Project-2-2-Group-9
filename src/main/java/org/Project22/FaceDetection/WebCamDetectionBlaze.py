@@ -44,24 +44,6 @@ def detectFaceandKeyPoints():
 
                     cv2.rectangle(frame, (x,y), (x+w, y+h), color=(255,255,255), thickness=2)
 
-                    # key_points = face.location_data.relative_keypoints
-
-                    # right_eye = (int(key_points[0].x * width), int(key_points[0].y * height))
-                    # left_eye = (int(key_points[1].x * width), int(key_points[1].y * height))
-
-                    # nose = (int(key_points[2].x * width), int(key_points[2].y * height))
-                    # mouth = (int(key_points[3].x * width), int(key_points[3].y * height))
-
-                    # right_ear = (int(key_points[4].x * width), int(key_points[4].y * height))
-                    # left_ear = (int(key_points[5].x * width), int(key_points[5].y * height))
-
-                    # cv2.circle(frame, right_eye, 15, (0,0,255), -1)
-                    # cv2.circle(frame, left_eye, 15, (0,0,255), -1)
-                    # cv2.circle(frame, nose, 15, (0,0,255), -1)
-                    # cv2.circle(frame, mouth, 15, (0,0,255), -1)
-                    # cv2.circle(frame, right_ear, 15, (0,0,255), -1)
-                    # cv2.circle(frame, left_ear, 15, (0,0,255), -1)
-
             cv2.imshow('frame', frame)
 
             # terminates the frame if user clicks "a"
