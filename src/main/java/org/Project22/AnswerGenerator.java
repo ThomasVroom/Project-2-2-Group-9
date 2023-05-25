@@ -1,5 +1,8 @@
 package org.Project22;
 
+import org.Project22.CFG_Handler.BobTheBuilder;
+import org.Project22.CFG_Handler.CFGtoCNFConverter;
+import org.Project22.CFG_Handler.CockeYoungerKasami.Rule;
 import org.Project22.Matching.Match1;
 import org.Project22.Matching.Match2;
 import org.Project22.Matching.Match3;
@@ -17,6 +20,10 @@ public class AnswerGenerator{
 
     // cfg-tree used by the tree traversal algorithm
     public CFGTree cfg;
+
+    // rules used by the cyk algorithm
+    public CFGtoCNFConverter converter = new CFGtoCNFConverter();
+    public List<Rule> rules = converter.getRulesCNF();
 
     //threshold
     public float ConfidenceCutoff = 0.3f;
@@ -54,9 +61,16 @@ public class AnswerGenerator{
             return question2.getAnswer(variables);
         }
         else if (algorithm.x().intValue() == 1) { // cfg
-            List<Tuple<String,String>> variables = cfg.matchString(userString);
-            Main.ui.setDebugText("CFG Path:", variables);
-            return cfg.getAnswer(variables);
+            if (algorithm.y().intValue() == 0) { // tree traversal
+                List<Tuple<String,String>> variables = cfg.matchString(userString);
+                Main.ui.setDebugText("CFG Path:", variables);
+                return cfg.getAnswer(variables);
+            }
+            else if (algorithm.y().intValue() == 1) { // cyk
+                boolean found = BobTheBuilder.iterateRules(userString.split(" "), rules);
+                Main.ui.setDebugText("", new ArrayList<Tuple<String, String>>());
+                return found ? ("Found! " + BobTheBuilder.topic) : "Not Found :(";
+            }
         }
         throw new RuntimeException("error selecting matching algorithm.");
     }

@@ -3,10 +3,10 @@ package org.Project22.CFG_Handler.CockeYoungerKasami;
 import java.util.List;
 
 public class Rule {
-    private String lhs; // Left-hand side non-terminal symbol
-    private List<String> rhs; // Right-hand side symbols (terminals or non-terminals)
+    public String lhs; // Left-hand side non-terminal symbol
+    public List<List<String>> rhs; // Right-hand side symbols (terminals or non-terminals)
 
-    public Rule(String lhs, List<String> rhs) {
+    public Rule(String lhs, List<List<String>> rhs) {
         this.lhs = lhs;
         this.rhs = rhs;
     }
@@ -19,11 +19,11 @@ public class Rule {
         this.lhs = lhs;
     }
 
-    public List<String> getRhs() {
+    public List<List<String>> getRhs() {
         return rhs;
     }
 
-    public void setRhs(List<String> rhs) {
+    public void setRhs(List<List<String>> rhs) {
         this.rhs = rhs;
     }
 

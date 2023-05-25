@@ -11,7 +11,8 @@ import javax.swing.*;
 
 public class CFGSkillEditor extends JFrame {
 
-    public static String default_cfg_file = "resources/CFG/NEW_CFG.txt";
+    public static String default_cfg_file_tree_traversal = "resources/CFG/TreeTraversal/CFG.txt";
+    public static String default_cfg_file_cyk = "resources/CFG/CYK/CFG.txt";
 
     private String currentFile;
     
@@ -33,13 +34,21 @@ public class CFGSkillEditor extends JFrame {
     private JTextArea jTextArea2;
     private JTextArea jTextArea3;
 
-    public CFGSkillEditor() {
+    private int algorithm;
+
+    public CFGSkillEditor(int algorithm) {
         // ui
         initComponents();
         setLocationRelativeTo(null);
 
+        // set algorithm
+        this.algorithm = algorithm;
+
         // load cfg file
-        loadFile(default_cfg_file);
+        if (algorithm == 0)
+            loadFile(default_cfg_file_tree_traversal);
+        else if (algorithm == 1)
+            loadFile(default_cfg_file_cyk);
     }
 
     private void initComponents() {
@@ -86,11 +95,21 @@ public class CFGSkillEditor extends JFrame {
         jButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser(default_cfg_file);
-                int result = fileChooser.showOpenDialog(null);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    default_cfg_file = fileChooser.getSelectedFile().getAbsolutePath();
-                    loadFile(default_cfg_file);
+                if (algorithm == 0) {
+                    JFileChooser fileChooser = new JFileChooser(default_cfg_file_tree_traversal);
+                    int result = fileChooser.showOpenDialog(null);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        default_cfg_file_tree_traversal = fileChooser.getSelectedFile().getAbsolutePath();
+                        loadFile(default_cfg_file_tree_traversal);
+                    }
+                }
+                else if (algorithm == 1) {
+                    JFileChooser fileChooser = new JFileChooser(default_cfg_file_cyk);
+                    int result = fileChooser.showOpenDialog(null);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        default_cfg_file_cyk = fileChooser.getSelectedFile().getAbsolutePath();
+                        loadFile(default_cfg_file_cyk);
+                    }
                 }
             }
         });

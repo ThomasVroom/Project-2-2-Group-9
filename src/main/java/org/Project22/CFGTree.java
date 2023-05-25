@@ -31,7 +31,7 @@ public class CFGTree {
      * Create the tree from the CFG.txt file.
      */
     private void createTree() {
-        try (BufferedReader br = new BufferedReader(new FileReader(CFGSkillEditor.default_cfg_file))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(CFGSkillEditor.default_cfg_file_tree_traversal))) {
             String line;
             while ((line = br.readLine()) != null) {
                 // read all the rules

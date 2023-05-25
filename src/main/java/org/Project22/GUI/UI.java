@@ -25,7 +25,7 @@ public class UI extends JFrame{
     private JButton skilleditorButton;
 
     private static final String[] skill_types = new String[] {"Template", "CFG"};
-    private static final String[] cfg_matching_algorithms = new String[] {"Tree Traversal"};
+    private static final String[] cfg_matching_algorithms = new String[] {"Tree Traversal", "CYK"};
     private static final String[] template_matching_algorithms = new String[] {"Exact Match", "Split Variables", "Split Variables+", "Filter Match"};
 
     private List<String> variables;
@@ -76,6 +76,10 @@ public class UI extends JFrame{
         });
 
         languageBox.setModel(new DefaultComboBoxModel<>(template_matching_algorithms));
+        languageBox.addActionListener (new ActionListener () {
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
 
         languageLabel.setText("Language Model");
         skillLabel.setText("Skill Type");
@@ -181,7 +185,7 @@ public class UI extends JFrame{
         if (skillBox.getSelectedIndex() == 0) 
             new SkillEditor().setVisible(true);
         else if (skillBox.getSelectedIndex() == 1)
-            new CFGSkillEditor().setVisible(true);
+            new CFGSkillEditor(languageBox.getSelectedIndex()).setVisible(true);
     }
 
     private void clearButtonActionPerformed(ActionEvent evt) {
