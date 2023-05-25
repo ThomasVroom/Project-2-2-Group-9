@@ -20,10 +20,10 @@ public class MenuWindow {
     private JButton welcomeButton;
     private JButton detectedButton;
     private JButton welcomeLabel;
-    private JButton nameLabel;
-    private JTextField text_name;
+    // private JButton nameLabel;
+    // private JTextField text_name;
     private static ArrayList<String> name_lists = new ArrayList<>();
-    private static String userInput;
+    // private static String userInput;
     private JButton noAccessButton;
     private JButton noWebCamButton;
     private JButton continueButton1,continueButton2;
@@ -71,34 +71,34 @@ public class MenuWindow {
         welcomeLabel.setBorderPainted(false);
         welcomeLabel.setFocusPainted(false);
 
-        nameLabel = new JButton("What is your name?");
-        nameLabel.setBounds(240,485,300,21);
-        nameLabel.setFont(new Font("Sans-serif",Font.BOLD,20));
-        nameLabel.setForeground(Color.black.darker());
-        nameLabel.setOpaque(false);
-        nameLabel.setContentAreaFilled(false);
-        nameLabel.setBorderPainted(false);
-        nameLabel.setFocusPainted(false);
-        menuPanel.add(nameLabel);
+        // nameLabel = new JButton("What is your name?");
+        // nameLabel.setBounds(240,485,300,21);
+        // nameLabel.setFont(new Font("Sans-serif",Font.BOLD,20));
+        // nameLabel.setForeground(Color.black.darker());
+        // nameLabel.setOpaque(false);
+        // nameLabel.setContentAreaFilled(false);
+        // nameLabel.setBorderPainted(false);
+        // nameLabel.setFocusPainted(false);
+        // menuPanel.add(nameLabel);
 
-        text_name = new JTextField();
-        text_name.setBounds(279,520,150,30);
-        text_name.setEnabled(true);
-        menuPanel.add(text_name);
+        // text_name = new JTextField();
+        // text_name.setBounds(279,520,150,30);
+        // text_name.setEnabled(true);
+        // menuPanel.add(text_name);
 
-        continueButton2 = new JButton("Continue");
-        continueButton2.setBounds(435,520,100,30);
-        continueButton2.setFont(new Font("Sans-serif",Font.BOLD,10));
-        menuPanel.add(continueButton2);
+        // continueButton2 = new JButton("Continue");
+        // continueButton2.setBounds(435,520,100,30);
+        // continueButton2.setFont(new Font("Sans-serif",Font.BOLD,10));
+        // menuPanel.add(continueButton2);
 
-        continueButton2.addActionListener(e -> {
-            userInput = text_name.getText().toLowerCase();
-            System.out.println("User name: " + userInput);
-        });
+        // continueButton2.addActionListener(e -> {
+        //     userInput = text_name.getText().toLowerCase();
+        //     System.out.println("User name: " + userInput);
+        // });
 
         //MENU LABEL
         authenticationButton = new JButton("Authentication");
-        authenticationButton.setBounds(240,570,300,45);
+        authenticationButton.setBounds(240,520,300,45);
         authenticationButton.setForeground(Color.black.brighter());
         authenticationButton.setFont(new Font("Sans-serif",Font.BOLD,26));
         authenticationButton.setOpaque(true);
@@ -109,7 +109,7 @@ public class MenuWindow {
         menuPanel.add(authenticationButton);
 
         noWebCamButton = new JButton("No access to webcam");
-        noWebCamButton.setBounds(200,620,368,50);
+        noWebCamButton.setBounds(200,600,368,50);
         noWebCamButton.setFont(new Font("Sans-serif",Font.BOLD,15));
         Color darkBlue = new Color(53, 98, 189); // RGB values for light blue
         noWebCamButton.setForeground(darkBlue);
@@ -135,19 +135,18 @@ public class MenuWindow {
         menuPanel.add(continueButton1);
 
         detectedButton = new JButton("Hello human! I'd love to help you.");
-        menuPanel.add(detectedButton);
         detectedButton.setVisible(false);
-        detectedButton.setBounds(15,430,500,100);
+        detectedButton.setBounds(150,490,500,100);
         detectedButton.setForeground(Color.black.brighter());
         detectedButton.setFont(new Font("Sans-serif",Font.BOLD,20));
-        detectedButton.setOpaque(false);
-        detectedButton.setContentAreaFilled(false);
-        detectedButton.setBorderPainted(true);
+        detectedButton.setOpaque(true);
+        detectedButton.setContentAreaFilled(true);
+        detectedButton.setBorderPainted(false);
         detectedButton.setFocusPainted(false);
+        menuPanel.add(detectedButton);
 
         noAccessButton = new JButton("Try again");
         noAccessButton.setVisible(false);
-        menuPanel.add(noAccessButton);
         noAccessButton.setForeground(Color.black.brighter());
         noAccessButton.setBounds(200,530,368,50);
         noAccessButton.setFont(new Font("Sans-serif",Font.BOLD,20));
@@ -162,7 +161,6 @@ public class MenuWindow {
 
                 webcamButtonActionPerformed(event);
 
-                noAccessButton.setVisible(false);
             }
             @Override
             public void mousePressed(MouseEvent e) {
@@ -186,7 +184,7 @@ public class MenuWindow {
         });
 
         noWebCamButton.addActionListener(e -> {
-            noAccessButton.setVisible(false);
+
             noWebCamButton.setText("Enter your password:");
             noWebCamButton.setForeground(Color.BLACK);
             passwordField.setVisible(true);
@@ -240,7 +238,12 @@ public class MenuWindow {
 
     class WebCamThread extends Thread {
 
-        private static final String[] source = {"python3", "src/main/java/org/Project22/FaceDetection/Recognition.py"};
+        private static final String[] sources = {"src/main/java/org/Project22/FaceDetection/WebcamDetectionFirst.py",
+                                                 "src/main/java/org/Project22/FaceDetection/WebCamDetectionBlaze.py",
+                                                 "src/main/java/org/Project22/FaceDetection/Recognition.py"};
+        
+        private static String source_index = sources[2]; 
+        private static String[] source = {"python3", source_index};
 
         @Override
         public void run() {
@@ -250,28 +253,78 @@ public class MenuWindow {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String output;
 
-                while ((output = reader.readLine()) != null) {
-                    System.out.println(output);
-                    if(output.equals("A human was detected")){
+                if(source_index.equals(sources[0]) || source_index.equals(sources[1])){
 
-                        noAccessButton.setVisible(false);
+                    while ((output = reader.readLine()) != null) {
+                        System.out.println(output);
+                        if(output.equals("A human was detected")){
+                            
+                            detectedButton.setVisible(true);
     
-                        menuPanel.remove(authenticationButton);
-                        menuPanel.add(detectedButton);
+                            authenticationButton.setVisible(false);
+                            menuPanel.remove(authenticationButton);
+                            menuPanel.add(detectedButton);
     
-                        try {
-                            Thread.sleep(1000); // delay for 1000 milliseconds (1 second)
-                        } catch (InterruptedException et) {
-                            // handle the exception
+        
+                            try {
+                                Thread.sleep(5000); // delay for 1000 milliseconds (1 second)
+                            } catch (InterruptedException et) {
+                                // handle the exception
+                            }
+                            
+                            frame.setVisible(false);
+                            Main.ui = new UI();
+        
+                        }else{
+                            authenticationButton.setVisible(false);
+                            menuPanel.remove(authenticationButton);
+
+                            noAccessButton.setVisible(true);
+                            menuPanel.add(noAccessButton);
                         }
-                        
-                        frame.setVisible(false);
-                        Main.ui = new UI();
-    
-                    }else{
-                        noAccessButton.setVisible(true);
                     }
                 }
+                if(source_index.equals(sources[2])){
+                    while ((output = reader.readLine()) != null) {
+                        System.out.println(output);
+                        if(output.contains("A human was detected")){
+
+                            String message = "A human was detected: ";
+                            int message_len = message.length();
+                            int message_index = output.indexOf("A human was detected: ");
+                            
+                            String name  = output.substring(message_index + message_len, output.length()-8);
+
+                            authenticationButton.setVisible(false);
+                            menuPanel.remove(authenticationButton);
+                            
+                            detectedButton.setText("Hello " + name + "! I'd love to help you.");
+                            detectedButton.setVisible(true);
+    
+                            menuPanel.add(detectedButton);
+    
+        
+                            try {
+                                Thread.sleep(5000); // delay for 1000 milliseconds (1 second)
+                            } catch (InterruptedException et) {
+                                // handle the exception
+                            }
+                            
+                            frame.setVisible(false);
+                            Main.ui = new UI();
+        
+                        }else{
+                            authenticationButton.setVisible(false);
+                            menuPanel.remove(authenticationButton);
+                            
+                            noAccessButton.setVisible(true);
+                            menuPanel.add(noAccessButton);
+                        }
+                    }
+                }
+                
+
+                
             } catch (IOException e) {e.printStackTrace();}
         }
     }

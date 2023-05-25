@@ -50,7 +50,7 @@ class Recognition:
             self.known_face_encodings.append(face_encoding)
             self.known_face_names_dlib.append(name)
 
-        print(self.known_face_names_dlib)
+        # print(self.known_face_names_dlib)
 
     def get_similarity(self, encoding1, encoding2, method):
         """
@@ -82,7 +82,7 @@ class Recognition:
         time.sleep(0.1)
         start_time = time.time()
 
-        while time.time() - start_time <= 20:
+        while time.time() - start_time <= 10:
             ret, frame = capture.read()
 
             if self.process_current_frame:
@@ -103,6 +103,8 @@ class Recognition:
                 self.face_encodings = face_recognition.face_encodings(RGB_resized, self.face_locations)
                 self.face_names = []
 
+                face_detected = False
+
                 for face_encoding in self.face_encodings:
                     matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
                     name = "Unknown face"
@@ -116,6 +118,8 @@ class Recognition:
                     if best_similarity > THRESHOLD:
                         name = self.known_face_names_dlib[best_match_index]
                         confidence_str = str(round(best_similarity * 100, 2)) + '%'
+
+                        face_detected = True
 
                     self.face_names.append(f'{name} ({confidence_str})')
 
@@ -150,10 +154,11 @@ class Recognition:
             if cv2.waitKey(1) == ord('q'):
                 break
 
-        if face_encoding is not None:
-                print("A human was detected")
+        if not face_detected:
+            print("No human was detected around.")
         else:
-                 print("No human was detected around.")
+            print("A human was detected: " + name)
+                 
 
         capture.release()
         cv2.destroyAllWindows()
@@ -195,7 +200,7 @@ class Recognition:
         time.sleep(0.1)
         start_time = time.time()
 
-        while time.time() - start_time <= 20:
+        while time.time() - start_time <= 10:
 
             ret, frame = capture.read()
 
