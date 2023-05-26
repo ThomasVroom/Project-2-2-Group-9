@@ -34,6 +34,7 @@ class OpenCVHaarFaceDetector():
         Returns:
             numpy.ndarray: Array of detected face bounding boxes in the format [x1, y1, x2, y2].
         """
+        # Requires gray scale image to perform classification.
         gray_scaled_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
         detected_faces = self.cascade_classifier.detectMultiScale(gray_scaled_image, self.scaleFactor,

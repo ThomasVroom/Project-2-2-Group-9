@@ -12,6 +12,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MenuWindow {
     public JFrame frame;
@@ -244,7 +246,7 @@ public class MenuWindow {
         
         private static String source_index = sources[1]; 
         private static String[] source = {"python3", source_index};
-
+        
         @Override
         public void run() {
             try {
