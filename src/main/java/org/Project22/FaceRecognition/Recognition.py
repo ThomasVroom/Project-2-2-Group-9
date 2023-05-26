@@ -15,7 +15,7 @@ face_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fron
 eye_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
 
 # Create an instance of the LBPHFRecognizer
-# recognizer = cv2.face.LBPHFaceRecognizer_create()
+recognizer = cv2.face.LBPHFaceRecognizer_create()
 
 THRESHOLD = 0.2 # 0.2 is ideal for cosine_similarity distance function.
                 # Haven't find the optimal thresholds for the other functions yet.  
@@ -42,9 +42,9 @@ class Recognition:
             The method then appends each encoding to the 'known_face_encodings' list and the corresponding
             image name to the 'known_face_names_dlib' list.
         """
-        for image in os.listdir('src/main/java/org/Project22/FaceDetection/dataset_of_people'):
+        for image in os.listdir('src/main/java/org/Project22/FaceRecognition/dataset_of_people'):
             name, ext = os.path.splitext(image)
-            face_image = face_recognition.load_image_file(f'src/main/java/org/Project22/FaceDetection/dataset_of_people/{image}')
+            face_image = face_recognition.load_image_file(f'src/main/java/org/Project22/FaceRecognition/dataset_of_people/{image}')
             face_encoding = face_recognition.face_encodings(face_image)[0]
 
             self.known_face_encodings.append(face_encoding)

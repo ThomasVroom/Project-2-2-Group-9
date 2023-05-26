@@ -233,16 +233,16 @@ public class MenuWindow {
 
     }
     private void webcamButtonActionPerformed(MouseEvent evt) {
+        System.out.println("Webcam Detection is starting...");
         new WebCamThread().start();
     }
 
     class WebCamThread extends Thread {
 
-        private static final String[] sources = {"src/main/java/org/Project22/FaceDetection/WebcamDetectionFirst.py",
-                                                 "src/main/java/org/Project22/FaceDetection/WebCamDetectionBlaze.py",
-                                                 "src/main/java/org/Project22/FaceDetection/Recognition.py"};
+        private static final String[] sources = {"src/main/java/org/Project22/FaceDetection/WebcamDetection.py",
+                                                 "src/main/java/org/Project22/FaceRecognition/Recognition.py"};
         
-        private static String source_index = sources[2]; 
+        private static String source_index = sources[1]; 
         private static String[] source = {"python3", source_index};
 
         @Override
@@ -253,7 +253,7 @@ public class MenuWindow {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String output;
 
-                if(source_index.equals(sources[0]) || source_index.equals(sources[1])){
+                if(source_index.equals(sources[0])){
 
                     while ((output = reader.readLine()) != null) {
                         System.out.println(output);
@@ -284,7 +284,8 @@ public class MenuWindow {
                         }
                     }
                 }
-                if(source_index.equals(sources[2])){
+                if(source_index.equals(sources[1])){
+                    System.out.println("Webcam Recognition is starting...");
                     while ((output = reader.readLine()) != null) {
                         System.out.println(output);
                         if(output.contains("A human was detected")){
