@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import dlib
 import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import mediapipe as mp
 
 
@@ -129,72 +130,57 @@ class BlazeDetector():
                     faces.append(np.array([x, y, x + w, y + h]))
 
         return np.array(faces)
-    
-class FaceDetector():
-    def __init__(self,
-                 threshold=0.3,
-                 model_path='models/ssd/frozen_inference_graph_face.pb'):
-        """
-        Initializes the TensorFlow MobileNet SSD face detector.
 
-        Args:
-            threshold (float): Minimum confidence threshold for detected faces.
-            model_path (str): Path to the frozen inference graph of the MobileNet SSD face detection model.
-        """
+class TensorFlowMobileNetSSDFaceDetector:
 
-        self.threshold = threshold
-        self.graph = tf.Graph()
-        with self.graph.as_default():
-            graph_def = tf.GraphDef()
-            with tf.gfile.GFile(model_path, 'rb') as file:
-                serialized_graph = file.read()
-                graph_def.ParseFromString(serialized_graph)
-                tf.import_graph_def(graph_def, name='')
+    def __init__(self, det_threshold=0.3, model_path='src/main/java/org/Project22/FaceDetection/models/ssd/frozen_inference_graph_face.pb'):
+        self.det_threshold = det_threshold
+        self.detection_graph = tf.Graph()
+        with self.detection_graph.as_default():
+            od_graph_def = tf.compat.v1.GraphDef()
+            with tf.gfile.GFile(model_path, 'rb') as fid:
+                serialized_graph = fid.read()
+                od_graph_def.ParseFromString(serialized_graph)
+                tf.import_graph_def(od_graph_def, name='')
 
-        with self.graph.as_default():
-            config = tf.ConfigProto()
+        with self.detection_graph.as_default():
+            config = tf.compat.v1.ConfigProto()
             config.gpu_options.allow_growth = True
-            self.session = tf.Session(graph=self.graph, config=config)
+            self.sess = tf.compat.v1.Session(graph=self.detection_graph, config=config)
 
-    def detect_faces(self, image):
-        """
-        Detects faces in the given image using the TensorFlow MobileNet SSD face detector.
+    def detect_face(self, image):
+        h, w, c = image.shape
 
-        Args:
-            image (numpy.ndarray): Input image to detect faces in.
+        image_np = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-        Returns:
-            numpy.ndarray: Array of detected face bounding boxes in the format [x1, y1, x2, y2].
-        """
+        image_np_expanded = np.expand_dims(image_np, axis=0)
+        image_tensor = self.detection_graph.get_tensor_by_name(
+            'image_tensor:0')
 
-        height, width, channels = image.shape
+        boxes = self.detection_graph.get_tensor_by_name('detection_boxes:0')
 
-        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        scores = self.detection_graph.get_tensor_by_name('detection_scores:0')
+        classes = self.detection_graph.get_tensor_by_name(
+            'detection_classes:0')
+        num_detections = self.detection_graph.get_tensor_by_name(
+            'num_detections:0')
 
-        image_expanded = np.expand_dims(image_rgb, axis=0)
-        image_tensor = self.graph.get_tensor_by_name('image_tensor:0')
+        (boxes, scores, classes, num_detections) = self.sess.run(
+            [boxes, scores, classes, num_detections],
+            feed_dict={image_tensor: image_np_expanded})
 
-        detection_boxes = self.graph.get_tensor_by_name('detection_boxes:0')
+        boxes = np.squeeze(boxes)
+        scores = np.squeeze(scores)
 
-        detection_scores = self.graph.get_tensor_by_name('detection_scores:0')
-        detection_classes = self.graph.get_tensor_by_name('detection_classes:0')
-        num_detections = self.graph.get_tensor_by_name('num_detections:0')
+        filtered_score_index = np.argwhere(
+            scores >= self.det_threshold).flatten()
+        selected_boxes = boxes[filtered_score_index]
 
-        (detection_boxes, detection_scores, detection_classes, num_detections) = self.session.run(
-            [detection_boxes, detection_scores, detection_classes, num_detections],
-            feed_dict={image_tensor: image_expanded})
-
-        detection_boxes = np.squeeze(detection_boxes)
-        detection_scores = np.squeeze(detection_scores)
-
-        filtered_score_index = np.argwhere(detection_scores >= self.threshold).flatten()
-        selected_boxes = detection_boxes[filtered_score_index]
-
-        detected_faces = np.array([[
-            int(x1 * width),
-            int(y1 * height),
-            int(x2 * width),
-            int(y2 * height),
+        faces = np.array([[
+            int(x1 * w),
+            int(y1 * h),
+            int(x2 * w),
+            int(y2 * h),
         ] for y1, x1, y2, x2 in selected_boxes])
 
-        return detected_faces
+        return faces

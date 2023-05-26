@@ -1,6 +1,7 @@
 import cv2
-from DetectionMethods import OpenCVHaarFaceDetector, BlazeDetector, DlibCNNFaceDetector, TensoflowMobilNetSSDFaceDector 
-
+from DetectionMethods import OpenCVHaarFaceDetector, BlazeDetector, DlibCNNFaceDetector, TensorFlowMobileNetSSDFaceDetector
+from tensorflow.python.ops.numpy_ops import np_config
+np_config.enable_numpy_behavior()
 
 def detect_and_display_faces(webcam, face_detector):
     while True:
@@ -29,7 +30,7 @@ def detect_and_display_faces(webcam, face_detector):
 webcam = cv2.VideoCapture(0)
 
 # Create instance of OpenCVHaarFaceDetector
-face_detector = OpenCVHaarFaceDetector()
+face_detector = TensorFlowMobileNetSSDFaceDetector()
 
 # Detect and display faces
 detect_and_display_faces(webcam, face_detector)
