@@ -50,6 +50,7 @@ public class CFGtoCNFConverter {
                 }
             }
             rulesList = parseRule(lines);
+            br.close();
         }
         catch (IOException e) {
             e.printStackTrace();
