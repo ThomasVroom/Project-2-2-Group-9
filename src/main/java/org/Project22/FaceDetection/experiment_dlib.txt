@@ -48,7 +48,8 @@ method: DlibCNNFaceDetector, Elapsed time: 763.11 milliseconds
 method: DlibCNNFaceDetector, Elapsed time: 708.12 milliseconds
 method: DlibCNNFaceDetector, Elapsed time: 869.84 milliseconds
 method: DlibCNNFaceDetector, Elapsed time: 823.77 milliseconds
-method: DlibCNNFaceDetector, Elapsed time: 718.87 millisecondsmethod: DlibCNNFaceDetector, Elapsed time: 1098.82 milliseconds
+method: DlibCNNFaceDetector, Elapsed time: 718.87 milliseconds
+method: DlibCNNFaceDetector, Elapsed time: 1098.82 milliseconds
 method: DlibCNNFaceDetector, Elapsed time: 688.06 milliseconds
 method: DlibCNNFaceDetector, Elapsed time: 684.13 milliseconds
 method: DlibCNNFaceDetector, Elapsed time: 683.10 milliseconds

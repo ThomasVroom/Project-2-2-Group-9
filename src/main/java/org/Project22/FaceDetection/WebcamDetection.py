@@ -8,7 +8,7 @@ def detect_and_display_faces(webcam, face_detector):
 
     detected = False
     
-    while time.time() - start_time <= 5:
+    while time.time() - start_time <= 20:
                
         # ret indicates whether the capture is done successfully.
         # frame is the numpy array that represents the image.

@@ -244,7 +244,7 @@ public class MenuWindow {
         private static final String[] sources = {"src/main/java/org/Project22/FaceDetection/WebcamDetection.py",
                                                  "src/main/java/org/Project22/FaceRecognition/Recognition.py"};
         
-        private static String source_index = sources[1]; 
+        private static String source_index = sources[0]; 
         private static String[] source = {"python3", source_index};
         
         @Override

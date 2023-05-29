@@ -98,3 +98,4 @@ method: OpenCVHaarFaceDetector, Elapsed time: 33.12 milliseconds
 method: OpenCVHaarFaceDetector, Elapsed time: 33.12 milliseconds
 method: OpenCVHaarFaceDetector, Elapsed time: 32.08 milliseconds
 method: OpenCVHaarFaceDetector, Elapsed time: 32.27 milliseconds
+
