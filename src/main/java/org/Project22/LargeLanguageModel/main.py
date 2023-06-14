@@ -1,27 +1,40 @@
-import logging
+from fastapi import FastAPI
+from pydantic import BaseModel
 import os
-import sys
 
 import CFGsentence
 import paraphraser
 import Model
-import time
+import Inference
 
-def main(training=False, paraphraserexec=False, paraphraserdel=False, inference=None):
-    if paraphraserexec:
-        directory_path = "Data/"
-        if paraphraserdel:
-            file_list = os.listdir(directory_path)
-            for file_name in file_list:
-                file_path = os.path.join(directory_path, file_name)
-                if os.path.isfile(file_path):
-                    os.remove(file_path)
-                    print(f"Deleted file: {file_name}")
-                else:
-                    print(f"Skipped deletion: {file_name} (not a file)")
+app = FastAPI()
+
+class ParaphraseData(BaseModel):
+    paraphraser_exec: bool
+    paraphraser_del: bool
+
+class TrainingData(BaseModel):
+    training: bool
+
+class InferenceData(BaseModel):
+    inference: str
+
+@app.post("/paraphrase")
+async def paraphrase(data: ParaphraseData):
+    directory_path = "Data/"
+    if data.paraphraser_del:
+        file_list = os.listdir(directory_path)
+        for file_name in file_list:
+            file_path = os.path.join(directory_path, file_name)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+                print(f"Deleted file: {file_name}")
+            else:
+                print(f"Skipped deletion: {file_name} (not a file)")
+    if data.paraphraser_exec:
         setoflabels = CFGsentence.getStuff()
         for sentence, labels in setoflabels:
-            if labels != "I have no idea.":
+            if labels != "I have no idea." and not os.path.exists(directory_path + labels + ".txt"):
                 sentences = paraphraser.paraphrase_20(sentence)
                 sentences.append(sentence)
                 with open(directory_path + labels + ".txt", "a+") as file:
@@ -32,28 +45,18 @@ def main(training=False, paraphraserexec=False, paraphraserdel=False, inference=
                         file.write("\n")
                     for string in sentences:
                         file.write(string + "\n")
-    if training:
-        Model.train(size=(64, 64, 64), learningrate=0.01)
-    if inference is not None:
-        import Inference
-        Inference.inferclass(inference)
+    return {"status": "Paraphrase completed"}
 
+@app.post("/train")
+async def train(data: TrainingData):
+    if data.training:
+        Model.train()
+    return {"status": "Training completed"}
 
-if __name__ == '__main__':
-    start_time = time.time()
-    # Parse command-line arguments
-    args = sys.argv[1:]
-    training = 'training' in args
-    paraphraserexec = 'paraphraserexec' in args
-    paraphraserdel = 'paraphraserdel' in args
-    inference = None
-    if 'inference' in args:
-        inference_index = args.index('inference')
-        if inference_index < len(args) - 1:
-            inference = args[inference_index + 1]
-    # Call the main function with the provided arguments
-    main(training=training, paraphraserexec=paraphraserexec, paraphraserdel=paraphraserdel, inference=inference)
-
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    print(f"Total time: {elapsed_time} seconds")
+@app.post("/infer")
+async def infer(data: InferenceData):
+    if data.inference != None:
+        result = Inference.inferclass(data.inference)
+        return {"result": result}
+    else:
+        return {"error": "No inference data provided"}

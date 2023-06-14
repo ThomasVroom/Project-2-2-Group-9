@@ -8,6 +8,11 @@ import org.Project22.Matching.Match2;
 import org.Project22.Matching.Match3;
 import org.Project22.Matching.Match4;
 import org.Project22.Matching.MatchingInterface;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,6 +29,9 @@ public class AnswerGenerator{
     // rules used by the cyk algorithm
     public CFGtoCNFConverter converter = new CFGtoCNFConverter();
     public List<Rule> rules = converter.getRulesCNF();
+
+    // client for interacting with the python server
+    public HttpClient client = HttpClient.newHttpClient();
 
     //threshold
     public float ConfidenceCutoff = 0.3f;
@@ -71,6 +79,25 @@ public class AnswerGenerator{
                 boolean found = BobTheBuilder.iterateRules(userString.split(" "), rules);
                 Main.ui.setDebugText("", new ArrayList<Tuple<String, String>>());
                 return found ? ("Found! " + BobTheBuilder.topic) : "Not Found :(";
+            }
+            else if (algorithm.y().intValue() == 2) { // language model
+                HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8000/infer"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString("{\"inference\":\"" + userString + "\"}"))
+                .build();
+
+                HttpResponse<String> response = null;
+                try {
+                    response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return "error connecting to server";
+                }
+
+                Main.ui.setDebugText(response.body(), new ArrayList<Tuple<String, String>>());
+                String[] strings = response.body().split("\"");
+                return strings[3];
             }
         }
         throw new RuntimeException("error selecting matching algorithm.");
