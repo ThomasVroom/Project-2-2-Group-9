@@ -67,6 +67,7 @@ public class AnswerGenerator{
                 return cfg.getAnswer(variables);
             }
             else if (algorithm.y().intValue() == 1) { // cyk
+                CFGtoCNFConverter.printRules(rules);
                 boolean found = BobTheBuilder.iterateRules(userString.split(" "), rules);
                 Main.ui.setDebugText("", new ArrayList<Tuple<String, String>>());
                 return found ? ("Found! " + BobTheBuilder.topic) : "Not Found :(";

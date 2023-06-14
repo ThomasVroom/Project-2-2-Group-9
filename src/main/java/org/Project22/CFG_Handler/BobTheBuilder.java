@@ -38,8 +38,8 @@ public class BobTheBuilder {
 
                 List<List<List<String>>> bob = bob(rule, inputWords, rules);
                 
-                //printBob(bob);
-                //System.out.println();
+                printBob(bob);
+                System.out.println();
 
                 if(!checkBob(bob, inputWords)){
                     bobBool = false;

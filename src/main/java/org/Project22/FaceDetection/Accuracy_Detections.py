@@ -157,8 +157,8 @@ def calculate_iou(boxA, boxB):
 
 annotation_file = "src/main/java/org/Project22/FaceDetection/dataset/wider_face_split/wider_face_val_bbx_gt.txt"
 
-face_detector = TensorFlowMobileNetSSDFaceDetector()
-iou_threshold = 0.7
+face_detector = DlibCNNFaceDetector()
+iou_threshold = 0.6
 bb_gt_collection = extract_and_filter_data(annotation_file=annotation_file)
 evaluation_results = evaluate(face_detector, bb_gt_collection, iou_threshold)
 print(evaluation_results)

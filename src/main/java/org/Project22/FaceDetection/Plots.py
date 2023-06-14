@@ -2,26 +2,26 @@ import matplotlib.pyplot as plt
 
 output_data_on_dataset = {'OpenCV': {'average_iou': 0.21356696150864374, 'mean_average_precision': 0.16094956345924968, 'average_inference_time': 49.498165828872745},
         'BlazePose': {'average_iou': 0.062434269915389064, 'mean_average_precision': 0.04580270421869926, 'average_inference_time': 2.759250438664171},
-        'DlibCNNFaceDetector': {'average_iou': 0.2827014003360415, 'mean_average_precision': 0.14485922089945655, 'average_inference_time': 1060.5117386346712},
-        'TensorFlowMobileNetSSDFaceDetector': {'average_iou': 0.5840790930792693, 'mean_average_precision': 0.52721169854748, 'average_inference_time': 214.1369269342062}}
+        'DlibCNNFaceDetector': {'average_iou': 0.2827014003360415, 'mean_average_precision': 0.14485922089945655, 'average_inference_time': 1060.5117386346712}}
+# 'TensorFlowMobileNetSSDFaceDetector': {'average_iou': 0.5840790930792693, 'mean_average_precision': 0.52721169854748, 'average_inference_time': 214.1369269342062}
 
 output_data_running_time = {
     'OpenCV': {33.788},
     'BlazePose': {32.8557},
     'DlibCNN': {752.6145},
-    'TensorFlowMobileNetSSD': {156.8958}
 }
+    # 'TensorFlowMobileNetSSD': {156.8958}
 output_data_detected_1 = {
-    'OpenCV': {62},
-    'BlazePose': {45},
+    'OpenCV': {46},
+    'BlazePose': {55},
     'DlibCNN': {98},
-    'TensorFlowMobileNetSSD': {99}
+    # 'TensorFlowMobileNetSSD': {99}
 }
 output_data_detected_2 = {
     'OpenCV': {100},
     'BlazePose': {100},
     'DlibCNN': {100},
-    'TensorFlowMobileNetSSD': {100}
+    # 'TensorFlowMobileNetSSD': {100}
 }
 
 def plot_iou_vs_time_complexity(data):
@@ -76,14 +76,14 @@ def plot_running_time(output_data_running_time):
 
 def plot_webcam_experiment(detected_not_detected):
     methods = list(output_data_running_time.keys())
-    detected_face_percent = [list(values)[0] for values in output_data_detected_2.values()]
+    detected_face_percent = [list(values)[0] for values in output_data_detected_1.values()]
 
     plt.bar(methods, detected_face_percent)
     plt.xlabel('Methods', fontweight='bold', fontsize=12)  # Increase x-label thickness and size
     plt.ylabel('Percentage of Detected Faces', fontweight='bold', fontsize=12)  # Increase y-label thickness and size
-    plt.title('Detected Face Percentage over 100 Iteration (with restrictions)', fontweight='bold', fontsize=14)
+    plt.title('Detected Face Percentage over 100 Iteration (without restrictions)', fontweight='bold', fontsize=14)
     plt.show()
 
-# plot_webcam_experiment(output_data_detected_1)
-plot_webcam_experiment(output_data_detected_2)
+plot_webcam_experiment(output_data_detected_1)
+# plot_webcam_experiment(output_data_detected_2)
 

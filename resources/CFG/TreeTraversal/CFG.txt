@@ -1,18 +1,23 @@
 Rule <S> <ACTION>
-Rule <ACTION> <LOCATION> | <SCHEDULE> | <ADDITION>
+Rule <ACTION> <LOCATION> | <SCHEDULE> | <ADDITION> | <WEATHER>
+Rule <WEATHER> what is the weather at <TIME>
 Rule <SCHEDULE> Which lectures are there <TIMEEXPRESSION>
 Rule <TIMEEXPRESSION> on <DAY> at <TIME> | at <TIME> on <DAY>
-Rule <TIME> 9:00 | 12:00
+Rule <TIME> 9:00 | 12:00 | 15:00
 Rule <LOCATION> Where is <ROOM> | How do <PRO> get to <ROOM> | Where is <ROOM> located
 Rule <PRO> I | you | he | she
 Rule <ROOM> DeepSpace | SpaceBox
 Rule <DAY> Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
 Rule <ADDITION> What is <NUMBER> \+ <NUMBER> | What is <NUMBER> plus <NUMBER>
 Rule <NUMBER> regex -?\d+
+
 Action <SCHEDULE> * <DAY> Saturday - There are no lectures on Saturday.
 Action <SCHEDULE> * <DAY> Monday <TIME> 9:00 - We start the week with math.
 Action <SCHEDULE> * <DAY> Monday <TIME> 12:00 - On Monday noon we have Theoratical Computer Science.
 Action <LOCATION> * <ROOM> DeepSpace - DeepSpace is the first room after the entrance.
 Action <LOCATION> * <ROOM> SpaceBox - SpaceBox is on the first floor.
+Action <SCHEDULE> * <DAY> Monday <TIME> 15:00 - On Monday noon we have the Project.
+Action <WEATHER> * - the weather is sunny
 Action <ADDITION> * - \py addition.py <NUMBER> <NUMBER>
 Action - I have no idea.
+
