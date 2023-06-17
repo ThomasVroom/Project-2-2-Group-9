@@ -1,14 +1,9 @@
+import itertools
 import random
 import torch
 import time
 
-# Goal : Fine-tuning the parameters of the hugging-face model and 
-#        try to generate more than 20 paraphrased sentences per input
-
-# Step 1 : Implement a metric score of the paraphrased sentences to try and optimize a number.
-# Step 2 : Implement some sort of grid search that gives the best parameters for the model.
-#          the best parameters are those that maximize the metric score.
-
+from bert_score import score
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -16,6 +11,9 @@ tokenizer = AutoTokenizer.from_pretrained("humarin/chatgpt_paraphraser_on_T5_bas
 
 model = AutoModelForSeq2SeqLM.from_pretrained("humarin/chatgpt_paraphraser_on_T5_base").to(device)
 
+question = "I have no idea."
+
+# ----------------------------------------------- #
 
 def paraphrase(
         question,
@@ -28,6 +26,7 @@ def paraphrase(
         temperature=0.7, # temperature=0.7
         max_length=128 # max_length=128
 ):
+
     input_ids = tokenizer(
         f'paraphrase: {question}',
         return_tensors="pt", padding="longest",
@@ -44,17 +43,96 @@ def paraphrase(
 
     res = tokenizer.batch_decode(outputs, skip_special_tokens=True)
 
-    return res
+    # Making sure that the number of references (input question repeated) is the same length as the number of paraphrased sentences
+    references = [question] * len(res) # Number of input question = Number of paraphrased sentences
 
+    # We extract the F1 score from the BERTScore output (BERTScore returns Precision, Recall, F1Score)
+    all_preds, _, hashcode = score(res, references, lang="en", model_type="bert-base-uncased")
+    avg_scores = [s.mean(dim=0) for s in all_preds] # Averages the scores for all the paraphrased sentences into one score
+    p_val = avg_scores[0].cpu().item() # Precision
+    r_val = avg_scores[1].cpu().item() # Recall
+    f1_val = avg_scores[2].cpu().item() # F1 Score
 
-def paraphrase_time(sentence):
+    return f1_val # When doing grid search only return the F1 score otherwise return  res, f1_val
+
+# Computes the time it takes to paraphrase a question
+def paraphrase_time(question): # make sure the return of paraphrase is res, f1_val.
     start_time = time.time()
-    result = paraphrase(sentence)
+    result, f1 = paraphrase(question)
     end_time = time.time()
     execution_time = end_time - start_time
     print("Execution Time:", execution_time, "seconds")
-    return result
+    return result, f1
+
+# ----------------------------------------------- #
+
+# Let's try and select the best parameter values for the models by performing a grid search
+# We will try to maximize the F1 score
+# When doing grid search make sure the return of paraphrase function is f1_val.
+
+def grid_search_best_parameters(question):
+
+    # Grid of parameter values
+    num_beams_values = [10, 20, 30]
+    num_beam_groups_values = [10, 20, 30]
+    num_return_sequences_values = [10, 20, 30]
+    repetition_penalty_values = [10.0, 13.0, 16.0]
+    diversity_penalty_values = [3.0, 4.0, 5.0]
+    no_repeat_ngram_size_values = [2, 3, 4]
+    temperature_values = [0.5, 0.7, 1.0]
+    max_length_values = [100, 128, 150]
+
+    best_f1_score = 0.0
+    best_parameters = {}
+
+    # Iterate over parameter combinations 
+    for (
+        num_beams,
+        num_beam_groups,
+        num_return_sequences,
+        repetition_penalty,
+        diversity_penalty,
+        no_repeat_ngram_size,
+        temperature,
+        max_length,
+    ) in itertools.product(
+        num_beams_values,
+        num_beam_groups_values,
+        num_return_sequences_values,
+        repetition_penalty_values,
+        diversity_penalty_values,
+        no_repeat_ngram_size_values,
+        temperature_values,
+        max_length_values,
+    ):
+        f1_score = paraphrase(
+            question,
+            num_beams=num_beams,
+            num_beam_groups=num_beam_groups,
+            num_return_sequences=num_return_sequences,
+            repetition_penalty=repetition_penalty,
+            diversity_penalty=diversity_penalty,
+            no_repeat_ngram_size=no_repeat_ngram_size,
+            temperature=temperature,
+            max_length=max_length,
+        )
+
+        if f1_score > best_f1_score:
+            best_f1_score = f1_score
+            best_parameters = {
+                "num_beams": num_beams,
+                "num_beam_groups": num_beam_groups,
+                "num_return_sequences": num_return_sequences,
+                "repetition_penalty": repetition_penalty,
+                "diversity_penalty": diversity_penalty,
+                "no_repeat_ngram_size": no_repeat_ngram_size,
+                "temperature": temperature,
+                "max_length": max_length,
+            }
+        
+    return best_parameters, best_f1_score
 
 # Testing 
 if __name__ == '__main__':
-    print(paraphrase_time("I have no idea."))
+    # print(paraphrase_time(question)) # make sure the return of paraphrase function is res, f1_val.
+    print(grid_search_best_parameters(question)) # make sure the return of paraphrase function  is f1_val.
