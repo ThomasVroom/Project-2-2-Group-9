@@ -171,7 +171,7 @@ public class CFGTree {
      * @param values a list of all variables and their values
      * @return the corresponding string
      */
-    public String getAnswer(List<Tuple<String,String>> values) {
+    public String getAnswer(List<Tuple<String,String>> values, List<Tuple<String,List<Tuple<String,String>>>> actions) {
         for (Tuple<String,List<Tuple<String,String>>> answer : actions) { // loop over all actions
             boolean answerFound = true;
             boolean[] usedValues = new boolean[values.size()];

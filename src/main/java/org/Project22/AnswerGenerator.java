@@ -72,13 +72,16 @@ public class AnswerGenerator{
             if (algorithm.y().intValue() == 0) { // tree traversal
                 List<Tuple<String,String>> variables = cfg.matchString(userString);
                 Main.ui.setDebugText("CFG Path:", variables);
-                return cfg.getAnswer(variables);
+                return cfg.getAnswer(variables, cfg.actions);
             }
             else if (algorithm.y().intValue() == 1) { // cyk
-                CFGtoCNFConverter.printRules(rules);
-                boolean found = BobTheBuilder.iterateRules(userString.split(" "), rules);
-                Main.ui.setDebugText("", new ArrayList<Tuple<String, String>>());
-                return found ? ("Found! " + BobTheBuilder.topic) : "Not Found :(";
+                List<Tuple<String,String>> placeholders = BobTheBuilder.getPlaceholders(rules, userString);
+                if (BobTheBuilder.iterateRules(userString.split(" "), rules)) {
+                    System.out.println("topic: "+BobTheBuilder.topic);
+                    placeholders.add(new Tuple<String,String>(BobTheBuilder.topic.toLowerCase(), "*"));
+                }
+                Main.ui.setDebugText("Placeholders:", placeholders);
+                return cfg.getAnswer(placeholders, converter.actions);
             }
             else if (algorithm.y().intValue() == 2) { // language model
                 HttpRequest request = HttpRequest.newBuilder()

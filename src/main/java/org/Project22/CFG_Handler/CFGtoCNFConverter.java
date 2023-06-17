@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
+import org.Project22.Tuple;
 import org.Project22.CFG_Handler.CockeYoungerKasami.Rule;
 import org.Project22.GUI.CFGSkillEditor;
 
@@ -25,6 +26,8 @@ public class CFGtoCNFConverter {
     private int newSymbolCounter = 0 ;
 
     private final static boolean DEBUG = false; // Debug variable
+
+    public List<Tuple<String,List<Tuple<String,String>>>> actions;
     
     public List<Rule> getRulesCNF() {
         readRulesFromFile();
@@ -47,6 +50,31 @@ public class CFGtoCNFConverter {
                 if (line.contains("rule") || line.contains("Rule")) {
                     line.toLowerCase();
                     lines.add(line);
+                }
+                // load all actions
+                else if (line.startsWith("Action")) {
+                    if (actions == null) {
+                        actions = new ArrayList<Tuple<String,List<Tuple<String,String>>>>();
+                    }
+
+                    // convert line
+                    line = line.substring(7);
+                    String[] splitLine = line.split("\\-");
+                    splitLine[0] = splitLine[0].toLowerCase();
+
+                    // values
+                    List<Tuple<String,String>> values = new ArrayList<Tuple<String,String>>();
+                    int indexLeft = splitLine[0].lastIndexOf('<');
+                    int indexRight = splitLine[0].lastIndexOf('>');
+                    while (indexLeft != -1) {
+                        values.add(new Tuple<String,String>(splitLine[0].substring(indexLeft, indexRight + 1), splitLine[0].substring(indexRight + 1).trim()));
+                        splitLine[0] = splitLine[0].substring(0, indexLeft);
+                        indexLeft = splitLine[0].lastIndexOf('<');
+                        indexRight = splitLine[0].lastIndexOf('>');
+                    }
+
+                    // add to actions
+                    actions.add(new Tuple<String,List<Tuple<String,String>>>(splitLine[1].trim(), values));
                 }
             }
             rulesList = parseRule(lines);

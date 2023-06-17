@@ -2,11 +2,12 @@ package org.Project22.CFG_Handler;
 
 import java.util.*;
 
+import org.Project22.Tuple;
 import org.Project22.CFG_Handler.CockeYoungerKasami.Rule;
 
 public class BobTheBuilder {
-
-    static List<List<String>> globalList = new ArrayList<>();
+    static List<Tuple<String, String>> placeholderList = new ArrayList<>();
+    //static List<List<String>> globalList = new ArrayList<>();
     public static String topic = "";
     public static void main(String[] args) {
 
@@ -25,6 +26,115 @@ public class BobTheBuilder {
             System.out.println("Not Found");
         }
         
+    }
+
+    public static List<Tuple<String, String>> getPlaceholders(List<Rule> rules, String input){
+        placeholderList.clear();
+        input = " " + input + " ";
+
+        // For each rule
+        for (Rule r : rules) {
+
+            String lhs = r.getLhs();
+
+            // Find the ones that don't start with <X
+            if ( !lhs.startsWith("<X") && !lhs.startsWith("<LOCATION") && !lhs.startsWith("<SCHED") ) {
+
+                List<List<String>> combinations = generateCombinations(r, rules);
+
+                // For each combination
+                for (List<String> combination : combinations) {
+
+                    // Join the words into a single string
+                    String combinationString = combination.get(0).toLowerCase();
+                    //System.out.println(combinationString);
+
+                    // Check if the combination is a substring of the sentence
+                    if (input.toLowerCase().contains(" "+combinationString+" ")) {
+                    
+                        Tuple<String, String> tuple = new Tuple<String, String>(lhs.toLowerCase(), combinationString);
+                        placeholderList.add(tuple);
+                    }
+                }
+            }
+        
+        }
+        System.out.println(placeholderList.toString());
+        return placeholderList;
+
+    }
+
+    
+    public static List<List<String>> generateCombinations(Rule rule, List<Rule> rules) {
+
+        List<List<String>> combinations = new ArrayList<>();
+
+        for (List<String> option : rule.rhs) {
+
+            List<List<String>> optionCombinations = new ArrayList<>();
+            optionCombinations.add(new ArrayList<>());
+
+            for (String symbol : option) {
+
+                if (symbol.charAt(0) == '<') {
+
+                    Rule subRule = findRuleByLHS(symbol, rules);
+                    List<List<String>> subCombinations = generateCombinations(subRule, rules);
+                    optionCombinations = crossJoin(optionCombinations, subCombinations);
+
+                }else {
+
+                    for (List<String> combination : optionCombinations) {
+
+                        combination.add(symbol);
+                    }
+                }
+            }
+
+            // Convert each combination list into a single string
+            List<List<String>> stringCombinations = new ArrayList<>();
+
+            for (List<String> combination : optionCombinations) {
+
+                stringCombinations.add(Arrays.asList(String.join(" ", combination)));
+            }
+
+            combinations.addAll(stringCombinations);
+        }
+
+        return combinations;
+    }
+
+    // Cross join of two lists of lists
+    private static List<List<String>> crossJoin(List<List<String>> list1, List<List<String>> list2) {
+
+        List<List<String>> result = new ArrayList<>();
+
+        for (List<String> list1Item : list1) {
+
+            for (List<String> list2Item : list2) {
+
+                List<String> joined = new ArrayList<>(list1Item);
+                joined.addAll(list2Item);
+                result.add(joined);
+            }
+        }
+
+        return result;
+    }
+
+    // Find a rule by its lhs
+    public static Rule findRuleByLHS(String lhs, List<Rule> rules) {
+
+        for (Rule rule : rules) {
+
+            if (rule.lhs.equals(lhs)) {
+
+                return rule;
+            }
+        }
+
+        return null;
     }
 
     public static boolean iterateRules(String[] inputWords, List<Rule> rules){
