@@ -17,6 +17,7 @@ question = "I have no idea."
 
 def paraphrase(
         question,
+        grid_search=False,
         num_beams=20, # num_beams=20
         num_beam_groups=20, # num_beam_groups=20
         num_return_sequences=20, # num_return_sequences=20
@@ -53,7 +54,10 @@ def paraphrase(
     r_val = avg_scores[1].cpu().item() # Recall
     f1_val = avg_scores[2].cpu().item() # F1 Score
 
-    return f1_val # When doing grid search only return the F1 score otherwise return  res, f1_val
+    if grid_search:
+        return f1_val
+
+    return res, f1_val # When doing grid search only return the F1 score otherwise return  res, f1_val
 
 # Computes the time it takes to paraphrase a question
 def paraphrase_time(question): # make sure the return of paraphrase is res, f1_val.
@@ -107,6 +111,7 @@ def grid_search_best_parameters(question):
     ):
         f1_score = paraphrase(
             question,
+            grid_search=True,
             num_beams=num_beams,
             num_beam_groups=num_beam_groups,
             num_return_sequences=num_return_sequences,
@@ -134,5 +139,5 @@ def grid_search_best_parameters(question):
 
 # Testing 
 if __name__ == '__main__':
-    # print(paraphrase_time(question)) # make sure the return of paraphrase function is res, f1_val.
-    print(grid_search_best_parameters(question)) # make sure the return of paraphrase function  is f1_val.
+    # print(paraphrase_time(question)) # make sure grid_search is false in paraphrase function.
+    print(grid_search_best_parameters(question)) # make sure grid_search is true in paraphrase function.
