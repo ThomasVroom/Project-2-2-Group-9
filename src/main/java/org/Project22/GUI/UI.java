@@ -25,7 +25,7 @@ public class UI extends JFrame{
     private JButton skilleditorButton;
 
     private static final String[] skill_types = new String[] {"Template", "CFG"};
-    private static final String[] cfg_matching_algorithms = new String[] {"Tree Traversal", "CYK"};
+    private static final String[] cfg_matching_algorithms = new String[] {"Tree Traversal", "CYK", "Language Model"};
     private static final String[] template_matching_algorithms = new String[] {"Exact Match", "Split Variables", "Split Variables+", "Filter Match"};
 
     private List<String> variables;

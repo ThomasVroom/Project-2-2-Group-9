@@ -44,4 +44,16 @@ This application uses [Java Swing](https://en.wikipedia.org/wiki/Swing_(Java)) a
   - https://pypi.org/project/opencv-python/
   - Other packages include `numpy`, `mediapipe` and `face_detection`
 
+- To use the neural network the following packages are needed:
+  - `tensorflow`
+  - `fastapi`
+  - `sklearn`
+  - `numpy`
+
+- To use the neural network first do the following steps before launching the main class:
+  1. Open a new terminal.
+  2. CD to `src\main\java\org\Project22\LargeLanguageModel`.
+  3. Type `uvicorn main:app --reload`.
+  4. Wait for the message `Application startup complete.` to appear.
+
 - Citation of code is mentioned in comments throughout the source code.

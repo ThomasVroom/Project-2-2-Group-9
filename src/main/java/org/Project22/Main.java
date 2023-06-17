@@ -33,4 +33,10 @@ public class Main {
         } catch (IOException e) {e.printStackTrace(); System.exit(0);}
         answerGenerator = new AnswerGenerator(questions);
     }
+
+    // HOW TO RUN PYTHON SERVER:
+    // 1. Open a new terminal
+    // 2. CD to the LargeLanguageModel folder
+    // 3. Type "uvicorn main:app --reload"
+    // 4. Wait for the message "Application startup complete." to appear
 }
