@@ -77,14 +77,14 @@ def paraphrase_time(question): # make sure the return of paraphrase is res, f1_v
 def grid_search_best_parameters(question):
 
     # Grid of parameter values
-    num_beams_values = [10, 20, 30]
-    num_beam_groups_values = [10, 20, 30]
-    num_return_sequences_values = [10, 20, 30]
-    repetition_penalty_values = [10.0, 13.0, 16.0]
-    diversity_penalty_values = [3.0, 4.0, 5.0]
-    no_repeat_ngram_size_values = [2, 3, 4]
-    temperature_values = [0.5, 0.7, 1.0]
-    max_length_values = [100, 128, 150]
+    num_beams_values = [10, 30]
+    num_beam_groups_values = num_beams_values # Has to be smaller or equal to num_beams
+    num_return_sequences_values = num_beams_values # Has to be smaller or equal to num_beams
+    repetition_penalty_values = [10.0, 16.0]
+    diversity_penalty_values = [3.0, 5.0]
+    no_repeat_ngram_size_values = [2, 4]
+    temperature_values = [0.5, 1.0]
+    max_length_values = [100, 150]
 
     best_f1_score = 0.0
     best_parameters = {}
@@ -113,8 +113,8 @@ def grid_search_best_parameters(question):
             question,
             grid_search=True,
             num_beams=num_beams,
-            num_beam_groups=num_beam_groups,
-            num_return_sequences=num_return_sequences,
+            num_beam_groups=num_beams, # Has to be smaller or equal to num_beams
+            num_return_sequences=num_beams, # Has to be smaller or equal to num_beams
             repetition_penalty=repetition_penalty,
             diversity_penalty=diversity_penalty,
             no_repeat_ngram_size=no_repeat_ngram_size,
