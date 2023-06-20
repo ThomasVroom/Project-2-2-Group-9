@@ -2,6 +2,12 @@ package org.Project22.GUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -23,9 +29,10 @@ public class UI extends JFrame{
     private JLabel languageLabel;
     private JLabel skillLabel;
     private JButton skilleditorButton;
+    private JButton retrainButton;
 
     private static final String[] skill_types = new String[] {"Template", "CFG"};
-    private static final String[] cfg_matching_algorithms = new String[] {"Tree Traversal", "CYK", "Language Model"};
+    private static final String[] cfg_matching_algorithms = new String[] {"Tree Traversal", "CYK", "Language Classifier"};
     private static final String[] template_matching_algorithms = new String[] {"Exact Match", "Split Variables", "Split Variables+", "Filter Match"};
 
     private List<String> variables;
@@ -43,6 +50,7 @@ public class UI extends JFrame{
 
     private void initComponents() {
         skilleditorButton = new JButton();
+        retrainButton = new JButton();
         languageBox = new JComboBox<>();
         skillBox = new JComboBox<>();
         languageLabel = new JLabel();
@@ -60,6 +68,36 @@ public class UI extends JFrame{
         skilleditorButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 skilleditorButtonActionPerformed(evt);
+            }
+        });
+
+        retrainButton.setText("Retrain Model");
+        retrainButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                if (skillBox.getSelectedIndex() == 1 && languageBox.getSelectedIndex() == 2) {
+                    System.out.println("Retraining started. This process might take several minutes.");
+                    HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8000/infer"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString("{\"paraphrase\"}"))
+                    .build();
+
+                    try {
+                        HttpClient client = HttpClient.newHttpClient();
+                        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                        System.out.println("Code: " + response.statusCode());
+                        System.out.println(response.body());
+                    } catch (ConnectException e) {
+                        System.out.println("error connecting to server");
+                    } catch (InterruptedException e) {
+                        System.out.println("server connection interrupted");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    System.out.println("Retraining is only possible when using the Language Classifier.");
+                }
             }
         });
 
@@ -121,6 +159,7 @@ public class UI extends JFrame{
                                         .addComponent(debugLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(skilleditorButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(clearButton, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                                        .addComponent(retrainButton, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
                                         .addComponent(skillBox, GroupLayout.Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(languageBox, GroupLayout.Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addContainerGap())
@@ -135,6 +174,8 @@ public class UI extends JFrame{
                                                 .addComponent(skilleditorButton)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(clearButton)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(retrainButton)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(skillLabel)
                                                 .addComponent(skillBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -191,5 +232,9 @@ public class UI extends JFrame{
     private void clearButtonActionPerformed(ActionEvent evt) {
         Main.loadSkills();
         this.chatScrollPane.setViewportView(new ChatWindow());
+
+        if (skillBox.getSelectedIndex() == 1 && languageBox.getSelectedIndex() == 2) {
+            System.out.println("language model!!");
+        }
     }
 }
