@@ -15,7 +15,7 @@ import javax.swing.*;
 import org.Project22.Main;
 import org.Project22.Tuple;
 
-public class UI extends JFrame{
+public class UI extends JFrame {
 
     private JScrollPane chatScrollPane;
     private JProgressBar confidenceBar;
@@ -79,7 +79,7 @@ public class UI extends JFrame{
                     HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:8000/infer"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString("{\"paraphrase\"}"))
+                    .POST(HttpRequest.BodyPublishers.ofString("{\"paraphrase\"}")) // TODO
                     .build();
 
                     try {
@@ -87,6 +87,7 @@ public class UI extends JFrame{
                         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                         System.out.println("Code: " + response.statusCode());
                         System.out.println(response.body());
+                        System.out.println("Retraining finished.");
                     } catch (ConnectException e) {
                         System.out.println("error connecting to server");
                     } catch (InterruptedException e) {
