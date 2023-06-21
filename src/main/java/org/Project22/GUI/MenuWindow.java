@@ -345,6 +345,7 @@ public class MenuWindow {
                             detectedButton.setVisible(true);
     
                             authenticationButton.setVisible(false);
+                            signupButton.setVisible(false);
                             menuPanel.remove(authenticationButton);
                             menuPanel.add(detectedButton);
     
@@ -360,6 +361,7 @@ public class MenuWindow {
         
                         }else{
                             authenticationButton.setVisible(false);
+                            signupButton.setVisible(false);
                             menuPanel.remove(authenticationButton);
 
                             noAccessButton.setVisible(true);
@@ -380,6 +382,7 @@ public class MenuWindow {
                             String name  = output.substring(message_index + message_len, output.length()-8);
 
                             authenticationButton.setVisible(false);
+                            signupButton.setVisible(false);
                             menuPanel.remove(authenticationButton);
                             
                             detectedButton.setText("Hello " + name + "! I'd love to help you.");
@@ -399,6 +402,7 @@ public class MenuWindow {
         
                         }else{
                             authenticationButton.setVisible(false);
+                            signupButton.setVisible(false);
                             menuPanel.remove(authenticationButton);
                             
                             noAccessButton.setVisible(true);
