@@ -12,13 +12,12 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MenuWindow {
     public JFrame frame;
     public JPanel menuPanel;
     private JButton authenticationButton;
+    private JButton signupButton;
     private JButton welcomeButton;
     private JButton detectedButton;
     private JButton welcomeLabel;
@@ -33,6 +32,10 @@ public class MenuWindow {
     private JLabel background_label;
     private JPasswordField passwordField;
     private ImageIcon icon;
+    private JButton signupButton2;
+    private JButton backButton;
+    private JTextField usernameField;
+    private JLabel usernameLabel;
 
     public MenuWindow() {
         initializeMenu();
@@ -55,7 +58,7 @@ public class MenuWindow {
 
         welcomeButton = new JButton("Digital Assistant");
         menuPanel.add(welcomeButton);
-        welcomeButton.setBounds(15,60,768,80);
+        welcomeButton.setBounds(0,60,768,80);
         welcomeButton.setForeground(Color.red.darker());
         welcomeButton.setFont(new Font("Sans-serif",Font.BOLD,60));
         welcomeButton.setOpaque(false);
@@ -66,7 +69,7 @@ public class MenuWindow {
         welcomeLabel = new JButton("Hello DACS Student!");
         menuPanel.add(welcomeLabel);
         welcomeLabel.setFont(new Font("Sans-serif",Font.BOLD,30));
-        welcomeLabel.setBounds(15,150,768,100);
+        welcomeLabel.setBounds(0,150,768,100);
         welcomeLabel.setForeground(Color.black.darker());
         welcomeLabel.setOpaque(false);
         welcomeLabel.setContentAreaFilled(false);
@@ -99,16 +102,68 @@ public class MenuWindow {
         // });
 
         //MENU LABEL
-        authenticationButton = new JButton("Authentication");
-        authenticationButton.setBounds(240,520,300,45);
+        authenticationButton = new JButton("Log in with FaceID");
+        authenticationButton.setBounds(109,520,250,45);
         authenticationButton.setForeground(Color.black.brighter());
-        authenticationButton.setFont(new Font("Sans-serif",Font.BOLD,26));
+        authenticationButton.setFont(new Font("Sans-serif",Font.BOLD,24));
         authenticationButton.setOpaque(true);
         authenticationButton.setContentAreaFilled(true);
         authenticationButton.setBackground(lightBlue);
         authenticationButton.setBorderPainted(true);
         authenticationButton.setFocusPainted(false);
         menuPanel.add(authenticationButton);
+
+        signupButton = new JButton("Sign Up");
+        signupButton.setBounds(409,520,250,45);
+        signupButton.setForeground(Color.black.brighter());
+        signupButton.setFont(new Font("Sans-serif",Font.BOLD,24));
+        signupButton.setOpaque(true);
+        signupButton.setContentAreaFilled(true);
+        signupButton.setBackground(lightBlue);
+        signupButton.setBorderPainted(true);
+        signupButton.setFocusPainted(false);
+        menuPanel.add(signupButton);
+
+        signupButton2 = new JButton("Sign up with FaceID");
+        signupButton2.setBounds(134,500,500,45);
+        signupButton2.setForeground(Color.black.brighter());
+        signupButton2.setFont(new Font("Sans-serif",Font.BOLD,24));
+        signupButton2.setOpaque(true);
+        signupButton2.setContentAreaFilled(true);
+        signupButton2.setBackground(lightBlue);
+        signupButton2.setBorderPainted(true);
+        signupButton2.setFocusPainted(false);
+        signupButton2.setVisible(false);
+        menuPanel.add(signupButton2);
+
+        backButton = new JButton("Back");
+        backButton.setBounds(334,560,100, 30);
+        backButton.setForeground(Color.black.brighter());
+        backButton.setFont(new Font("Sans-serif",Font.BOLD,15));
+        backButton.setOpaque(true);
+        backButton.setContentAreaFilled(true);
+        backButton.setBackground(lightBlue);
+        backButton.setBorderPainted(true);
+        backButton.setFocusPainted(false);
+        backButton.setVisible(false);
+        menuPanel.add(backButton);
+
+        usernameField = new JTextField();
+        usernameField.setBounds(134,425,500,45);
+        usernameField.setForeground(Color.black.brighter());
+        usernameField.setFont(new Font("Sans-serif",Font.BOLD,20));
+        usernameField.setOpaque(true);
+        usernameField.setBackground(lightBlue);
+        usernameField.setVisible(false);
+        menuPanel.add(usernameField);
+
+        usernameLabel = new JLabel("Username:");
+        usernameLabel.setFont(new Font("Sans-serif",Font.BOLD,20));
+        usernameLabel.setBounds(134,380,500,45);
+        usernameLabel.setForeground(Color.black.darker());
+        usernameLabel.setOpaque(false);
+        usernameLabel.setVisible(false);
+        menuPanel.add(usernameLabel);
 
         noWebCamButton = new JButton("No access to webcam");
         noWebCamButton.setBounds(200,600,368,50);
@@ -183,6 +238,32 @@ public class MenuWindow {
             public void mouseExited(MouseEvent e) {
 
             }
+        });
+
+        signupButton.addActionListener(e -> {
+            signupButton2.setVisible(true);
+            backButton.setVisible(true);
+            usernameField.setVisible(true);
+            usernameLabel.setVisible(true);
+            authenticationButton.setVisible(false);
+            signupButton.setVisible(false);
+            background_label.setVisible(false);
+        });
+
+        backButton.addActionListener(e -> {
+            signupButton2.setVisible(false);
+            backButton.setVisible(false);
+            usernameField.setVisible(false);
+            usernameLabel.setVisible(false);
+            authenticationButton.setVisible(true);
+            signupButton.setVisible(true);
+            background_label.setVisible(true);
+        });
+
+        signupButton2.addActionListener(e -> {
+            String username = usernameField.getText();
+            System.out.println("Signing up with name " + username);
+            // ...
         });
 
         noWebCamButton.addActionListener(e -> {
