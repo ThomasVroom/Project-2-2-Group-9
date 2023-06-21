@@ -74,7 +74,7 @@ class Recognition:
         time.sleep(0.1)
         start_time = time.time()
 
-        while time.time() - start_time <= 10:
+        while time.time() - start_time <= 5:
             ret, frame = capture.read()
 
             if self.process_current_frame:

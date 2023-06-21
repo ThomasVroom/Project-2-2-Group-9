@@ -12,6 +12,10 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Map;
+// import org.opencv.core.Core;
+// import org.opencv.core.Mat;
+// import org.opencv.videoio.VideoCapture;
+// import org.opencv.imgcodecs.Imgcodecs;
 
 public class MenuWindow {
     public JFrame frame;
@@ -262,10 +266,10 @@ public class MenuWindow {
 
         signupButton2.addActionListener(e -> {
             String username = usernameField.getText();
-            System.out.println("Signing up with name " + username);
-            // ...
+            System.out.println("Signing up with name " + username.toLowerCase());
+        
         });
-
+        
         noWebCamButton.addActionListener(e -> {
 
             noWebCamButton.setText("Enter your password:");
@@ -325,7 +329,7 @@ public class MenuWindow {
         private static final String[] sources = {"src/main/java/org/Project22/FaceDetection/WebcamDetection.py",
                                                  "src/main/java/org/Project22/FaceRecognition/Recognition.py"};
         
-        private static String source_index = sources[0]; 
+        private static String source_index = sources[1]; 
         private static String[] source = {"python3", source_index};
         
         @Override
