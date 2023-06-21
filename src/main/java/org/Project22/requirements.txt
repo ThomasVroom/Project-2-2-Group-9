@@ -1,0 +1,7 @@
+gdown
+tensorflow
+deepface==0.0.68
+matplotlib==3.4.2
+gdown
+deepface
+
