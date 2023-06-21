@@ -268,8 +268,10 @@ public class MenuWindow {
             String username = usernameField.getText();
             System.out.println("Signing up with name " + username.toLowerCase());
         
+            SignUpThread captureThread = new SignUpThread(username);
+            captureThread.start();
         });
-        
+
         noWebCamButton.addActionListener(e -> {
 
             noWebCamButton.setText("Enter your password:");
@@ -319,6 +321,34 @@ public class MenuWindow {
         frame.add(menuPanel);
 
     }
+    class SignUpThread extends Thread {
+        private String username;
+    
+        SignUpThread(String username) {
+            this.username = username;
+        }
+    
+        @Override
+        public void run() {
+            try {
+                String[] source = {"python3", "src/main/java/org/Project22/GUI/Webcam2Dataset.py", username.toLowerCase()};
+                Process process = Runtime.getRuntime().exec(source);
+    
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    
+                if (reader.readLine() == null) {
+                    System.out.println("Image captured and saved successfully.");
+                    
+                } else {
+                    System.out.println("Error occurred while capturing image.");
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    
     private void webcamButtonActionPerformed(MouseEvent evt) {
         System.out.println("Webcam Detection is starting...");
         new WebCamThread().start();
