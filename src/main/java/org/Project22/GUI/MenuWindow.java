@@ -38,6 +38,7 @@ public class MenuWindow {
     private ImageIcon icon;
     private JButton signupButton2;
     private JButton backButton;
+    private JButton backButton2;
     private JTextField usernameField;
     private JLabel usernameLabel;
 
@@ -152,6 +153,18 @@ public class MenuWindow {
         backButton.setVisible(false);
         menuPanel.add(backButton);
 
+        backButton2 = new JButton("Back");
+        backButton2.setBounds(334,560,100, 30);
+        backButton2.setForeground(Color.black.brighter());
+        backButton2.setFont(new Font("Sans-serif",Font.BOLD,15));
+        backButton2.setOpaque(true);
+        backButton2.setContentAreaFilled(true);
+        backButton2.setBackground(lightBlue);
+        backButton2.setBorderPainted(true);
+        backButton2.setFocusPainted(false);
+        backButton2.setVisible(false);
+        menuPanel.add(backButton2);
+
         usernameField = new JTextField();
         usernameField.setBounds(134,425,500,45);
         usernameField.setForeground(Color.black.brighter());
@@ -262,6 +275,11 @@ public class MenuWindow {
             authenticationButton.setVisible(true);
             signupButton.setVisible(true);
             background_label.setVisible(true);
+        });
+
+        backButton2.addActionListener(e -> {
+            frame.setVisible(false);
+            Main.menu = new MenuWindow();
         });
 
         signupButton2.addActionListener(e -> {
@@ -399,6 +417,7 @@ public class MenuWindow {
                             menuPanel.remove(authenticationButton);
 
                             noAccessButton.setVisible(true);
+                            backButton2.setVisible(true);
                             menuPanel.add(noAccessButton);
                         }
                     }
@@ -440,6 +459,7 @@ public class MenuWindow {
                             menuPanel.remove(authenticationButton);
                             
                             noAccessButton.setVisible(true);
+                            backButton2.setVisible(true);
                             menuPanel.add(noAccessButton);
                         }
                     }
