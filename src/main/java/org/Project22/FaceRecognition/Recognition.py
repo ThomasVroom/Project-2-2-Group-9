@@ -73,7 +73,7 @@ class Recognition:
         time.sleep(0.1)
         start_time = time.time()
 
-        while time.time() - start_time <= 5:
+        while time.time() - start_time <= 10:
             ret, frame = capture.read()
 
             if self.process_current_frame:
@@ -90,7 +90,7 @@ class Recognition:
                 # different orientations and lighting conditions, and can detect faces at smaller scales compared to
                 # the 'hog' model.
 
-                self.face_locations = face_recognition.face_locations(RGB_resized, model='cnn') # to try hog model -> model='hog'
+                self.face_locations = face_recognition.face_locations(RGB_resized, model='hog') # to try hog model -> model='hog'
                 self.face_encodings = face_recognition.face_encodings(RGB_resized, self.face_locations)
                 self.face_names = []
 
