@@ -31,9 +31,9 @@ def plot_iou_vs_time_complexity(data):
 
     plt.figure(figsize=(8, 6))
     plt.scatter(inference_time, avg_iou)
-    plt.xlabel('Average Time Elapsed to Detect Faces on a Single Image in Milliseconds (Inference Time)', fontsize=12)
-    plt.ylabel('Average Intersection over Union (IOU)', fontsize=12)
-    plt.title('Intersection over Union (IoU) Ratio with Respect to Time Complexity', fontsize=14)
+    plt.xlabel('Average Time Elapsed to Detect Faces on a Single Image in Milliseconds (Inference Time)', fontsize=14)
+    plt.ylabel('Average Intersection over Union (IOU)', fontsize=14)
+    plt.title('Intersection over Union (IoU) Ratio with Respect to Time Complexity', fontsize=16)
 
     for i, model in enumerate(models):
         plt.annotate(model, (inference_time[i], avg_iou[i]), textcoords="offset points", xytext=(5, 5), ha='center')
@@ -48,9 +48,9 @@ def plot_map_vs_time_complexity(data):
 
     plt.figure(figsize=(8, 6))
     plt.scatter(inference_time, mAP)
-    plt.xlabel('Average Time Elapsed to Detect Faces on a Single Image in Milliseconds (Inference Time)', fontsize=12)
-    plt.ylabel('Mean Average Precision', fontsize=12)
-    plt.title('Mean Average Precision with Respect to Time Complexity', fontsize=14)
+    plt.xlabel('Average Time Elapsed to Detect Faces on a Single Image in Milliseconds (Inference Time)', fontsize=14)
+    plt.ylabel('Mean Average Precision', fontsize=14)
+    plt.title('Mean Average Precision with Respect to Time Complexity', fontsize=16)
 
     for i, model in enumerate(models):
         plt.annotate(model, (inference_time[i], mAP[i]), textcoords="offset points", xytext=(5, 5), ha='center')
@@ -61,12 +61,12 @@ def plot_running_time(output_data_running_time):
     methods = list(output_data_running_time.keys())
     running_times = [list(values)[0] for values in output_data_running_time.values()]
 
-    plt.bar(methods, running_times)
-    plt.xlabel('Methods', fontweight='bold', fontsize=12)  # Increase x-label thickness and size
-    plt.ylabel('Running Time (milliseconds)', fontweight='bold', fontsize=12)  # Increase y-label thickness and size
-    plt.title('Average Elapsed Time to Detect Face', fontweight='bold', fontsize=14)
-    plt.xticks(rotation=45)
-    plt.xticks(rotation=5)
+    plt.bar(methods, running_times, width=0.5)
+    plt.xlabel('Methods', fontweight='bold', fontsize=14)  
+    plt.ylabel('Running Time (milliseconds)', fontweight='bold', fontsize=14)  
+    plt.title('Average Elapsed Time to Detect Face', fontweight='bold', fontsize=16)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
     plt.show()
 
 # Plotting the data
@@ -78,12 +78,14 @@ def plot_webcam_experiment(detected_not_detected):
     methods = list(output_data_running_time.keys())
     detected_face_percent = [list(values)[0] for values in output_data_detected_1.values()]
 
-    plt.bar(methods, detected_face_percent)
-    plt.xlabel('Methods', fontweight='bold', fontsize=12)  # Increase x-label thickness and size
-    plt.ylabel('Percentage of Detected Faces', fontweight='bold', fontsize=12)  # Increase y-label thickness and size
-    plt.title('Detected Face Percentage over 100 Iteration (without restrictions)', fontweight='bold', fontsize=14)
+    plt.bar(methods, detected_face_percent, width=0.5)
+    plt.xlabel('Methods', fontweight='bold', fontsize=14)  
+    plt.ylabel('Percentage of Detected Faces', fontweight='bold', fontsize=14)  
+    plt.title('Detected Face Percentage over 100 Iteration (with restrictions)', fontweight='bold', fontsize=14)
+    plt.xticks(fontsize=12)  
+    plt.yticks(fontsize=12) 
     plt.show()
 
-plot_webcam_experiment(output_data_detected_1)
-# plot_webcam_experiment(output_data_detected_2)
+# plot_running_time(output_data_running_time)
+plot_webcam_experiment(output_data_detected_2)
 

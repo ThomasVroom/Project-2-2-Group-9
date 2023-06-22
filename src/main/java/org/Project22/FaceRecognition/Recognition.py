@@ -10,8 +10,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 face_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 eye_detection = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
 
-THRESHOLD = 0.2 # 0.2 is ideal for cosine_similarity distance function.
-                # Haven't find the optimal thresholds for the other functions yet.  
+THRESHOLD = 0.91 
 
 class Recognition:
     face_locations = []
@@ -109,7 +108,10 @@ class Recognition:
 
                     if best_similarity > THRESHOLD:
                         name = self.known_face_names_dlib[best_match_index]
+
                         confidence_str = str(round(best_similarity * 100, 2)) + '%'
+
+                        # print(confidence_str)
 
                         face_detected = True
 

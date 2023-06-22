@@ -206,7 +206,7 @@ public class MenuWindow {
         detectedButton.setFocusPainted(false);
         menuPanel.add(detectedButton);
 
-        noAccessButton = new JButton("Try again");
+        noAccessButton = new JButton("Your face is not recognized. Please try again or sign up with FaceID.");
         noAccessButton.setVisible(false);
         noAccessButton.setForeground(Color.black.brighter());
         noAccessButton.setBounds(200,530,368,50);
