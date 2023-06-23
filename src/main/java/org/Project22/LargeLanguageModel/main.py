@@ -47,6 +47,7 @@ async def paraphrase(data: ParaphraseData):
                         file.write(string + "\n")
     return {"status": "Paraphrase completed"}
 
+
 @app.post("/train")
 async def train(data: TrainingData):
     if data.training:
