@@ -67,6 +67,7 @@ def train(size=(128, 64, 32),learningrate = 0.001):
         monitor='val_accuracy', patience=35, mode='max', verbose=1, restore_best_weights=True
     )
 
+
     # Build neural network model
     model = Sequential([
         Embedding(MAX_WORDS, EMBEDDING_DIM, input_length=MAX_LEN),
