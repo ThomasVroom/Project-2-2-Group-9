@@ -42,7 +42,7 @@ def plot_results(histories, configs):
     plt.legend()
     plt.show()
 
-def train(stop=True, stem=True, size=(64, 64, 32),learningrate = 0.001):
+def train(stop=True, stem=True, size=(128, 128, 64),learningrate = 0.001):
 
 
     sentences = []
@@ -91,7 +91,7 @@ def train(stop=True, stem=True, size=(64, 64, 32),learningrate = 0.001):
 
     # Define the EarlyStopping callback
     early_stopping = EarlyStopping(
-        monitor='val_accuracy', patience=35, mode='max', verbose=1, restore_best_weights=True
+        monitor='val_accuracy', patience=85, mode='max', verbose=1, restore_best_weights=True
     )
 
 
