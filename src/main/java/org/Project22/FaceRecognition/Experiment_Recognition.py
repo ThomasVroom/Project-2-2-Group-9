@@ -91,7 +91,7 @@ class Recognition:
                     print("Running face recognition with HOG model...")
 
                     # Run face recognition with 'hog' model
-                    self.face_locations = face_recognition.face_locations(RGB_resized, model='hog')
+                    self.face_locations = face_recognition.face_locations(RGB_resized, model='cnn')
                     self.face_encodings = face_recognition.face_encodings(RGB_resized, self.face_locations)
                     self.face_names = []
 
@@ -118,8 +118,8 @@ class Recognition:
 
                     if face_detected:
                         elapsed_time = time.time() - start_time
-                        hog_elapsed_times.append(elapsed_time)
-                        hog_confidences.append(confidence_str)
+                        cnn_elapsed_times.append(elapsed_time)
+                        cnn_confidences.append(confidence_str)
                         print("Face recognized using HOG model.")
                         break
 
@@ -131,17 +131,17 @@ class Recognition:
             capture.release()
             cv2.destroyAllWindows()
 
-        with open('hog_confidences.txt', 'w') as file:
-            file.write('\n'.join(hog_confidences))
+        # with open('hog_confidences.txt', 'w') as file:
+        #     file.write('\n'.join(hog_confidences))
 
-        # with open('cnn_confidences.txt', 'w') as file:
-        #     file.write('\n'.join(cnn_confidences))
+        with open('cnn_confidences.txt', 'w') as file:
+            file.write('\n'.join(cnn_confidences))
 
-        with open('hog_elapsed_times.txt', 'w') as file:
-            file.write('\n'.join(map(str, hog_elapsed_times)))
+        # with open('hog_elapsed_times.txt', 'w') as file:
+        #     file.write('\n'.join(map(str, hog_elapsed_times)))
 
-        # with open('cnn_elapsed_times.txt', 'w') as file:
-        #     file.write('\n'.join(map(str, cnn_elapsed_times)))
+        with open('cnn_elapsed_times.txt', 'w') as file:
+            file.write('\n'.join(map(str, cnn_elapsed_times)))
 
         print("Experiment finished successfully.")
 

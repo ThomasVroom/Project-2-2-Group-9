@@ -154,7 +154,7 @@ public class MenuWindow {
         menuPanel.add(backButton);
 
         backButton2 = new JButton("Back");
-        backButton2.setBounds(334,560,100, 30);
+        backButton2.setBounds(334,460,100, 30);
         backButton2.setForeground(Color.black.brighter());
         backButton2.setFont(new Font("Sans-serif",Font.BOLD,15));
         backButton2.setOpaque(true);
@@ -224,10 +224,10 @@ public class MenuWindow {
         noAccessButton.setForeground(Color.black.brighter());
         noAccessButton.setBounds(200,530,368,50);
         noAccessButton.setFont(new Font("Sans-serif",Font.BOLD,20));
-        noAccessButton.setOpaque(true);
-        noAccessButton.setContentAreaFilled(true);
-        noAccessButton.setBorderPainted(false);
-        noAccessButton.setFocusPainted(false);
+        // noAccessButton.setOpaque(true);
+        // noAccessButton.setContentAreaFilled(true);
+        // noAccessButton.setBorderPainted(false);
+        // noAccessButton.setFocusPainted(false);
 
         authenticationButton.addMouseListener(new MouseListener() {
             @Override
@@ -457,6 +457,11 @@ public class MenuWindow {
                             authenticationButton.setVisible(false);
                             signupButton.setVisible(false);
                             menuPanel.remove(authenticationButton);
+                            background_label.setVisible(false);
+                            welcomeButton.setVisible(false);
+                            welcomeLabel.setVisible(false);
+                            noWebCamButton.setVisible(false);
+
                             
                             noAccessButton.setVisible(true);
                             backButton2.setVisible(true);
