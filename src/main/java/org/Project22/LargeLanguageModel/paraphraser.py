@@ -18,9 +18,9 @@ question = "I have no idea."
 def paraphrase(
         question,
         grid_search=False,
-        num_beams=20, # num_beams=20
-        num_beam_groups=20, # num_beam_groups=20
-        num_return_sequences=20, # num_return_sequences=20
+        num_beams=50, # num_beams=20
+        num_beam_groups=50, # num_beam_groups=20
+        num_return_sequences=50, # num_return_sequences=20
         repetition_penalty=13.0, # repetition_penalty=1.5 #10.0
         diversity_penalty=4.0, # diversity_penalty=0.5 #3.0
         no_repeat_ngram_size=2, # no_repeat_ngram_size=3 #2

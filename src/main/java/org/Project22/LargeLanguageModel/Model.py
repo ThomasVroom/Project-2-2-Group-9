@@ -26,13 +26,25 @@ MAX_WORDS = 10000
 MAX_LEN = 100
 EMBEDDING_DIM = 100
 EPOCHS = 200
-BATCH_SIZE = 32
+BATCH_SIZE = 256
+
+import matplotlib.pyplot as plt
+
+def plot_results(histories, configs):
+    plt.figure(figsize=(12,6))
+
+    for history, config in zip(histories, configs):
+        plt.plot(history.history['val_accuracy'], label=f'stop={config[0]}, stem={config[1]}')
+
+    plt.title('Model Accuracy')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Epoch')
+    plt.legend()
+    plt.show()
+
+def train(stop=True, stem=True, size=(64, 64, 32),learningrate = 0.001):
 
 
-
-def train(size=(256, 256, 64),learningrate = 0.001):
-
-    # Read data from files and create dataset
     sentences = []
     labels = []
 
@@ -47,7 +59,7 @@ def train(size=(256, 256, 64),learningrate = 0.001):
     tokenizer = Tokenizer(num_words=MAX_WORDS, oov_token='<OOV>')
     #preprocess sentences
     
-    sequences = preprocess(sentences, stop=True, stem=True)
+    sequences = preprocess(sentences, stop=stop, stem=stem)
     #turn list of list back into one list.
     untokenized_list=[]
     for sentence in sequences:
@@ -120,6 +132,7 @@ def train(size=(256, 256, 64),learningrate = 0.001):
 
 
     print("Model and tokenizer saved.")
+    return history
     
 def preprocess(sentences, stop=True, stem=True):
     stop_words = set(stopwords.words('english'))
@@ -135,12 +148,12 @@ def preprocess(sentences, stop=True, stem=True):
         yield tokenized_sentence
 
 
-
-
-
-
 if __name__ == '__main__':
-    train()
+    options = [(True, True), (True, False), (False, True), (False, False)]
+    histories = []
+    for stop, stem in options:
+        print(f"\nTraining with stop={stop} and stem={stem}")
+        history = train(stop, stem)
+        histories.append(history)
 
-
-
+    plot_results(histories, options)
