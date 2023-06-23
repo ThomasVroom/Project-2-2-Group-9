@@ -76,17 +76,27 @@ public class UI extends JFrame {
             public void actionPerformed(ActionEvent evt) {
                 if (skillBox.getSelectedIndex() == 1 && languageBox.getSelectedIndex() == 2) {
                     System.out.println("Retraining started. This process might take several minutes.");
-                    HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8000/infer"))
+                    HttpRequest paraphrase_request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8000/paraphrase"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString("{\"paraphrase\"}")) // TODO
+                    .POST(HttpRequest.BodyPublishers.ofString("{\"paraphraser_exec\": true,\"paraphraser_del\": true}"))
+                    .build();
+                    HttpRequest retrain_request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8000/train"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString("{\"training\": true}"))
                     .build();
 
                     try {
                         HttpClient client = HttpClient.newHttpClient();
-                        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                        HttpResponse<String> response = client.send(paraphrase_request, HttpResponse.BodyHandlers.ofString());
                         System.out.println("Code: " + response.statusCode());
                         System.out.println(response.body());
+
+                        response = client.send(retrain_request, HttpResponse.BodyHandlers.ofString());
+                        System.out.println("Code: " + response.statusCode());
+                        System.out.println(response.body());
+
                         System.out.println("Retraining finished.");
                     } catch (ConnectException e) {
                         System.out.println("error connecting to server");
@@ -233,9 +243,5 @@ public class UI extends JFrame {
     private void clearButtonActionPerformed(ActionEvent evt) {
         Main.loadSkills();
         this.chatScrollPane.setViewportView(new ChatWindow());
-
-        if (skillBox.getSelectedIndex() == 1 && languageBox.getSelectedIndex() == 2) {
-            System.out.println("language model!!");
-        }
     }
 }

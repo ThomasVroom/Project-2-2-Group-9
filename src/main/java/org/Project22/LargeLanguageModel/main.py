@@ -35,7 +35,7 @@ async def paraphrase(data: ParaphraseData):
         setoflabels = CFGsentence.getStuff()
         for sentence, labels in setoflabels:
             if labels != "I have no idea." and not os.path.exists(directory_path + labels + ".txt"):
-                sentences = paraphraser.paraphrase_20(sentence)
+                sentences = paraphraser.paraphrase(sentence)[0]
                 sentences.append(sentence)
                 with open(directory_path + labels + ".txt", "a+") as file:
                     file.seek(0)
