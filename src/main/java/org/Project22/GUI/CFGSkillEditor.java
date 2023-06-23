@@ -13,6 +13,7 @@ public class CFGSkillEditor extends JFrame {
 
     public static String default_cfg_file_tree_traversal = "resources/CFG/TreeTraversal/CFG.txt";
     public static String default_cfg_file_cyk = "resources/CFG/CYK/CFG.txt";
+    public static String default_cfg_file_language_model = "src/main/java/org/Project22/LargeLanguageModel/CFG.txt";
 
     private String currentFile;
     
@@ -49,6 +50,8 @@ public class CFGSkillEditor extends JFrame {
             loadFile(default_cfg_file_tree_traversal);
         else if (algorithm == 1)
             loadFile(default_cfg_file_cyk);
+        else if (algorithm == 2)
+            loadFile(default_cfg_file_language_model);
     }
 
     private void initComponents() {

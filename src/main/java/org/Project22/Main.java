@@ -9,13 +9,13 @@ import java.util.*;
 import java.util.List;
 
 public class Main {
-    
-   // answer generator declaration
-   public static AnswerGenerator answerGenerator;
 
-   // UI interface
-   public static UI ui;
-   public static MenuWindow menu;
+    // answer generator declaration
+    public static AnswerGenerator answerGenerator;
+
+    // UI interface
+    public static UI ui;
+    public static MenuWindow menu;
 
     public static void main(String[] args) {
         loadSkills();

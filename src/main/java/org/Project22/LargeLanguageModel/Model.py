@@ -1,5 +1,7 @@
 import logging
 import os
+
+import nltk
 import numpy as np
 logging.getLogger().setLevel(logging.FATAL)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -12,6 +14,11 @@ from keras.models import Sequential
 from keras.layers import Dense, Embedding, GlobalAveragePooling1D
 from keras.layers import LSTM, Bidirectional, Dropout
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from string import punctuation
+from nltk.stem import SnowballStemmer
+from nltk.corpus import stopwords
+import string
+from nltk.tokenize import word_tokenize
 
 # Define constants
 DATA_DIR = 'Data/'
@@ -19,10 +26,11 @@ MAX_WORDS = 10000
 MAX_LEN = 100
 EMBEDDING_DIM = 100
 EPOCHS = 200
-BATCH_SIZE = 256
+BATCH_SIZE = 32
 
 
-def train(size=(128, 64, 32),learningrate = 0.001):
+
+def train(size=(256, 256, 64),learningrate = 0.001):
 
     # Read data from files and create dataset
     sentences = []
@@ -36,19 +44,25 @@ def train(size=(128, 64, 32),learningrate = 0.001):
                 sentences.append(line.strip())
                 labels.append(label)
 
-        # Print label and a few sentences for testing
-        print(f"Label: {label}")
-        print("Sentences:")
-        for sentence in lines[:3]:  # Adjust the number of sentences to print
-            print(f"  - {sentence.strip()}")
-
-    # Preprocess sentences
     tokenizer = Tokenizer(num_words=MAX_WORDS, oov_token='<OOV>')
-    tokenizer.fit_on_texts(sentences)
+    #preprocess sentences
+    
+    sequences = preprocess(sentences, stop=True, stem=True)
+    #turn list of list back into one list.
+    untokenized_list=[]
+    for sentence in sequences:
+        untokenize =' '.join(sentence)
+        untokenized_list.append(untokenize)
+    print(untokenized_list)
+
+    tokenizer.fit_on_texts(untokenized_list)
     word_index = tokenizer.word_index
-    sequences = tokenizer.texts_to_sequences(sentences)
-    padded_sequences = pad_sequences(sequences, maxlen=MAX_LEN)
-    print(padded_sequences)
+    word2num = tokenizer.texts_to_sequences(untokenized_list)
+
+    padded_sequences = pad_sequences(word2num, maxlen=MAX_LEN)
+
+
+
     # Encode labels
     label_encoder = LabelEncoder()
     encoded_labels = label_encoder.fit_transform(labels)
@@ -61,6 +75,7 @@ def train(size=(128, 64, 32),learningrate = 0.001):
     X_train, X_test, y_train, y_test = train_test_split(
         padded_sequences, encoded_labels, test_size=0.2, random_state=42
     )
+
 
     # Define the EarlyStopping callback
     early_stopping = EarlyStopping(
@@ -105,3 +120,27 @@ def train(size=(128, 64, 32),learningrate = 0.001):
 
 
     print("Model and tokenizer saved.")
+    
+def preprocess(sentences, stop=True, stem=True):
+    stop_words = set(stopwords.words('english'))
+
+    for sentence in sentences:
+        tokenized_sentence = word_tokenize(sentence.lower())
+        if stop:
+            tokenized_sentence = [token for token in tokenized_sentence if token not in stop_words  ]
+        if stem:
+            stemmer = SnowballStemmer('english') 
+
+            tokenized_sentence = [stemmer.stem(token) for token in tokenized_sentence]
+        yield tokenized_sentence
+
+
+
+
+
+
+if __name__ == '__main__':
+    train()
+
+
+
