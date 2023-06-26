@@ -1,3 +1,4 @@
+import importlib
 from fastapi import FastAPI
 from pydantic import BaseModel
 import os
@@ -37,7 +38,7 @@ async def paraphrase(data: ParaphraseData):
             if labels != "I have no idea.":
                 sentences = paraphraser.paraphrase(sentence)[0]
                 sentences.append(sentence)
-                with open(directory_path + labels + ".txt", "a+") as file:
+                with open(directory_path + labels + ".txt", "a+", encoding='utf-8') as file:
                     file.seek(0)
                     is_empty = len(file.read()) == 0
                     file.seek(0, 2)
@@ -52,6 +53,7 @@ async def paraphrase(data: ParaphraseData):
 async def train(data: TrainingData):
     if data.training:
         Model.train()
+    importlib.reload(Inference)
     return {"status": "Training completed"}
 
 @app.post("/infer")

@@ -89,11 +89,11 @@ public class UI extends JFrame {
 
                     try {
                         HttpClient client = HttpClient.newHttpClient();
-                        //HttpResponse<String> response = client.send(paraphrase_request, HttpResponse.BodyHandlers.ofString());
-                        //System.out.println("Code: " + response.statusCode());
-                        //System.out.println(response.body());
+                        HttpResponse<String> response = client.send(paraphrase_request, HttpResponse.BodyHandlers.ofString());
+                        System.out.println("Code: " + response.statusCode());
+                        System.out.println(response.body());
 
-                        HttpResponse<String> response = client.send(retrain_request, HttpResponse.BodyHandlers.ofString());
+                        response = client.send(retrain_request, HttpResponse.BodyHandlers.ofString());
                         System.out.println("Code: " + response.statusCode());
                         System.out.println(response.body());
                         
