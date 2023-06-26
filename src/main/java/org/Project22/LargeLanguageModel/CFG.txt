@@ -13,5 +13,13 @@ Action <SCHEDULE> * <DAY> Monday <TIME> 9 - We start the week with math.
 Action <SCHEDULE> * <DAY> Monday <TIME> 12 - On Monday noon we have Theoratical Computer Science.
 Action <LOCATION> * <ROOM> DeepSpace - DeepSpace is the first room after the entrance.
 Action <LOCATION> * <ROOM> SpaceBox - SpaceBox is on the first floor.
+Action <SCHEDULE> * <DAY> Tuesday <TIME> 9 - On Tuesday morning we have Physics.
+Action <SCHEDULE> * <DAY> Tuesday <TIME> 12 - On Tuesday noon we have Data Structures.
+Action <SCHEDULE> * <DAY> Wednesday <TIME> 9 - On Wednesday morning we have Chemistry.
+Action <SCHEDULE> * <DAY> Wednesday <TIME> 12 - On Wednesday noon we have Algorithms.
+Action <SCHEDULE> * <DAY> Thursday <TIME> 9 - On Thursday morning we have Electronics.
+Action <SCHEDULE> * <DAY> Thursday <TIME> 12 - On Thursday noon we have Discrete Mathematics.
+Action <SCHEDULE> * <DAY> Friday <TIME> 9 - On Friday morning we have Mechanics.
+Action <SCHEDULE> * <DAY> Friday <TIME> 12 - On Friday noon we have Statistics.
 Action - I have no idea.
 
