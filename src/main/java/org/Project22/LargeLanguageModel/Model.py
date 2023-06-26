@@ -19,6 +19,8 @@ from nltk.stem import SnowballStemmer
 from nltk.corpus import stopwords
 import string
 from nltk.tokenize import word_tokenize
+nltk.download('stopwords')
+nltk.download('punkt')
 
 # Define constants
 DATA_DIR = 'Data/'
