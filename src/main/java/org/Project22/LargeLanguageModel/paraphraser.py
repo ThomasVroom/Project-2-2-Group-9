@@ -21,10 +21,10 @@ def paraphrase(
         num_beams=30, # num_beams=20
         num_beam_groups=30, # num_beam_groups=20
         num_return_sequences=30, # num_return_sequences=20
-        repetition_penalty=1.5, # repetition_penalty=1.5 #10.0
-        diversity_penalty=0.5, # diversity_penalty=0.5 #3.0
+        repetition_penalty=2, # repetition_penalty=1.5 #10.0
+        diversity_penalty=0.8, # diversity_penalty=0.5 #3.0
         no_repeat_ngram_size=3, # no_repeat_ngram_size=3 #2
-        temperature=0.7, # temperature=0.7
+        temperature=0.8, # temperature=0.7
         max_length=128 # max_length=128
 ):
 
@@ -43,21 +43,10 @@ def paraphrase(
     )
 
     res = tokenizer.batch_decode(outputs, skip_special_tokens=True)
-
-    # Making sure that the number of references (input question repeated) is the same length as the number of paraphrased sentences
-    references = [question] * len(res) # Number of input question = Number of paraphrased sentences
-
-    # We extract the F1 score from the BERTScore output (BERTScore returns Precision, Recall, F1Score)
-    all_preds, _, hashcode = score(res, references, lang="en", model_type="bert-base-uncased")
-    avg_scores = [s.mean(dim=0) for s in all_preds] # Averages the scores for all the paraphrased sentences into one score
-    p_val = avg_scores[0].cpu().item() # Precision
-    r_val = avg_scores[1].cpu().item() # Recall
-    f1_val = avg_scores[2].cpu().item() # F1 Score
-
-    if grid_search:
-        return f1_val
-
-    return res, f1_val # When doing grid search only return the F1 score otherwise return  res, f1_val
+    for string in res:
+        string = string.encode('utf-8', 'ignore').decode('utf-8','ignore')
+    k =1
+    return res, k
 
 # Computes the time it takes to paraphrase a question
 def paraphrase_time(question): # make sure the return of paraphrase is res, f1_val.

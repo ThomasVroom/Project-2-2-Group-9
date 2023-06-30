@@ -51,6 +51,7 @@ This application uses [Java Swing](https://en.wikipedia.org/wiki/Swing_(Java)) a
   - `numpy`
   - `bert_score`
   - `transformers`
+  - `nltk`
 
 - To use the neural network first do the following steps before launching the main class:
   1. Open a new terminal.

@@ -6,6 +6,10 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import LabelEncoder
 from keras.preprocessing.text import Tokenizer
+from nltk.stem import SnowballStemmer
+from nltk.corpus import stopwords
+import string
+from nltk.tokenize import word_tokenize
 # Constants
 MAX_WORDS = 10000
 MAX_LEN = 100
@@ -52,8 +56,20 @@ tokenizer = load_tokenizer(tokenizer_path)
 label_encoder = LabelEncoder()
 label_encoder.classes_ = np.load('label_encoder_classes.npy')  # Load the saved label encoder classes
 
+def preprocess(sentence, stop=True, stem=True):
+    stop_words = set(stopwords.words('english'))
+    tokenized_sentence = word_tokenize(sentence.lower())
+    if stop:
+        tokenized_sentence = [token for token in tokenized_sentence if token not in stop_words  ]
+    if stem:
+        stemmer = SnowballStemmer('english') 
+
+    tokenized_sentence = [stemmer.stem(token) for token in tokenized_sentence]
+    return tokenized_sentence
 
 def inferclass(sentence):
+    sentence = ' '.join(preprocess(sentence))
+    print(f"processed sentence: {sentence}")
     start_time = time.time()
     predicted_label = predict_label(sentence, model, tokenizer)
     end_time = time.time()

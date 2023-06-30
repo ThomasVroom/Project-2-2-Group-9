@@ -2,7 +2,7 @@ Rule <S> <ACTION>
 Rule <ACTION> <LOCATION> | <SCHEDULE>
 Rule <SCHEDULE> Which lectures are there <TIMEEXPRESSION>
 Rule <TIMEEXPRESSION> on <DAY> at <TIME> | at <TIME> on <DAY>
-Rule <TIME> 9 | 12
+Rule <TIME> 9 | 12 | 15
 Rule <LOCATION> Where is <ROOM> | How do <PRO> get to <ROOM> | Where is <ROOM> located
 Rule <PRO> I | you | he | she
 Rule <ROOM> DeepSpace | SpaceBox
@@ -13,5 +13,7 @@ Action <SCHEDULE> * <DAY> Monday <TIME> 9 - We start the week with math.
 Action <SCHEDULE> * <DAY> Monday <TIME> 12 - On Monday noon we have Theoratical Computer Science.
 Action <LOCATION> * <ROOM> DeepSpace - DeepSpace is the first room after the entrance.
 Action <LOCATION> * <ROOM> SpaceBox - SpaceBox is on the first floor.
+Action <SCHEDULE> * <DAY> Thursday <TIME> 15 - We have nothing lol.
+Action <SCHEDULE> * <DAY> Tuesday <TIME> 9 - We have the presentation Tuesday morning.
 Action - I have no idea.
 
