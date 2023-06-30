@@ -90,7 +90,7 @@ class Recognition:
                 # different orientations and lighting conditions, and can detect faces at smaller scales compared to
                 # the 'hog' model.
 
-                self.face_locations = face_recognition.face_locations(RGB_resized, model='cnn') # to try hog model -> model='hog'
+                self.face_locations = face_recognition.face_locations(RGB_resized, model='hog') # to try hog model -> model='hog'
                 self.face_encodings = face_recognition.face_encodings(RGB_resized, self.face_locations)
                 self.face_names = []
 

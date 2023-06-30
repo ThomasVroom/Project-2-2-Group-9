@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import cv2
-from DetectionMethods import OpenCVHaarFaceDetector, BlazeDetector, DlibCNNFaceDetector, TensorFlowMobileNetSSDFaceDetector
+from DetectionMethods import OpenCVHaarFaceDetector, BlazeDetector, DlibCNNFaceDetector, TensorFlowMobileNetSSDFaceDetector, DlibHOGFaceDetector
 from tensorflow.python.ops.numpy_ops import np_config
 import time
 np_config.enable_numpy_behavior()
@@ -23,7 +23,7 @@ def detect_and_display_faces(webcam, face_detector):
     return detected, elapsed_time
 
 def test_detection_rtime(webcam, face_detector, method_name, num_iterations):
-    with open("src/main/java/org/Project22/FaceDetection/experiment_blaze.txt", "a") as f:
+    with open("src/main/java/org/Project22/FaceDetection/experiment_hog.txt", "a") as f:
         for _ in range(num_iterations):
             detected, elapsed_time = detect_and_display_faces(webcam, face_detector)
             f.write(f"method: {method_name}, Elapsed time: {elapsed_time:.2f} milliseconds\n")
@@ -72,11 +72,14 @@ def detect_or_not(webcam, face_detector):
     return detected, not_detected
 
 def test_detection_performance(webcam, face_detector, method_name, num_iterations):
-    with open("src/main/java/org/Project22/FaceDetection/experiment_performance_opencv.txt", "a") as f:
-        for _ in range(num_iterations):
+    print('Started...')
+    with open("src/main/java/org/Project22/FaceDetection/experiment_performance_hog.txt", "a") as f:
+        for i in range(num_iterations):
+            print(i, '. iteration...')
             detected, notdetected  = detect_or_not(webcam, face_detector)
             f.write(f"method: {method_name}, Detected: {detected} faces, Not Detected: {notdetected}\n")
             f.flush()  # Flush the buffer to ensure immediate write to the file
+    print('Completed.')
 
 def export_to_excel(txt_files, excel_file_path):
     # Create an Excel writer in append mode
@@ -117,33 +120,30 @@ def export_to_excel(txt_files, excel_file_path):
 # webcam = cv2.VideoCapture(0)
 
 # # Create instance of BlazeDetector
-# face_detector = OpenCVHaarFaceDetector()
+# face_detector = DlibHOGFaceDetector()
 
-# ## Test detection run time performance for 100 iterations
-# # test_detection_rtime(webcam, face_detector, "TensorFlowMobileNetSSDFaceDetector", 100)
+# # ## Test detection run time performance for 100 iterations
+# # test_detection_rtime(webcam, face_detector, "DlibHOGFaceDetector", 100)
 
-# # Test detection performance for 100 iterations
-# test_detection_performance(webcam, face_detector, "OpenCVHaarFaceDetector", 100)
+# # # Test detection performance for 100 iterations
+# test_detection_performance(webcam, face_detector, "DlibHOGFaceDetector", 100)
 
 # # Close the webcam
 # webcam.release()
 
-# # Specify the list of text files and the output Excel file
-# txt_files = ['src/main/java/org/Project22/FaceDetection/experiment_opencv.txt', 
-#              'src/main/java/org/Project22/FaceDetection/experiment_blaze.txt', 
-#              'src/main/java/org/Project22/FaceDetection/experiment_dlib.txt', 
-#              'src/main/java/org/Project22/FaceDetection/experiment_tf.txt']
-# excel_file = 'src/main/java/org/Project22/FaceDetection/combined_experiment.xlsx'
+# Specify the list of text files and the output Excel file
+txt_files = ['src/main/java/org/Project22/FaceDetection/experiment_performance_hog.txt']
+excel_file = 'src/main/java/org/Project22/FaceDetection/hog_perf.xlsx'
 
-# convert_txt_to_excel(txt_files, excel_file)
+convert_txt_to_excel(txt_files, excel_file)
 
-txt_files = ['src/main/java/org/Project22/FaceDetection/experiment_performance_opencv.txt', 
-             'src/main/java/org/Project22/FaceDetection/experiment_performance_blaze.txt', 
-             'src/main/java/org/Project22/FaceDetection/experiment_performance_dlib.txt',
-             'src/main/java/org/Project22/FaceDetection/experiment_performance_tf.txt']
+# txt_files = ['src/main/java/org/Project22/FaceDetection/experiment_performance_opencv.txt', 
+#              'src/main/java/org/Project22/FaceDetection/experiment_performance_blaze.txt', 
+#              'src/main/java/org/Project22/FaceDetection/experiment_performance_dlib.txt',
+#              'src/main/java/org/Project22/FaceDetection/experiment_performance_tf.txt']
 
-excel_file_path = 'src/main/java/org/Project22/FaceDetection/combined_experiment.xlsx'
-export_to_excel(txt_files, excel_file_path)
+# excel_file_path = 'src/main/java/org/Project22/FaceDetection/combined_experiment.xlsx'
+# export_to_excel(txt_files, excel_file_path)
 
 
 

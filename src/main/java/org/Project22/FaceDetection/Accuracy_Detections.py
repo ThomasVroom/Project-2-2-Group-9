@@ -5,7 +5,7 @@ from tqdm import tqdm
 import dlib
 import mediapipe as mp
 
-from DetectionMethods import OpenCVHaarFaceDetector, BlazeDetector, DlibCNNFaceDetector, TensorFlowMobileNetSSDFaceDetector
+from DetectionMethods import OpenCVHaarFaceDetector, BlazeDetector, DlibCNNFaceDetector, DlibHOGFaceDetector
 
 
 def extract_and_filter_data(annotation_file):
@@ -49,10 +49,10 @@ def evaluate(face_detector, bb_gt_collection, iou_threshold):
 
         image_data = cv2.imread("src/main/java/org/Project22/FaceDetection/WIDER_val/images/{}".format(image_path))
 
-        # if image_data is None:
-        #     print(f"Error reading image: {image_path}")
-        #     continue
-        # print(f"Processing image: {image_path}")
+        if image_data is None:
+            print(f"Error reading image: {image_path}")
+            continue
+        print(f"Processing image: {image_path}")
     
         ground_truth_bboxes = np.array(bb_gt_collection[image_path])
         total_gt_faces = len(ground_truth_bboxes)
@@ -157,8 +157,8 @@ def calculate_iou(boxA, boxB):
 
 annotation_file = "src/main/java/org/Project22/FaceDetection/dataset/wider_face_split/wider_face_val_bbx_gt.txt"
 
-face_detector = DlibCNNFaceDetector()
-iou_threshold = 0.6
+face_detector = DlibHOGFaceDetector()
+iou_threshold = 0.7
 bb_gt_collection = extract_and_filter_data(annotation_file=annotation_file)
 evaluation_results = evaluate(face_detector, bb_gt_collection, iou_threshold)
 print(evaluation_results)

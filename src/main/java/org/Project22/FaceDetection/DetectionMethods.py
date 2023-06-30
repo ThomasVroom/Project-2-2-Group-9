@@ -43,6 +43,28 @@ class OpenCVHaarFaceDetector():
         detected_faces = [[x, y, x + w, y + h] for x, y, w, h in detected_faces]
 
         return np.array(detected_faces)
+    
+class DlibHOGFaceDetector():
+
+    def __init__(self, nrof_upsample=0, det_threshold=0):
+        self.hog_detector = dlib.get_frontal_face_detector()
+        self.nrof_upsample = nrof_upsample
+        self.det_threshold = det_threshold
+
+    def detect_face(self, image):
+
+        dets, scores, idx = self.hog_detector.run(image, self.nrof_upsample, self.det_threshold)
+
+        faces = []
+        for i, d in enumerate(dets):
+            x1 = int(d.left())
+            y1 = int(d.top())
+            x2 = int(d.right())
+            y2 = int(d.bottom())
+
+            faces.append(np.array([x1, y1, x2, y2]))
+
+        return np.array(faces)
 
 
 class DlibCNNFaceDetector():
